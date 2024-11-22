@@ -14,8 +14,8 @@ class EnvironmentConfig {
     return false;
   }
 
-  static String get apiKey {
-    const value = 'API_KEY';
+  static String get supabaseUrl {
+    const value = 'SUPABASE_URL';
     if (isGithubPages) {
       // En GitHub Pages, la variable se inyecta en tiempo de build
       return const String.fromEnvironment(value);
@@ -24,8 +24,18 @@ class EnvironmentConfig {
     return dotenv.env[value] ?? 'No hay valor';
   }
 
-  static String get secret {
-    const value = 'SECRET';
+  static String get supabaseAnonKey {
+    const value = 'SUPABASE_ANON_KEY';
+    if (isGithubPages) {
+      // En GitHub Pages, la variable se inyecta en tiempo de build
+      return const String.fromEnvironment(value);
+    }
+    // En desarrollo local, usa .env
+    return dotenv.env[value] ?? 'No hay valor';
+  }
+
+  static String get databasePassword {
+    const value = 'DATA_BASE_PASSWORD';
     if (isGithubPages) {
       // En GitHub Pages, la variable se inyecta en tiempo de build
       return const String.fromEnvironment(value);
