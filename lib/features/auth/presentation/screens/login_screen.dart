@@ -12,9 +12,6 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
-
-    // debugPrint('Ancho: ${size.width}');
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -52,11 +49,9 @@ class LoginScreen extends StatelessWidget {
                   Flexible(
                     flex: 3,
                     child: Container(
-                      // position: DecorationPosition.background,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Color.fromARGB(255, 234, 228, 228),
-                        // color: Colors.black.withOpacity(0.1),
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(100)),
                       ),
@@ -76,11 +71,14 @@ class LoginScreen extends StatelessWidget {
 class _LoginForm extends ConsumerWidget {
   const _LoginForm();
 
-  // void showSnackbar(BuildContext context, String message) {
-  //   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-  //   ScaffoldMessenger.of(context)
-  //       .showSnackBar(SnackBar(content: Text(message)));
-  // }
+  void onError(BuildContext context, String errorMessage) {
+    NotificationService().showNotification(
+      context: context,
+      message: errorMessage,
+      title: 'Error',
+      type: FlushbarType.error,
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -92,7 +90,7 @@ class _LoginForm extends ConsumerWidget {
       authProvider,
       (previous, next) {
         if (next.errorMessage.isEmpty) return;
-        AppUtils.showSnackbar(context, next.errorMessage);
+        onError(context, next.errorMessage);
       },
     );
 
@@ -104,12 +102,10 @@ class _LoginForm extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // SizedBox(height: 20),
           Flexible(
               flex: 2,
               child:
                   Center(child: Text('Login', style: textStyles.titleLarge))),
-          // SizedBox(height: 20),
           Flexible(
             child: ConstrainedBox(
               constraints:
@@ -161,7 +157,6 @@ class _LoginForm extends ConsumerWidget {
               ),
             ),
           ),
-          // SizedBox(height: 100),
           Flexible(
             flex: 3,
             child: Column(
@@ -175,7 +170,6 @@ class _LoginForm extends ConsumerWidget {
               ],
             ),
           ),
-          // SizedBox(height: 40),
         ],
       ),
     );
