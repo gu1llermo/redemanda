@@ -75,5 +75,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       return null;
     },
+    errorBuilder: (context, state) => const NotFoundScreen(),
   );
 });
