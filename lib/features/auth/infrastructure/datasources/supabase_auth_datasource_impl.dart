@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:redemanda/features/auth/infrastructure/errors/auth_errors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -28,7 +29,10 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
       if (authResponse.user == null) {
         throw CustomError('Credenciales incorrectas!');
       }
-      final appMetadata = authResponse.user!.appMetadata;
+      debugPrint('acces token: ${authResponse.session?.accessToken}');
+      debugPrint('refresh token: ${authResponse.session?.refreshToken}');
+      debugPrint('id: ${authResponse.user?.id}');
+      //final appMetadata = authResponse.user!.appMetadata;
 
       // claro tengo que crear un user deacuerdo a la respuesta recibida
       // para luego regtornarlo

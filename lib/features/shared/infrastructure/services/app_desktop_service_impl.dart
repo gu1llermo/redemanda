@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:universal_io/io.dart';
 
 import 'app_desktop_service.dart';
@@ -27,6 +28,7 @@ class AppDesktopServiceImpl extends AppDesktopService {
   }
 
   bool isDesktop() {
+    if (kIsWeb) return false;
     return Platform.isWindows || Platform.isMacOS || Platform.isLinux;
   }
 }
