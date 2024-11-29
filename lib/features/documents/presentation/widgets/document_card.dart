@@ -25,9 +25,9 @@ class DocumentCard extends StatelessWidget {
         children: [
           // CircleAvatar con las dos primeras letras y degradado
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.only(left: 10),
             child: CircleAvatar(
-              radius: 40,
+              radius: 30,
               backgroundColor: Colors.transparent,
               child: Container(
                 decoration: BoxDecoration(
