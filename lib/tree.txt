@@ -1,0 +1,73 @@
+├── config
+│  ├── config.dart
+│  ├── constants
+│  │  └── environment_config.dart
+│  ├── router
+│  │  ├── app_router_notifier.dart
+│  │  └── app_router.dart
+│  ├── theme
+│  │  └── app_theme.dart
+│  └── utils
+│    └── app_utils.dart
+├── features
+│  ├── auth
+│  │  ├── domain
+│  │  │  ├── datasources
+│  │  │  │  └── auth_datasource.dart
+│  │  │  ├── domain.dart
+│  │  │  ├── entities
+│  │  │  │  └── user_entity.dart
+│  │  │  └── repositories
+│  │  │    └── auth_repository.dart
+│  │  ├── infrastructure
+│  │  │  ├── datasources
+│  │  │  │  └── supabase_auth_datasource_impl.dart
+│  │  │  ├── errors
+│  │  │  │  └── auth_errors.dart
+│  │  │  ├── infrastructure.dart
+│  │  │  ├── mappers
+│  │  │  │  ├── mappers.dart
+│  │  │  │  └── user_entity_mapper.dart
+│  │  │  └── repositories
+│  │  │    └── auth_repository_impl.dart
+│  │  └── presentation
+│  │    ├── providers
+│  │    │  ├── auth_provider.dart
+│  │    │  ├── login_form_provider.dart
+│  │    │  └── providers.dart
+│  │    ├── screens
+│  │    │  ├── check_out_status_screen.dart
+│  │    │  ├── home_admin_screen.dart
+│  │    │  ├── home_user_screen.dart
+│  │    │  ├── login_screen.dart
+│  │    │  ├── not_found_screen.dart
+│  │    │  └── screens.dart
+│  │    └── widgets
+│  │      └── widgets.dart
+│  └── shared
+│    ├── infrastructure
+│    │  ├── infrastructure.dart
+│    │  ├── inputs
+│    │  │  ├── email.dart
+│    │  │  ├── full_name.dart
+│    │  │  ├── inputs.dart
+│    │  │  ├── password.dart
+│    │  │  └── repeat_password.dart
+│    │  └── services
+│    │    ├── app_desktop_service_impl.dart
+│    │    ├── app_desktop_service.dart
+│    │    ├── camera_gallery_service_impl.dart
+│    │    ├── camera_gallery_service.dart
+│    │    ├── key_value_storage_service_impl.dart
+│    │    ├── key_value_storage_service.dart
+│    │    ├── notification_service.dart
+│    │    └── services.dart
+│    ├── shared.dart
+│    └── widgets
+│      ├── custom_filled_button.dart
+│      ├── custom_text_form_field.dart
+│      ├── full_screen_loader.dart
+│      ├── geometrical_background.dart
+│      ├── side_menu.dart
+│      └── widgets.dart
+└── main.dart

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/providers/providers.dart';
 import '../../features/auth/presentation/screens/screens.dart';
+import '../../features/documents/documents.dart';
 import 'app_router_notifier.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -12,7 +13,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   //* ESTO SE LLAMA PROTECCIÓN DE RUTAS
   final goRouterNotifier = ref.read(goRouterNotifierProvider);
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/splash',
     refreshListenable: goRouterNotifier,
     routes: [
       //* Primera Pantalla
@@ -27,22 +28,30 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const LoginScreen(),
       ),
 
-      ///* Product Routes
+      ///* Documents Routes
       GoRoute(
         path: '/',
-        builder: (context, state) => const HomeScreen(),
+        builder: (context, state) => const DocumentsScreen(),
       ),
-      //   GoRoute(
-      //     path: '/product/:id',
-      //     builder: (context, state) => ProductScreen(
-      //       productId: state.pathParameters['id'] ?? 'no-id',
-      //     ),
-      //   ),
+      GoRoute(
+        path: '/document/:id',
+        builder: (context, state) => DocumentScreen(
+          documentId: state.pathParameters['id'] ?? 'no-id',
+        ),
+      ),
+
+      ///* Admin Routes
+      GoRoute(
+        path: '/home-admin',
+        builder: (context, state) => const HomeAdminScreen(),
+      ),
     ],
     redirect: (context, state) {
       // con esto se validan todas las rutas, porque todas pasan por aqui
       final isGoingTo = state.matchedLocation;
-      final authStatus = goRouterNotifier.authStatus;
+      final authState = goRouterNotifier.authState;
+      final authStatus = authState.authStatus;
+      final isAdmin = authState.user?.isAdmin ?? false;
       if (isGoingTo == '/splash' && authStatus == AuthStatus.checking) {
         return null; // lo deja tranquilo que vaya a splash
       }
@@ -61,7 +70,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             isGoingTo == '/register' ||
             isGoingTo == '/splash') {
           // lo mandamos a la ruta principal, porque ya está autenticado
-          return '/';
+          return isAdmin ? '/home-admin' : '/';
         }
       }
       //! Aquí podríamos verificar si el usuario es admin y redirigirlo a una ruta específica

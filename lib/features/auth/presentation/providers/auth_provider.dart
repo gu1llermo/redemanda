@@ -10,7 +10,7 @@ final authProvider =
 class AuthNotifier extends Notifier<AuthState> {
   late final AuthRepository authRepository;
   late final KeyValueStorageService keyValueStorageService;
-  static const String _token = 'token';
+  // static const String _token = 'token';
 
   @override
   AuthState build() {
@@ -51,10 +51,14 @@ class AuthNotifier extends Notifier<AuthState> {
 
   Future<void> checkAuthStatus() async {
     // verificamos si tenemos un token
-    final token = await keyValueStorageService.getValue<String>(_token);
-    if (token == null) return logout();
+    // final token = await keyValueStorageService.getValue<String>(_token);
+    // if (token == null) return logout();
     try {
-      final user = await authRepository.checkAuthStatus(token);
+      // aquí en realidad está pasando 'token' solo para mantener la interfaz
+      // ya que la implementación de supabase me parece que maneja eso internamente
+      final user = await authRepository.checkAuthStatus('token'); //
+
+      // final user = await authRepository.checkAuthStatus(token);
       _setLoggedUser(user);
     }
     // on CustomError catch (e) {
@@ -67,7 +71,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
   Future<void> _setLoggedUser(UserEntity user) async {
     // Guardamos el token físicamente
-    await keyValueStorageService.setKeyValue<String>(_token, user.token);
+    // await keyValueStorageService.setKeyValue<String>(_token, user.token);
     state = state.copyWith(
       user: user,
       authStatus: AuthStatus.authenticated,
@@ -77,7 +81,10 @@ class AuthNotifier extends Notifier<AuthState> {
 
   Future<void> logout([String? errorMessage]) async {
     // limpiar token
-    keyValueStorageService.removeKey(_token);
+    // keyValueStorageService.removeKey(_token);
+
+    await authRepository.logout();
+
     state = state.copyWith(
         user: null,
         authStatus: AuthStatus.notAuthenticated,
@@ -85,6 +92,10 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 }
 
+// me parece que tengo que crear un nuevo estado para cuando el usuario
+// olvide su password, recoryPassword
+// que si detecta que el estado es ese entonces lo redirige a una pantalla
+// en específico, que puede servir incluso para web como para móvil
 enum AuthStatus { checking, authenticated, notAuthenticated }
 
 class AuthState {

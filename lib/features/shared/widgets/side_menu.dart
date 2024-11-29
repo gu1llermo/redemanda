@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../auth/presentation/providers/providers.dart';
 import 'custom_filled_button.dart';
 
 class SideMenu extends ConsumerStatefulWidget {
@@ -22,6 +23,8 @@ class _SideMenuState extends ConsumerState<SideMenu> {
   Widget build(BuildContext context) {
     final hasNotch = MediaQuery.viewPaddingOf(context).top > 20;
     final textStyles = Theme.of(context).textTheme;
+    final auth = ref.watch(authProvider);
+    final name = auth.user?.fullName;
 
     return NavigationDrawer(
         elevation: 1,
@@ -42,7 +45,7 @@ class _SideMenuState extends ConsumerState<SideMenu> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 16, 10),
-            child: Text('Tony Stark', style: textStyles.titleSmall),
+            child: Text('$name', style: textStyles.titleSmall),
           ),
           // const NavigationDrawerDestination(
           //   icon: Icon(Icons.home_outlined),
@@ -52,15 +55,14 @@ class _SideMenuState extends ConsumerState<SideMenu> {
             padding: EdgeInsets.fromLTRB(28, 16, 28, 10),
             child: Divider(),
           ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(28, 10, 16, 10),
-            child: Text('Otras opciones'),
-          ),
+          // const Padding(
+          //   padding: EdgeInsets.fromLTRB(28, 10, 16, 10),
+          //   child: Text('Otras opciones'),
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomFilledButton(
-              // todo: implementar authProvider
-              //onPressed: ref.read(authProvider.notifier).logout,
+              onPressed: ref.read(authProvider.notifier).logout,
               text: 'Cerrar sesión',
             ),
           ),

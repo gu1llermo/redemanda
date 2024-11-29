@@ -29,6 +29,7 @@ class AppDesktopServiceImpl extends AppDesktopService {
 
   bool isDesktop() {
     if (kIsWeb) return false;
-    return Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+    return Platform.isWindows;
+    // return Platform.isWindows || Platform.isMacOS || Platform.isLinux;
   }
 }

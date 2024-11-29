@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:redemanda/features/auth/infrastructure/errors/auth_errors.dart';
+import 'package:redemanda/features/auth/infrastructure/mappers/user_entity_mapper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../config/config.dart';
@@ -26,17 +27,11 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     try {
       final authResponse = await supabase.auth
           .signInWithPassword(password: password, email: email);
-      if (authResponse.user == null) {
-        throw CustomError('Credenciales incorrectas!');
-      }
-      debugPrint('acces token: ${authResponse.session?.accessToken}');
-      debugPrint('refresh token: ${authResponse.session?.refreshToken}');
-      debugPrint('id: ${authResponse.user?.id}');
-      //final appMetadata = authResponse.user!.appMetadata;
 
-      // claro tengo que crear un user deacuerdo a la respuesta recibida
-      // para luego regtornarlo
-      throw Exception();
+      final userEntity = UserEntityMapper.authResponseToEntity(authResponse);
+      return userEntity;
+    } on AuthApiException catch (e) {
+      throw CustomError(e.message);
     } catch (e) {
       rethrow;
     }
@@ -47,18 +42,24 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     try {
       // es cuestión de probar sin colocarle el token ó refresh token allí,
       // ya que lo gestiona localmente la misma librería de supabase
-      final authResponse = await supabase.auth.refreshSession(token);
+      final authResponse = await supabase.auth.refreshSession();
+      // cuando no existe una sesión en el equipo, la respuesta es un error
+      // final authResponse = await supabase.auth.refreshSession(token);
 
-      if (authResponse.user == null) {
-        throw CustomError('Credenciales incorrectas!');
-      }
-      final appMetadata = authResponse.user!.appMetadata;
+      final userEntity = UserEntityMapper.authResponseToEntity(authResponse);
 
-      // claro tengo que crear un user deacuerdo a la respuesta recibida
-      // para luego regtornarlo
-      throw Exception();
+      return userEntity;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    try {
+      await supabase.auth.signOut();
+    } on Exception catch (e) {
+      throw CustomError(e.toString());
     }
   }
 }
