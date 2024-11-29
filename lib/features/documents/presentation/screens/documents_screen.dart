@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -41,17 +42,17 @@ class _DocumentsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 40, top: 10),
-      child: GridView.builder(
+      child: MasonryGridView.builder(
         physics: const ClampingScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        gridDelegate: const SliverSimpleGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 400,
-          mainAxisExtent: 170,
+          // mainAxisExtent: 170,
         ),
         itemBuilder: (context, index) {
           return DocumentCard(
-            title: 'Lorem exercitation veniam Lorem irure non. Index: $index',
+            title: 'Pedro Pérez',
             description:
-                'Adipisicing ut duis veniam pariatur exercitation sint nisi officia anim aliquip nisi dolor. Enim id sit reprehenderit laboris magna qui nostrud dolore excepteur laboris ut. Ea et tempor in nulla. Fugiat ullamco sint eu id dolore. Aute anim tempor in Lorem id ut est. Descripción Documento nro $index',
+                'Aliqua ex enim do duis id esse irure do sit. Mollit ex eiusmod ea enim aliquip deserunt est voluptate Lorem aliqua. Ea esse occaecat aliqua minim in aliqua. Elit fugiat duis consequat ad sit esse officia commodo adipisicing cillum minim eiusmod nisi. Nulla excepteur occaecat consectetur anim. Quis ad id id deserunt anim.',
             creationDate: DateTime.now(),
           );
         },
