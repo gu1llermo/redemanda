@@ -14,20 +14,21 @@ class CustomTextFormField extends StatelessWidget {
   final Widget? suffixIcon;
   final String obscuringCharacter;
 
-  const CustomTextFormField(
-      {super.key,
-      this.label,
-      this.hint,
-      this.errorMessage,
-      this.obscureText = false,
-      this.keyboardType = TextInputType.text,
-      this.onChanged,
-      this.validator,
-      this.textInputAction,
-      this.onFieldSubmitted,
-      this.prefixIcon,
-      this.suffixIcon,
-      this.obscuringCharacter = '•'});
+  const CustomTextFormField({
+    super.key,
+    this.label,
+    this.hint,
+    this.errorMessage,
+    this.obscureText = false,
+    this.keyboardType = TextInputType.text,
+    this.onChanged,
+    this.validator,
+    this.textInputAction,
+    this.onFieldSubmitted,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.obscuringCharacter = '•',
+  });
 
   @override
   Widget build(BuildContext context) {
