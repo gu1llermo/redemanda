@@ -10,19 +10,24 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputAction? textInputAction;
   final void Function(String)? onFieldSubmitted;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final String obscuringCharacter;
 
-  const CustomTextFormField({
-    super.key,
-    this.label,
-    this.hint,
-    this.errorMessage,
-    this.obscureText = false,
-    this.keyboardType = TextInputType.text,
-    this.onChanged,
-    this.validator,
-    this.textInputAction,
-    this.onFieldSubmitted,
-  });
+  const CustomTextFormField(
+      {super.key,
+      this.label,
+      this.hint,
+      this.errorMessage,
+      this.obscureText = false,
+      this.keyboardType = TextInputType.text,
+      this.onChanged,
+      this.validator,
+      this.textInputAction,
+      this.onFieldSubmitted,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.obscuringCharacter = '•'});
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +59,7 @@ class CustomTextFormField extends StatelessWidget {
         obscureText: obscureText,
         keyboardType: keyboardType,
         textInputAction: textInputAction,
+        obscuringCharacter: obscuringCharacter,
         onFieldSubmitted: onFieldSubmitted,
         style: const TextStyle(fontSize: 20, color: Colors.black54),
         decoration: InputDecoration(
@@ -67,9 +73,13 @@ class CustomTextFormField extends StatelessWidget {
               borderSide: const BorderSide(color: Colors.transparent)),
           isDense: true,
           label: label != null ? Text(label!) : null,
+
           hintText: hint,
           errorText: errorMessage,
           focusColor: colors.primary,
+          //icon: Icon(Icons.email),
+          prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
           // icon: Icon( Icons.supervised_user_circle_outlined, color: colors.primary, )
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -81,6 +82,7 @@ class _LoginForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginForm = ref.watch(loginFormProvider);
+    final obscureText = loginForm.obscureText;
 
     ref.listen(
       // con ésto solo escucho los cambios de authProvider, pero sin redibujar
@@ -110,6 +112,7 @@ class _LoginForm extends ConsumerWidget {
                   BoxConstraints(maxWidth: maxWidth), // Límite de ancho
               child: CustomTextFormField(
                 label: 'Correo',
+                prefixIcon: Icon(Icons.email),
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 onChanged: ref.read(loginFormProvider.notifier).onEmailChange,
@@ -126,7 +129,14 @@ class _LoginForm extends ConsumerWidget {
                   BoxConstraints(maxWidth: maxWidth), // Límite de ancho
               child: CustomTextFormField(
                 label: 'Contraseña',
-                obscureText: true,
+                prefixIcon: Icon(Icons.password),
+                suffixIcon: PasswordSuffixIcon(
+                  obscureText: obscureText,
+                  onTap: ref
+                      .read(loginFormProvider.notifier)
+                      .onTapPasswordSuffixIcon,
+                ),
+                obscureText: obscureText,
                 onChanged:
                     ref.read(loginFormProvider.notifier).onPasswordChange,
                 onFieldSubmitted: (value) =>

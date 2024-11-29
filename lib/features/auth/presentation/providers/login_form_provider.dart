@@ -30,6 +30,12 @@ class LoginFormNotifier extends AutoDisposeNotifier<LoginFormState> {
         isValid: Formz.validate([newPassword, state.email]));
   }
 
+  void onTapPasswordSuffixIcon() {
+    state = state.copyWith(
+      obscureText: !state.obscureText,
+    );
+  }
+
   Future<void> onFormSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
@@ -61,6 +67,7 @@ class LoginFormState {
   final bool isValid;
   final Email email;
   final Password password;
+  final bool obscureText;
 
   LoginFormState({
     this.isPosting = false,
@@ -68,6 +75,7 @@ class LoginFormState {
     this.isValid = false,
     this.email = const Email.pure(),
     this.password = const Password.pure(),
+    this.obscureText = true,
   });
 
   LoginFormState copyWith({
@@ -76,14 +84,15 @@ class LoginFormState {
     bool? isValid,
     Email? email,
     Password? password,
+    bool? obscureText,
   }) =>
       LoginFormState(
-        isPosting: isPosting ?? this.isPosting,
-        isFormPosted: isFormPosted ?? this.isFormPosted,
-        isValid: isValid ?? this.isValid,
-        email: email ?? this.email,
-        password: password ?? this.password,
-      );
+          isPosting: isPosting ?? this.isPosting,
+          isFormPosted: isFormPosted ?? this.isFormPosted,
+          isValid: isValid ?? this.isValid,
+          email: email ?? this.email,
+          password: password ?? this.password,
+          obscureText: obscureText ?? this.obscureText);
 
   @override
   String toString() {
@@ -94,6 +103,7 @@ class LoginFormState {
     isValid: $isValid
     email: ${email.value}
     password: ${password.value}
+    obscureText: $obscureText
 ''';
   }
 }
