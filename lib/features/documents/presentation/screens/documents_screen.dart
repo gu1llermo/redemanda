@@ -49,7 +49,6 @@ class _DocumentsView extends ConsumerWidget {
         physics: const ClampingScrollPhysics(),
         gridDelegate: const SliverSimpleGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 400,
-          // mainAxisExtent: 170,
         ),
         itemBuilder: (context, index) {
           var nombre = lorem(paragraphs: 1, words: 4);
