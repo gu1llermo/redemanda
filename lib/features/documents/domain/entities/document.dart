@@ -3,7 +3,7 @@ import 'dart:typed_data';
 class Document {
   final String id;
   final String title;
-  final String? description;
+  final String description;
   final int sizeInBytes;
   final DateTime createdAt;
   final String? author;
@@ -14,7 +14,7 @@ class Document {
   const Document({
     required this.id,
     required this.title,
-    this.description,
+    required this.description,
     required this.sizeInBytes,
     required this.createdAt,
     this.author,
@@ -35,5 +35,22 @@ class Document {
     }
 
     return '${size.toStringAsFixed(2)} ${units[unitIndex]}';
+  }
+
+  factory Document.empty({
+    String title = 'Documento sin título',
+    String description = 'Sin descripción',
+  }) {
+    return Document(
+      id: '',
+      title: title,
+      description: description,
+      sizeInBytes: 0,
+      createdAt: DateTime.now(),
+      docxFile: Uint8List(0),
+      author: null,
+      tags: [],
+      thumbnailPath: null,
+    );
   }
 }

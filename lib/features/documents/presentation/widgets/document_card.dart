@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/domain.dart';
+
 class DocumentCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final DateTime creationDate;
+  final Document document;
 
   const DocumentCard({
     super.key,
-    required this.title,
-    required this.description,
-    required this.creationDate,
+    required this.document,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+
+    var title = document.title;
+    var description = document.description;
+    var creationDate = document.createdAt;
 
     return Card(
       elevation: 4,
