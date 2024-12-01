@@ -1,2 +1,2 @@
 export 'documents_screen.dart';
-export 'document_screen.dart';
+export 'new_document_screen.dart';

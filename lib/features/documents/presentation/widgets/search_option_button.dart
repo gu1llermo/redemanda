@@ -16,14 +16,14 @@ class SearchOptionButton extends StatelessWidget {
             final values = await showCalendarDatePicker2Dialog(
               context: context,
               config: CalendarDatePicker2WithActionButtonsConfig(
-                calendarType: CalendarDatePicker2Type.range,
-                allowSameValueSelection: true,
-                // currentDate: DateTime.now(),
-              ),
+                  calendarType: CalendarDatePicker2Type.range,
+                  allowSameValueSelection: true,
+                  buttonPadding: const EdgeInsets.symmetric(horizontal: 10)),
               dialogSize: const Size(355, 370),
-              borderRadius: BorderRadius.circular(15),
+              // dialogSize: const Size(355, 370),
+
+              //borderRadius: BorderRadius.circular(15),
               value: [DateTime.now()],
-              //dialogBackgroundColor: Colors.white,
             );
 
             print('Buscar por fecha');
