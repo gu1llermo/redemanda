@@ -34,6 +34,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const DocumentsScreen(),
       ),
       GoRoute(
+        path: '/settings',
+        builder: (context, state) => const UnderConstructionScreen(),
+      ),
+      GoRoute(
         path: '/document/:id',
         builder: (context, state) => DocumentScreen(
           documentId: state.pathParameters['id'] ?? 'no-id',
