@@ -130,7 +130,10 @@ class _CircleCard extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
-              colors: [colors.secondary, colors.primary],
+              colors: [
+                colors.primary,
+                colors.secondary,
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -141,7 +144,7 @@ class _CircleCard extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                //color: Colors.black,
               ),
             ),
           ),
