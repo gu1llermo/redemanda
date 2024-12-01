@@ -131,10 +131,8 @@ class _CircleCard extends StatelessWidget {
             shape: BoxShape.circle,
             gradient: LinearGradient(
               colors: [
-                colors
-                    .primaryContainer, // Generalmente un tono más claro del color primario
-                colors
-                    .onPrimaryContainer, // Generalmente un tono más oscuro o de alto contraste
+                colors.onPrimaryContainer,
+                colors.primaryContainer,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -146,7 +144,7 @@ class _CircleCard extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                //color: Colors.black,
+                color: Colors.black,
               ),
             ),
           ),

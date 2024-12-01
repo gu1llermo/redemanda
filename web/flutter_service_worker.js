@@ -1,6 +1,6 @@
 // para que registre una nueva actualización tengo que cambiar éste nombre
 // de CACHE_NAME
-const CACHE_NAME = 'flutter-app-cache-v2';
+const CACHE_NAME = 'flutter-app-cache-v1';
 const RESOURCES_TO_CACHE = [
   '/',
   '/index.html',
