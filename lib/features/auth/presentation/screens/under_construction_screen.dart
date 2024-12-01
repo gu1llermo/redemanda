@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class NotFoundScreen extends StatelessWidget {
-  const NotFoundScreen({super.key});
+class UnderConstructionScreen extends StatelessWidget {
+  const UnderConstructionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,31 +17,21 @@ class NotFoundScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // 404 Icon
+              // Construction Icon
               Icon(
-                Icons.error_outline,
+                Icons.construction,
                 size: 100,
-                color: colorScheme.error,
+                color: colorScheme.primary,
               ),
 
               const SizedBox(height: 20),
 
-              // Main Error Title
+              // Main Title
               Text(
-                '404',
-                style: textTheme.displayLarge?.copyWith(
-                  color: colorScheme.error,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              // Error Description
-              Text(
-                'Página no encontrada',
-                style: textTheme.headlineSmall?.copyWith(
+                'Página en Construcción',
+                style: textTheme.headlineMedium?.copyWith(
                   color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -50,8 +40,20 @@ class NotFoundScreen extends StatelessWidget {
 
               // Descriptive Message
               Text(
-                'Lo sentimos, la página que estás buscando no existe o ha sido movida.',
+                'Estamos trabajando arduamente para mejorar esta sección. Pronto estará lista para ti.',
                 style: textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+
+              const SizedBox(height: 30),
+
+              // Additional Details
+              Text(
+                'Disculpa las molestias. Vuelve pronto para ver las novedades.',
+                style: textTheme.bodyMedium?.copyWith(
+                  fontStyle: FontStyle.italic,
+                  color: colorScheme.onSurfaceVariant,
+                ),
                 textAlign: TextAlign.center,
               ),
 
