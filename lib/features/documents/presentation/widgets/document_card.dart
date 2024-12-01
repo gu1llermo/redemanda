@@ -125,14 +125,16 @@ class _CircleCard extends StatelessWidget {
       padding: const EdgeInsets.only(right: 10),
       child: CircleAvatar(
         radius: 30,
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         child: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
               colors: [
-                colors.primary,
-                colors.secondary,
+                colors
+                    .primaryContainer, // Generalmente un tono más claro del color primario
+                colors
+                    .onPrimaryContainer, // Generalmente un tono más oscuro o de alto contraste
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
