@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:redemanda/features/auth/infrastructure/errors/auth_errors.dart';
 import 'package:redemanda/features/auth/infrastructure/mappers/user_entity_mapper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

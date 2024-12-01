@@ -130,7 +130,7 @@ class _CircleCard extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
-              colors: [Colors.white, colors.primary],
+              colors: [colors.secondary, colors.primary],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

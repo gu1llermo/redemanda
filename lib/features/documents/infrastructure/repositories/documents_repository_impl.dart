@@ -1,11 +1,9 @@
 import '../../domain/domain.dart';
-import '../infrastructure.dart';
 
 class DocumentsRepositoryImpl extends DocumentsRepository {
   final DocumentsDatasource datasource;
 
-  DocumentsRepositoryImpl([DocumentsDatasource? datasource])
-      : datasource = datasource ?? DocumentsDatasourceImpl();
+  DocumentsRepositoryImpl(this.datasource);
 
   @override
   Future<Document> createDocument(Map<String, dynamic> documentData) {
@@ -13,17 +11,31 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   }
 
   @override
-  Future<void> deleteDocument(String id) {
+  Future<void> deleteDocument(int id) {
     return datasource.deleteDocument(id);
   }
 
   @override
-  Future<Document> getDocumentById(String id) {
+  Future<Document> getDocumentById(int id) {
     return datasource.getDocumentById(id);
   }
 
   @override
   Future<List<Document>> searchDocumentByTerm(String term) {
     return datasource.searchDocumentByTerm(term);
+  }
+
+  @override
+  Future<List<Document>> getAllDocuments() {
+    return datasource.getAllDocuments();
+  }
+
+  @override
+  Future<List<Document>> searchDocumentByRange(
+      {required DateTime startDate, required DateTime endDate}) {
+    return datasource.searchDocumentByDateRange(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 }
