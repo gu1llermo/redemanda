@@ -157,6 +157,9 @@ class _LoginForm extends ConsumerWidget {
                 height: 60,
                 child: CustomFilledButton(
                   text: 'Ingresar',
+                  textWidget: loginForm.isPosting
+                      ? const CircularProgressIndicator(strokeWidth: 2)
+                      : null,
                   buttonColor: Colors.black,
                   onPressed: loginForm.isPosting
                       ? null

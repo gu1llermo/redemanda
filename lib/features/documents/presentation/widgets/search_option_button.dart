@@ -20,7 +20,7 @@ class SearchOptionButton extends StatelessWidget {
                 allowSameValueSelection: true,
                 // currentDate: DateTime.now(),
               ),
-              dialogSize: const Size(325, 370),
+              dialogSize: const Size(355, 370),
               borderRadius: BorderRadius.circular(15),
               value: [DateTime.now()],
               //dialogBackgroundColor: Colors.white,
