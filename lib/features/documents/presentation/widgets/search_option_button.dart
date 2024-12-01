@@ -23,7 +23,7 @@ class SearchOptionButton extends StatelessWidget {
               dialogSize: const Size(325, 370),
               borderRadius: BorderRadius.circular(15),
               value: [DateTime.now()],
-              dialogBackgroundColor: Colors.white,
+              //dialogBackgroundColor: Colors.white,
             );
 
             print('Buscar por fecha');
