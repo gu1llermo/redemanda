@@ -1,4 +1,5 @@
 export 'constants/environment_config.dart';
 export 'router/app_router.dart';
-export 'theme/app_theme.dart';
+export 'theme/theme_provider.dart';
 export 'utils/app_utils.dart';
+export 'utils/string_utils.dart';

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../config/config.dart';
 import '../../auth/presentation/providers/providers.dart';
 import 'custom_filled_button.dart';
 
@@ -24,48 +26,122 @@ class _SideMenuState extends ConsumerState<SideMenu> {
     final hasNotch = MediaQuery.viewPaddingOf(context).top > 20;
     final textStyles = Theme.of(context).textTheme;
     final auth = ref.watch(authProvider);
-    final name = auth.user?.fullName;
+    final name = auth.user?.fullName ?? 'Usuario';
+    final colors = Theme.of(context).colorScheme;
+    final themeMode = ref.watch(themeNotifierProvider);
 
     return NavigationDrawer(
-        elevation: 1,
-        selectedIndex: navDrawerIndex,
-        onDestinationSelected: (value) {
-          setState(() {
-            navDrawerIndex = value;
-          });
+      elevation: 1,
+      selectedIndex: navDrawerIndex,
+      onDestinationSelected: (value) {
+        setState(() {
+          navDrawerIndex = value;
+        });
 
-          // final menuItem = appMenuItems[value];
-          // context.push( menuItem.link );
-          widget.scaffoldKey.currentState?.closeDrawer();
-        },
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(20, hasNotch ? 0 : 20, 16, 0),
-            child: Text('Saludos', style: textStyles.titleMedium),
+        // Navegación basada en el índice seleccionado
+        switch (value) {
+          case 0:
+            // Navegar a la pantalla principal o dashboard
+            context.push('/');
+            break;
+          case 1:
+            // Navegar a settings
+            context.push('/settings');
+            break;
+        }
+
+        // Cerrar el drawer después de la navegación
+        widget.scaffoldKey.currentState?.closeDrawer();
+      },
+      children: [
+        // Header con ícono de persona y nombre de usuario
+        Padding(
+          padding: EdgeInsets.fromLTRB(16, hasNotch ? 20 : 10, 16, 16),
+          child: Column(
+            children: [
+              // Ícono de persona
+              CircleAvatar(
+                backgroundColor: colors.primaryContainer,
+                radius: 40,
+                child: Icon(
+                  Icons.person,
+                  color: colors.primary,
+                  size: 60,
+                ),
+              ),
+              const SizedBox(height: 10),
+              // Nombre de usuario
+              Text(
+                name,
+                style: textStyles.titleMedium,
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 16, 10),
-            child: Text('$name', style: textStyles.titleSmall),
+        ),
+
+        // Divider
+        const Divider(),
+
+        // Destinos de navegación
+        NavigationDrawerDestination(
+          icon: const Icon(Icons.home_outlined),
+          selectedIcon: const Icon(Icons.home),
+          label: Text(
+            'Inicio',
+            style: textStyles.bodyMedium,
           ),
-          // const NavigationDrawerDestination(
-          //   icon: Icon(Icons.home_outlined),
-          //   label: Text('Productos'),
-          // ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(28, 16, 28, 10),
-            child: Divider(),
+        ),
+        NavigationDrawerDestination(
+          icon: const Icon(Icons.settings_outlined),
+          selectedIcon: const Icon(Icons.settings),
+          label: Text(
+            'Configuración',
+            style: textStyles.bodyMedium,
           ),
-          // const Padding(
-          //   padding: EdgeInsets.fromLTRB(28, 10, 16, 10),
-          //   child: Text('Otras opciones'),
-          // ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomFilledButton(
-              onPressed: ref.read(authProvider.notifier).logout,
-              text: 'Cerrar sesión',
-            ),
+        ),
+
+        // Otro Divider
+        const Divider(),
+
+        // Cambiar Tema
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Icon(
+                themeMode == ThemeMode.dark
+                    ? Icons.nightlight_round // Moon icon for dark mode
+                    : Icons.wb_sunny, // Sun icon for light mode
+                color: colors
+                    .onSurface, // Use the theme's onSurface color for contrast
+              ),
+              const SizedBox(width: 10),
+              // Switch para cambiar el tema
+              Switch(
+                value: themeMode == ThemeMode.dark,
+                onChanged: (_) {
+                  // Alternar tema usando el notifier
+                  ref.read(themeNotifierProvider.notifier).toggleTheme();
+                },
+                activeColor: colors.primary,
+              ),
+            ],
           ),
-        ]);
+        ),
+
+        // Otro Divider
+        const Divider(),
+
+        // Botón de Cerrar Sesión
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: CustomFilledButton(
+            onPressed: ref.read(authProvider.notifier).logout,
+            text: 'Cerrar sesión',
+          ),
+        ),
+      ],
+    );
   }
 }

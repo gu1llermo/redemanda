@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'config/config.dart';
@@ -22,10 +23,25 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final appRouter = ref.watch(goRouterProvider);
+    // Observar cambios en el tema
+    final themeMode = ref.watch(themeNotifierProvider);
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter,
-      theme: AppTheme().getLightTheme(),
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: themeMode, // Usar el tema actual
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('zh', ''),
+        Locale('he', ''),
+        Locale('es', ''),
+        Locale('ru', ''),
+        Locale('ko', ''),
+        Locale('hi', ''),
+      ],
     );
   }
 }
