@@ -28,7 +28,7 @@ class DocumentsScreen extends StatelessWidget {
         label: const Text('Nuevo documento'),
         icon: const Icon(Icons.note_add),
         onPressed: () {
-          context.push('/document/new');
+          context.push('/new-document');
         },
       ),
     );

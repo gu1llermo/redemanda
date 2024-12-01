@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DocumentScreen extends ConsumerWidget {
-  const DocumentScreen({super.key, required this.documentId});
-  final String documentId;
+class NewDocumentScreen extends ConsumerWidget {
+  const NewDocumentScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
