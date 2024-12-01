@@ -31,6 +31,8 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
       return userEntity;
     } on AuthApiException catch (e) {
       throw CustomError(e.message);
+    } on AuthRetryableFetchException catch (_) {
+      throw CustomError('Revise su conexión a internet');
     } catch (e) {
       rethrow;
     }

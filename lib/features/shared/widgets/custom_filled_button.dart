@@ -4,9 +4,14 @@ class CustomFilledButton extends StatelessWidget {
   final void Function()? onPressed;
   final String text;
   final Color? buttonColor;
+  final Widget? textWidget;
 
   const CustomFilledButton(
-      {super.key, this.onPressed, required this.text, this.buttonColor});
+      {super.key,
+      this.onPressed,
+      required this.text,
+      this.buttonColor,
+      this.textWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +27,6 @@ class CustomFilledButton extends StatelessWidget {
               topLeft: radius,
             ))),
         onPressed: onPressed,
-        child: Text(text));
+        child: onPressed == null ? textWidget : Text(text));
   }
 }
