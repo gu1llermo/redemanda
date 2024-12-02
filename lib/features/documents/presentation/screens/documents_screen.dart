@@ -6,6 +6,7 @@ import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:redemanda/features/documents/domain/domain.dart';
 
 import '../../../shared/widgets/widgets.dart';
+import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
 class DocumentsScreen extends StatelessWidget {
@@ -40,6 +41,8 @@ class _DocumentsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final documentsState = ref.watch(documentsProvider);
+
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 40, top: 10),
       child: MasonryGridView.builder(
@@ -48,17 +51,19 @@ class _DocumentsView extends ConsumerWidget {
           maxCrossAxisExtent: 400,
         ),
         itemBuilder: (context, index) {
-          var nombre = lorem(paragraphs: 1, words: 4);
-          var description = lorem(paragraphs: 2, words: 30);
-          var document = Document.empty(
-            title: nombre,
-            description: description,
-          );
-          return DocumentCard(
-            document: document,
-          );
+          final document = documentsState.documents[index];
+          return DocumentCard(document: document);
+          // var nombre = lorem(paragraphs: 1, words: 4);
+          // var description = lorem(paragraphs: 2, words: 30);
+          // var document = Document.empty(
+          //   title: nombre,
+          //   description: description,
+          // );
+          // return DocumentCard(
+          //   document: document,
+          // );
         },
-        itemCount: 50,
+        itemCount: documentsState.documents.length,
       ),
     );
   }

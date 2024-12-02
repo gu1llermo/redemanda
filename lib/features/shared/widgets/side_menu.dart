@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +30,7 @@ class _SideMenuState extends ConsumerState<SideMenu> {
     final name = auth.user?.fullName ?? 'Usuario';
     final colors = Theme.of(context).colorScheme;
     final themeMode = ref.watch(themeNotifierProvider);
+    final isDarkMode = themeMode == ThemeMode.dark;
 
     return NavigationDrawer(
       elevation: 1,
@@ -109,12 +111,15 @@ class _SideMenuState extends ConsumerState<SideMenu> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Icon(
-                themeMode == ThemeMode.dark
-                    ? Icons.nightlight_round // Moon icon for dark mode
-                    : Icons.wb_sunny, // Sun icon for light mode
-                color: colors
-                    .onSurface, // Use the theme's onSurface color for contrast
+              Spin(
+                animate: true,
+                key: Key(isDarkMode.toString()),
+                delay: const Duration(milliseconds: 100),
+                child: Icon(
+                  isDarkMode ? Icons.nightlight_round : Icons.wb_sunny,
+                  color: colors
+                      .onSurface, // Use the theme's onSurface color for contrast
+                ),
               ),
               const SizedBox(width: 10),
               // Switch para cambiar el tema
