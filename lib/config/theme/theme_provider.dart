@@ -52,7 +52,7 @@ class AppThemes {
   // Tema claro
   static final lightTheme = ThemeData(
     brightness: Brightness.light,
-    colorSchemeSeed: colorSeed,
+    // colorSchemeSeed: colorSeed,
     useMaterial3: true,
 
     ///* Scaffold Background Color
@@ -63,7 +63,7 @@ class AppThemes {
   // Tema oscuro
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
-    colorSchemeSeed: colorSeed,
+    // colorSchemeSeed: colorSeed,
     useMaterial3: true,
 
     ///* Scaffold Background Color

@@ -15,14 +15,17 @@ class SearchOptionButton extends StatelessWidget {
             // Lógica de búsqueda por fecha
             final values = await showCalendarDatePicker2Dialog(
               context: context,
+              barrierLabel: 'Titulo',
               config: CalendarDatePicker2WithActionButtonsConfig(
-                  calendarType: CalendarDatePicker2Type.range,
-                  allowSameValueSelection: true,
-                  buttonPadding: const EdgeInsets.symmetric(horizontal: 10)),
-              dialogSize: const Size(355, 370),
-              // dialogSize: const Size(355, 370),
+                calendarType: CalendarDatePicker2Type.range,
+                allowSameValueSelection: true,
+                buttonPadding: const EdgeInsets.symmetric(horizontal: 20),
 
-              //borderRadius: BorderRadius.circular(15),
+                // okButton: Icon(Icons.check_circle_outline, color: Colors.green),
+                // cancelButton: Icon(Icons.cancel_outlined, color: Colors.red),
+              ),
+              dialogSize: const Size(355, 370),
+              borderRadius: BorderRadius.circular(15),
               value: [DateTime.now()],
             );
 
@@ -50,23 +53,6 @@ class SearchOptionButton extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _CalendarPicker extends StatelessWidget {
-  const _CalendarPicker();
-
-  @override
-  Widget build(BuildContext context) {
-    return CalendarDatePicker2(
-      config: CalendarDatePicker2Config(
-        calendarType: CalendarDatePicker2Type.range,
-      ),
-      value: [],
-      onValueChanged: (value) {
-        debugPrint(value.toString());
-      },
     );
   }
 }

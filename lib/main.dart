@@ -35,12 +35,7 @@ class MainApp extends ConsumerWidget {
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       supportedLocales: const [
         Locale('en', ''),
-        Locale('zh', ''),
-        Locale('he', ''),
         Locale('es', ''),
-        Locale('ru', ''),
-        Locale('ko', ''),
-        Locale('hi', ''),
       ],
     );
   }
