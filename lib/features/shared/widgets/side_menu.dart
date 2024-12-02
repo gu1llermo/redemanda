@@ -181,6 +181,7 @@ class _CustomSwitch extends ConsumerWidget {
         ref.read(themeNotifierProvider.notifier).toggleTheme();
       },
       styleBuilder: (value) => ToggleStyle(
+        
         // Usa colores con buen contraste del esquema de colores
         backgroundColor:
             value ? colors.onInverseSurface : colors.primary.withOpacity(0.1),
@@ -202,7 +203,7 @@ class _CustomSwitch extends ConsumerWidget {
       ),
       textBuilder: (value) => Center(
         child: Text(
-          value ? 'Light' : 'Dark',
+          value ? 'Claro' : 'Obscuro',
           // style: TextStyle(
           //   color: value
           //       ? colors.onSurfaceVariant // Color texto en modo oscuro
