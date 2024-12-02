@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -111,32 +112,33 @@ class _SideMenuState extends ConsumerState<SideMenu> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              isDarkMode
-                  ? Pulse(
-                      animate: true,
-                      key: Key('$isDarkMode+1'),
-                      duration: Duration(milliseconds: 500),
-                      child: Icon(
-                        Icons.nightlight_round,
-                        color: colors
-                            .onSurface, // Use the theme's onSurface color for contrast
-                      ),
-                    )
-                  : Spin(
-                      animate: true,
-                      key: Key(isDarkMode.toString()),
-                      duration: Duration(milliseconds: 500),
-                      child: Icon(Icons.wb_sunny, color: colors.onSurface)),
-              const SizedBox(width: 10),
+              _CustomSwitch(isDarkMode),
+              // isDarkMode
+              //     ? Pulse(
+              //         animate: true,
+              //         key: Key('$isDarkMode+1'),
+              //         duration: Duration(milliseconds: 500),
+              //         child: Icon(
+              //           Icons.nightlight_round,
+              //           color: colors
+              //               .onSurface, // Use the theme's onSurface color for contrast
+              //         ),
+              //       )
+              //     : Spin(
+              //         animate: true,
+              //         key: Key(isDarkMode.toString()),
+              //         duration: Duration(milliseconds: 500),
+              //         child: Icon(Icons.wb_sunny, color: colors.onSurface)),
+              // const SizedBox(width: 10),
               // Switch para cambiar el tema
-              Switch(
-                value: themeMode == ThemeMode.dark,
-                onChanged: (_) {
-                  // Alternar tema usando el notifier
-                  ref.read(themeNotifierProvider.notifier).toggleTheme();
-                },
-                activeColor: colors.primary,
-              ),
+              // Switch(
+              //   value: themeMode == ThemeMode.dark,
+              //   onChanged: (_) {
+              //     // Alternar tema usando el notifier
+              //     ref.read(themeNotifierProvider.notifier).toggleTheme();
+              //   },
+              //   activeColor: colors.primary,
+              // ),
             ],
           ),
         ),
@@ -153,6 +155,61 @@ class _SideMenuState extends ConsumerState<SideMenu> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _CustomSwitch extends ConsumerWidget {
+  const _CustomSwitch(this.isDarkMode);
+  final bool isDarkMode;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = Theme.of(context).colorScheme;
+
+    return AnimatedToggleSwitch<bool>.dual(
+      current: isDarkMode,
+      first: false,
+      second: true,
+      spacing: 30.0,
+      borderWidth: 2.0,
+      // style: ToggleStyle(
+      //   borderColor: Colors.transparent,
+      // ),
+      height: 40,
+      onChanged: (_) {
+        ref.read(themeNotifierProvider.notifier).toggleTheme();
+      },
+      styleBuilder: (value) => ToggleStyle(
+        // Usa colores con buen contraste del esquema de colores
+        backgroundColor:
+            value ? colors.onInverseSurface : colors.primary.withOpacity(0.1),
+
+        indicatorColor: value
+            ? colors.onSurfaceVariant // Indicador en modo oscuro
+            : colors.surface, // Indicador en modo claro
+
+        borderRadius: const BorderRadius.horizontal(
+            left: Radius.circular(50.0), right: Radius.circular(50.0)),
+        indicatorBorderRadius: BorderRadius.circular(50),
+      ),
+      iconBuilder: (value) => Icon(
+        value ? Icons.nightlight_round : Icons.wb_sunny,
+        size: 32.0,
+        color: value
+            ? colors.inversePrimary // Alternativa para modo oscuro
+            : colors.primary, // Alternativa para modo claro
+      ),
+      textBuilder: (value) => Center(
+        child: Text(
+          value ? 'Light' : 'Dark',
+          // style: TextStyle(
+          //   color: value
+          //       ? colors.onSurfaceVariant // Color texto en modo oscuro
+          //       : colors.surface, // Color texto en modo claro
+          // ),
+        ),
+      ),
     );
   }
 }
