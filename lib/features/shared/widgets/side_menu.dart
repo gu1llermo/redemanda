@@ -111,16 +111,22 @@ class _SideMenuState extends ConsumerState<SideMenu> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Spin(
-                animate: true,
-                key: Key(isDarkMode.toString()),
-                delay: const Duration(milliseconds: 100),
-                child: Icon(
-                  isDarkMode ? Icons.nightlight_round : Icons.wb_sunny,
-                  color: colors
-                      .onSurface, // Use the theme's onSurface color for contrast
-                ),
-              ),
+              isDarkMode
+                  ? Pulse(
+                      animate: true,
+                      key: Key('$isDarkMode+1'),
+                      duration: Duration(milliseconds: 500),
+                      child: Icon(
+                        Icons.nightlight_round,
+                        color: colors
+                            .onSurface, // Use the theme's onSurface color for contrast
+                      ),
+                    )
+                  : Spin(
+                      animate: true,
+                      key: Key(isDarkMode.toString()),
+                      duration: Duration(milliseconds: 500),
+                      child: Icon(Icons.wb_sunny, color: colors.onSurface)),
               const SizedBox(width: 10),
               // Switch para cambiar el tema
               Switch(
