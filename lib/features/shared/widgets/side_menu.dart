@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -82,7 +81,6 @@ class _SideMenuState extends ConsumerState<SideMenu> {
           ),
         ),
 
-        // Divider
         const Divider(),
 
         // Destinos de navegación
@@ -103,7 +101,6 @@ class _SideMenuState extends ConsumerState<SideMenu> {
           ),
         ),
 
-        // Otro Divider
         const Divider(),
 
         // Cambiar Tema
@@ -112,38 +109,11 @@ class _SideMenuState extends ConsumerState<SideMenu> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              _CustomSwitch(isDarkMode),
-              // isDarkMode
-              //     ? Pulse(
-              //         animate: true,
-              //         key: Key('$isDarkMode+1'),
-              //         duration: Duration(milliseconds: 500),
-              //         child: Icon(
-              //           Icons.nightlight_round,
-              //           color: colors
-              //               .onSurface, // Use the theme's onSurface color for contrast
-              //         ),
-              //       )
-              //     : Spin(
-              //         animate: true,
-              //         key: Key(isDarkMode.toString()),
-              //         duration: Duration(milliseconds: 500),
-              //         child: Icon(Icons.wb_sunny, color: colors.onSurface)),
-              // const SizedBox(width: 10),
-              // Switch para cambiar el tema
-              // Switch(
-              //   value: themeMode == ThemeMode.dark,
-              //   onChanged: (_) {
-              //     // Alternar tema usando el notifier
-              //     ref.read(themeNotifierProvider.notifier).toggleTheme();
-              //   },
-              //   activeColor: colors.primary,
-              // ),
+              _ChangeModeCustomSwitch(isDarkMode),
             ],
           ),
         ),
 
-        // Otro Divider
         const Divider(),
 
         // Botón de Cerrar Sesión
@@ -159,8 +129,8 @@ class _SideMenuState extends ConsumerState<SideMenu> {
   }
 }
 
-class _CustomSwitch extends ConsumerWidget {
-  const _CustomSwitch(this.isDarkMode);
+class _ChangeModeCustomSwitch extends ConsumerWidget {
+  const _ChangeModeCustomSwitch(this.isDarkMode);
   final bool isDarkMode;
 
   @override
@@ -181,7 +151,6 @@ class _CustomSwitch extends ConsumerWidget {
         ref.read(themeNotifierProvider.notifier).toggleTheme();
       },
       styleBuilder: (value) => ToggleStyle(
-        
         // Usa colores con buen contraste del esquema de colores
         backgroundColor:
             value ? colors.onInverseSurface : colors.primary.withOpacity(0.1),

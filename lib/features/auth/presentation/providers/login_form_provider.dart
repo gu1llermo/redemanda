@@ -12,6 +12,7 @@ class LoginFormNotifier extends AutoDisposeNotifier<LoginFormState> {
   @override
   LoginFormState build() {
     loginUser = ref.read(authProvider.notifier).loginUser;
+
     return LoginFormState();
   }
 

@@ -7,7 +7,13 @@ class SearchOptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      icon: const Icon(Icons.search),
+      icon: Padding(
+        padding: const EdgeInsets.only(right: 5),
+        child: const Icon(
+          Icons.search,
+          size: 30,
+        ),
+      ),
       tooltip: 'Buscar',
       onSelected: (String choice) async {
         switch (choice) {

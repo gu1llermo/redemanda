@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/domain.dart';
+class DocumentCardView extends StatelessWidget {
+  final int productId;
+  final String title;
+  final String description;
+  final DateTime creationDate;
 
-class DocumentCard extends StatelessWidget {
-  final Document document;
-
-  const DocumentCard({
+  const DocumentCardView({
     super.key,
-    required this.document,
+    required this.title,
+    required this.description,
+    required this.creationDate,
+    required this.productId,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-
-    var title = document.title;
-    var description = document.description;
-    var creationDate = document.createdAt;
 
     return Card(
       elevation: 4,
@@ -43,7 +43,7 @@ class DocumentCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const _OptionButton(),
+                _OptionButton(productId),
               ],
             ),
 
@@ -155,7 +155,8 @@ class _CircleCard extends StatelessWidget {
 }
 
 class _OptionButton extends StatelessWidget {
-  const _OptionButton();
+  const _OptionButton(this.productId);
+  final int productId;
 
   @override
   Widget build(BuildContext context) {

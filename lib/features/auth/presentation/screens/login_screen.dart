@@ -1,16 +1,19 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../config/config.dart';
 import '../../../shared/shared.dart';
 import '../providers/providers.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.sizeOf(context);
+    final colors = Theme.of(context).colorScheme;
+    final themeMode = ref.watch(themeNotifierProvider);
+    final isDarkMode = themeMode == ThemeMode.dark;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -22,7 +25,10 @@ class LoginScreen extends StatelessWidget {
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Colors.black, Colors.white]),
+                colors: [
+                  isDarkMode ? colors.primary : colors.primaryContainer,
+                  isDarkMode ? colors.secondary : colors.secondaryContainer
+                ]),
           ),
           child: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
@@ -36,10 +42,9 @@ class LoginScreen extends StatelessWidget {
                   Flexible(
                     child: Align(
                       alignment: Alignment.center,
-                      child: const Icon(
+                      child: Icon(
                         Icons.person,
-                        // Icons.gavel,
-                        color: Colors.white,
+                        color: colors.onPrimary,
                         size: 120,
                       ),
                     ),
@@ -50,7 +55,7 @@ class LoginScreen extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 234, 228, 228),
+                        color: colors.surface,
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(100)),
                       ),
@@ -83,19 +88,17 @@ class _LoginForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final loginForm = ref.watch(loginFormProvider);
     final obscureText = loginForm.obscureText;
+    final colors = Theme.of(context).colorScheme;
+    final textStyles = Theme.of(context).textTheme;
+    const maxWidth = 500.0;
 
     ref.listen(
-      // con ésto solo escucho los cambios de authProvider, pero sin redibujar
-      // ó reconstruir el widget
       authProvider,
       (previous, next) {
         if (next.errorMessage.isEmpty) return;
         onError(context, next.errorMessage);
       },
     );
-
-    final textStyles = Theme.of(context).textTheme;
-    const maxWidth = 500.0;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -104,15 +107,16 @@ class _LoginForm extends ConsumerWidget {
         children: [
           Flexible(
               flex: 2,
-              child:
-                  Center(child: Text('Login', style: textStyles.titleLarge))),
+              child: Center(
+                  child: Text('Login',
+                      style: textStyles.titleLarge
+                          ?.copyWith(color: colors.onSurface)))),
           Flexible(
             child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxWidth: maxWidth), // Límite de ancho
+              constraints: BoxConstraints(maxWidth: maxWidth),
               child: CustomTextFormField(
                 label: 'Correo',
-                prefixIcon: Icon(Icons.email),
+                prefixIcon: Icon(Icons.email, color: colors.primary),
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 onChanged: ref.read(loginFormProvider.notifier).onEmailChange,
@@ -125,11 +129,10 @@ class _LoginForm extends ConsumerWidget {
           const SizedBox(height: 10),
           Flexible(
             child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxWidth: maxWidth), // Límite de ancho
+              constraints: BoxConstraints(maxWidth: maxWidth),
               child: CustomTextFormField(
                 label: 'Contraseña',
-                prefixIcon: Icon(Icons.password),
+                prefixIcon: Icon(Icons.password, color: colors.primary),
                 suffixIcon: PasswordSuffixIcon(
                   obscureText: obscureText,
                   onTap: ref
@@ -150,17 +153,17 @@ class _LoginForm extends ConsumerWidget {
           SizedBox(height: 20),
           Flexible(
             child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxWidth: maxWidth), // Límite de ancho
+              constraints: BoxConstraints(maxWidth: maxWidth),
               child: SizedBox(
                 width: double.infinity,
                 height: 60,
                 child: CustomFilledButton(
                   text: 'Ingresar',
                   textWidget: loginForm.isPosting
-                      ? const CircularProgressIndicator(strokeWidth: 2)
+                      ? CircularProgressIndicator(
+                          strokeWidth: 2, color: colors.onPrimary)
                       : null,
-                  buttonColor: Colors.black,
+                  buttonColor: colors.primary,
                   onPressed: loginForm.isPosting
                       ? null
                       : ref.read(loginFormProvider.notifier).onFormSubmit,
@@ -175,8 +178,10 @@ class _LoginForm extends ConsumerWidget {
               children: [
                 TextButton(
                     onPressed: () {},
-                    // onPressed: () => context.push('/recovery-password'),
-                    child: const Text('¿Olvidó su contraseña?')),
+                    child: Text(
+                      '¿Olvidó su contraseña?',
+                      style: TextStyle(color: colors.primary),
+                    )),
                 SizedBox(height: 30),
               ],
             ),

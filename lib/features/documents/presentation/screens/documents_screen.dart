@@ -52,7 +52,17 @@ class _DocumentsView extends ConsumerWidget {
         ),
         itemBuilder: (context, index) {
           final document = documentsState.documents[index];
-          return DocumentCard(document: document);
+          final title = document.title;
+          final description = document.description;
+          final creationDate = document.createdAt;
+          final id = document.id!;
+
+          return DocumentCardView(
+            creationDate: creationDate,
+            description: description,
+            productId: id,
+            title: title,
+          );
           // var nombre = lorem(paragraphs: 1, words: 4);
           // var description = lorem(paragraphs: 2, words: 30);
           // var document = Document.empty(

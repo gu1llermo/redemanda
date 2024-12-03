@@ -41,13 +41,18 @@ class DocumentsNotifier extends Notifier<DocumentsState> {
   }
 
   Future<void> loadAllDocuments() async {
+    // para éste caso en especifico no me parece necesario paginar
+    // los documentos, es decir pedirlo por páginas
+
     try {
       final documents = await documentsRepository.getAllDocuments();
       state =
           state.copyWith(documents: documents); // me parece que puedo hacer así
       // para cargar los documentos iniciales al iniciar la app
       // state = state.copyWith(documents: [...documents]);
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 

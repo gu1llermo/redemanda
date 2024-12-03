@@ -33,24 +33,25 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     final border = OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.transparent),
+        borderSide: BorderSide(color: Colors.transparent),
         borderRadius: BorderRadius.circular(40));
 
     const borderRadius = Radius.circular(15);
 
     return DecoratedBox(
-      // padding: const EdgeInsets.only(bottom: 0, top: 15),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.surface, // Usa el color de superficie del tema
           borderRadius: const BorderRadius.only(
               topLeft: borderRadius,
               bottomLeft: borderRadius,
               bottomRight: borderRadius),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: colors.shadow
+                    .withOpacity(0.1), // Usa el color de sombra del tema
                 blurRadius: 10,
                 offset: const Offset(0, 5))
           ]),
@@ -62,26 +63,40 @@ class CustomTextFormField extends StatelessWidget {
         textInputAction: textInputAction,
         obscuringCharacter: obscuringCharacter,
         onFieldSubmitted: onFieldSubmitted,
-        style: const TextStyle(fontSize: 20, color: Colors.black54),
+        style: TextStyle(
+            fontSize: 20,
+            color:
+                colors.onSurface // Usa el color del texto sobre la superficie
+            ),
         decoration: InputDecoration(
-          floatingLabelStyle:
-              const TextStyle(color: Colors.black, fontSize: 18),
+          floatingLabelStyle: TextStyle(
+              color: colors
+                  .primary, // Usa el color primario para la etiqueta flotante
+              fontSize: 18),
           enabledBorder: border,
           focusedBorder: border,
           errorBorder: border.copyWith(
-              borderSide: const BorderSide(color: Colors.transparent)),
-          focusedErrorBorder: border.copyWith(
-              borderSide: const BorderSide(color: Colors.transparent)),
+              borderSide: BorderSide(
+                  color: colors.error) // Usa el color de error del tema
+              ),
+          focusedErrorBorder:
+              border.copyWith(borderSide: BorderSide(color: colors.error)),
           isDense: true,
           label: label != null ? Text(label!) : null,
-
           hintText: hint,
+          hintStyle: TextStyle(
+              color: colors.onSurface
+                  .withOpacity(0.5)), // Estilo para el texto de pista
           errorText: errorMessage,
+          errorStyle:
+              TextStyle(color: colors.error), // Estilo para el texto de error
           focusColor: colors.primary,
-          //icon: Icon(Icons.email),
-          prefixIcon: prefixIcon,
+          prefixIcon: prefixIcon != null
+              ? IconTheme(
+                  data: IconThemeData(color: colors.primary),
+                  child: prefixIcon!)
+              : null,
           suffixIcon: suffixIcon,
-          // icon: Icon( Icons.supervised_user_circle_outlined, color: colors.primary, )
         ),
       ),
     );

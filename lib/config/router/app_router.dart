@@ -38,6 +38,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const UnderConstructionScreen(),
       ),
       GoRoute(
+        path: '/admin-settings',
+        builder: (context, state) => const UnderConstructionScreen(),
+      ),
+      GoRoute(
         path: '/new-document',
         builder: (context, state) => NewDocumentScreen(),
       ),
@@ -72,7 +76,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             isGoingTo == '/register' ||
             isGoingTo == '/splash') {
           // lo mandamos a la ruta principal, porque ya está autenticado
-          return isAdmin ? '/home-admin' : '/';
+          return '/';
+        }
+        if (isGoingTo == '/settings') {
+          return isAdmin ? '/admin-settings' : null;
+        }
+        if (isGoingTo == '/admin-settings') {
+          return !isAdmin ? '/settings' : null;
         }
       }
       //! Aquí podríamos verificar si el usuario es admin y redirigirlo a una ruta específica
