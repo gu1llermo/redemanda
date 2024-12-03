@@ -7,17 +7,17 @@ final documentsProvider =
     NotifierProvider<DocumentsNotifier, DocumentsState>(DocumentsNotifier.new);
 
 class DocumentsNotifier extends Notifier<DocumentsState> {
-  late final DocumentsRepository documentsRepository;
+  late final DocumentsRepository _documentsRepository;
   @override
   DocumentsState build() {
-    documentsRepository = ref.watch(documentsRepositoryProvider);
+    _documentsRepository = ref.read(documentsRepositoryProvider);
     Future.microtask(loadAllDocuments);
     return DocumentsState();
   }
 
   Future<bool> createDocument(Map<String, dynamic> documentData) async {
     try {
-      final document = await documentsRepository.createDocument(documentData);
+      final document = await _documentsRepository.createDocument(documentData);
 
       state = state.copyWith(documents: [...state.documents, document]);
 
@@ -29,7 +29,7 @@ class DocumentsNotifier extends Notifier<DocumentsState> {
 
   Future<bool> deleteDocument(int id) async {
     try {
-      await documentsRepository.deleteDocument(id);
+      await _documentsRepository.deleteDocument(id);
       state = state.copyWith(
           documents:
               state.documents.where((document) => document.id != id).toList());
@@ -45,7 +45,7 @@ class DocumentsNotifier extends Notifier<DocumentsState> {
     // los documentos, es decir pedirlo por páginas
 
     try {
-      final documents = await documentsRepository.getAllDocuments();
+      final documents = await _documentsRepository.getAllDocuments();
       state =
           state.copyWith(documents: documents); // me parece que puedo hacer así
       // para cargar los documentos iniciales al iniciar la app

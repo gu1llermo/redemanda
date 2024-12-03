@@ -21,11 +21,7 @@ class CustomFilledButton extends StatelessWidget {
         style: FilledButton.styleFrom(
             backgroundColor: buttonColor,
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-              bottomLeft: radius,
-              bottomRight: radius,
-              topLeft: radius,
-            ))),
+                borderRadius: BorderRadius.all(radius))),
         onPressed: onPressed,
         child: onPressed == null ? textWidget : Text(text));
   }

@@ -26,8 +26,17 @@ class LoginScreen extends ConsumerWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  isDarkMode ? colors.primary : colors.primaryContainer,
-                  isDarkMode ? colors.secondary : colors.secondaryContainer
+                  // colors.primary,
+                  // colors.secondary,
+                  // colors.primary,// queda bien en tema claro
+                  // colors.secondary,// queda bien en tema claro
+                  // isDarkMode ? colors.surface : colors.primary,
+                  // colors.secondary,
+                  // isDarkMode ? colors.secondary : colors.secondary,
+                  // isDarkMode ? colors.surface : colors.primary,
+                  isDarkMode ? colors.secondary : colors.primary,
+                  isDarkMode ? colors.surface : colors.secondary,
+                  // isDarkMode ? colors.secondary ,
                 ]),
           ),
           child: SingleChildScrollView(
@@ -44,7 +53,7 @@ class LoginScreen extends ConsumerWidget {
                       alignment: Alignment.center,
                       child: Icon(
                         Icons.person,
-                        color: colors.onPrimary,
+                        color: isDarkMode ? colors.secondary : colors.onPrimary,
                         size: 120,
                       ),
                     ),
@@ -55,7 +64,7 @@ class LoginScreen extends ConsumerWidget {
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: colors.surface,
+                        color: colors.surfaceContainer,
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(100)),
                       ),
@@ -126,7 +135,7 @@ class _LoginForm extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           Flexible(
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: maxWidth),

@@ -13,7 +13,6 @@ class CustomTextFormField extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final String obscuringCharacter;
-
   const CustomTextFormField({
     super.key,
     this.label,
@@ -34,70 +33,64 @@ class CustomTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final radius = 12.0;
 
-    final border = OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.transparent),
-        borderRadius: BorderRadius.circular(40));
-
-    const borderRadius = Radius.circular(15);
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-          color: colors.surface, // Usa el color de superficie del tema
-          borderRadius: const BorderRadius.only(
-              topLeft: borderRadius,
-              bottomLeft: borderRadius,
-              bottomRight: borderRadius),
-          boxShadow: [
-            BoxShadow(
-                color: colors.shadow
-                    .withOpacity(0.1), // Usa el color de sombra del tema
-                blurRadius: 10,
-                offset: const Offset(0, 5))
-          ]),
-      child: TextFormField(
-        onChanged: onChanged,
-        validator: validator,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        textInputAction: textInputAction,
-        obscuringCharacter: obscuringCharacter,
-        onFieldSubmitted: onFieldSubmitted,
-        style: TextStyle(
-            fontSize: 20,
-            color:
-                colors.onSurface // Usa el color del texto sobre la superficie
-            ),
-        decoration: InputDecoration(
-          floatingLabelStyle: TextStyle(
-              color: colors
-                  .primary, // Usa el color primario para la etiqueta flotante
-              fontSize: 18),
-          enabledBorder: border,
-          focusedBorder: border,
-          errorBorder: border.copyWith(
-              borderSide: BorderSide(
-                  color: colors.error) // Usa el color de error del tema
-              ),
-          focusedErrorBorder:
-              border.copyWith(borderSide: BorderSide(color: colors.error)),
-          isDense: true,
-          label: label != null ? Text(label!) : null,
-          hintText: hint,
-          hintStyle: TextStyle(
-              color: colors.onSurface
-                  .withOpacity(0.5)), // Estilo para el texto de pista
-          errorText: errorMessage,
-          errorStyle:
-              TextStyle(color: colors.error), // Estilo para el texto de error
-          focusColor: colors.primary,
-          prefixIcon: prefixIcon != null
-              ? IconTheme(
-                  data: IconThemeData(color: colors.primary),
-                  child: prefixIcon!)
-              : null,
-          suffixIcon: suffixIcon,
+    return TextFormField(
+      key: key,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      onChanged: onChanged,
+      validator: validator,
+      textInputAction: textInputAction,
+      onFieldSubmitted: onFieldSubmitted,
+      obscuringCharacter: obscuringCharacter,
+      // style: textTheme.bodyMedium?.copyWith(color: colors.onSurface),
+      cursorColor: colors.primary,
+      decoration: InputDecoration(
+        isDense: false,
+        label: label != null ? Text(label!) : null,
+        hintText: hint,
+        hintStyle: textTheme.bodyMedium
+            ?.copyWith(color: colors.onSurface.withOpacity(0.6)),
+        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
+        errorText: errorMessage,
+        errorStyle: textTheme.bodySmall?.copyWith(
+          color: colors.error,
+          height: 0.7,
         ),
+
+        // Configuración del borde
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radius),
+          borderSide: BorderSide(color: colors.outline),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radius),
+          borderSide: BorderSide(color: colors.outline),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radius),
+          borderSide: BorderSide(color: colors.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radius),
+          borderSide: BorderSide(color: colors.error),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radius),
+          borderSide: BorderSide(color: colors.error, width: 2),
+        ),
+
+        // Relleno y márgenes
+        contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 12 // Aumentar ligeramente el padding vertical
+            ),
+        errorMaxLines: 1,
+
+        filled: true,
+        fillColor: colors.surface,
       ),
     );
   }
