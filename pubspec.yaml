@@ -34,11 +34,16 @@ dependencies:
   service_worker: ^0.4.0
   animate_do: ^3.3.4
   animated_toggle_switch: ^0.8.3
+  riverpod_annotation: ^2.6.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  riverpod_generator: ^2.6.3
+  build_runner: ^2.4.13
+  custom_lint: ^0.7.0
+  riverpod_lint: ^2.6.3
 
 flutter:
   uses-material-design: true

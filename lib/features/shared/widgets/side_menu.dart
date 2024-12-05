@@ -109,6 +109,7 @@ class _SideMenuState extends ConsumerState<SideMenu> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // _ColorPicker(),
               _ChangeModeCustomSwitch(isDarkMode),
             ],
           ),
