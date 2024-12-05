@@ -1,22 +1,17 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:formz/formz.dart';
 import '../../../shared/shared.dart';
 import 'auth_provider.dart';
 
-final loginFormProvider =
-    AutoDisposeNotifierProvider<LoginFormNotifier, LoginFormState>(
-  () => LoginFormNotifier(),
-);
+part 'login_form_provider.g.dart';
 
-class LoginFormNotifier extends AutoDisposeNotifier<LoginFormState> {
+@riverpod
+class LoginForm extends _$LoginForm {
   @override
   LoginFormState build() {
-    loginUser = ref.read(authProvider.notifier).loginUser;
-
-    return LoginFormState();
+    final loginUser = ref.read(authProvider.notifier).loginUser;
+    return LoginFormState(loginUser: loginUser);
   }
-
-  late final Future<void> Function(String, String) loginUser;
 
   void onEmailChange(String value) {
     final newEmail = Email.dirty(value);
@@ -41,14 +36,14 @@ class LoginFormNotifier extends AutoDisposeNotifier<LoginFormState> {
     _touchEveryField();
     if (!state.isValid) return;
 
-    // está haciendo esto con la finalidad deshabilitar el botón de posteo
-    // para que el usuario no presione dos veces ó ingrese dos veces
-    // al mismo tiempo, es como una medida de seguridad
+    // Deshabilitar el botón de posteo para evitar doble envío
     state = state.copyWith(isPosting: true);
 
-    await loginUser(state.email.value, state.password.value);
-
-    state = state.copyWith(isPosting: false);
+    try {
+      await state.loginUser(state.email.value, state.password.value);
+    } finally {
+      state = state.copyWith(isPosting: false);
+    }
   }
 
   void _touchEveryField() {
@@ -69,6 +64,7 @@ class LoginFormState {
   final Email email;
   final Password password;
   final bool obscureText;
+  final Future<void> Function(String, String) loginUser;
 
   LoginFormState({
     this.isPosting = false,
@@ -77,6 +73,7 @@ class LoginFormState {
     this.email = const Email.pure(),
     this.password = const Password.pure(),
     this.obscureText = true,
+    required this.loginUser,
   });
 
   LoginFormState copyWith({
@@ -86,19 +83,22 @@ class LoginFormState {
     Email? email,
     Password? password,
     bool? obscureText,
+    Future<void> Function(String, String)? loginUser,
   }) =>
       LoginFormState(
-          isPosting: isPosting ?? this.isPosting,
-          isFormPosted: isFormPosted ?? this.isFormPosted,
-          isValid: isValid ?? this.isValid,
-          email: email ?? this.email,
-          password: password ?? this.password,
-          obscureText: obscureText ?? this.obscureText);
+        isPosting: isPosting ?? this.isPosting,
+        isFormPosted: isFormPosted ?? this.isFormPosted,
+        isValid: isValid ?? this.isValid,
+        email: email ?? this.email,
+        password: password ?? this.password,
+        obscureText: obscureText ?? this.obscureText,
+        loginUser: loginUser ?? this.loginUser,
+      );
 
   @override
   String toString() {
     return '''
-  LoginFormSate:
+  LoginFormState:
     isPosting: $isPosting
     isFormPosted: $isFormPosted
     isValid: $isValid

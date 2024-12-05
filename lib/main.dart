@@ -25,12 +25,13 @@ class MainApp extends ConsumerWidget {
     final appRouter = ref.watch(goRouterProvider);
     // Observar cambios en el tema
     final themeMode = ref.watch(themeNotifierProvider);
+    final seedColor = ref.watch(colorPreferencesProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter,
-      theme: AppThemes.lightTheme,
-      darkTheme: AppThemes.darkTheme,
+      theme: AppThemes.lightTheme(seedColor),
+      darkTheme: AppThemes.darkTheme(seedColor),
       themeMode: themeMode, // Usar el tema actual
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       supportedLocales: const [
