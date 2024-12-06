@@ -3,7 +3,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
-import 'package:redemanda/features/documents/domain/domain.dart';
 
 import '../../../shared/widgets/widgets.dart';
 import '../providers/providers.dart';

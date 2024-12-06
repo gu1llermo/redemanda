@@ -4,3 +4,4 @@ export 'full_screen_loader.dart';
 export 'geometrical_background.dart';
 export 'side_menu.dart';
 export 'password_suffix_icon.dart';
+export 'change_color_seed_button.dart';

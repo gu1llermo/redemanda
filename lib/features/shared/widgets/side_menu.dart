@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../config/config.dart';
 import '../../auth/presentation/providers/providers.dart';
+import 'change_color_seed_button.dart';
 import 'custom_filled_button.dart';
 
 class SideMenu extends ConsumerStatefulWidget {
@@ -31,6 +32,7 @@ class _SideMenuState extends ConsumerState<SideMenu> {
     final colors = Theme.of(context).colorScheme;
     final themeMode = ref.watch(themeNotifierProvider);
     final isDarkMode = themeMode == ThemeMode.dark;
+    // final seedColor = ref.watch(colorPreferencesProvider);
 
     return NavigationDrawer(
       elevation: 1,
@@ -107,9 +109,9 @@ class _SideMenuState extends ConsumerState<SideMenu> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // _ColorPicker(),
+              ChangeColorSeedButton(),
               _ChangeModeCustomSwitch(isDarkMode),
             ],
           ),

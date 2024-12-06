@@ -10,6 +10,8 @@ const colorSeed = Color(0xff424CB8);
 
 @Riverpod(dependencies: [keyValueStorageService])
 class ColorPreferences extends _$ColorPreferences {
+  // static const _darkColorSeed = 'darkColorSeed';
+  // static const _lightColorSeed = 'lightColorSeed';
   static const _colorSeed = 'colorSeed';
 
   @override
@@ -33,8 +35,10 @@ class ColorPreferences extends _$ColorPreferences {
   }
 
   void changeColorSeed(Color newColor) {
+    newColor = Color.fromARGB(255, newColor.red, newColor.green, newColor.blue);
     final keyValueStorageService = ref.read(keyValueStorageServiceProvider);
     state = newColor;
+
     _saveColorToPrefs(keyValueStorageService, newColor);
   }
 
