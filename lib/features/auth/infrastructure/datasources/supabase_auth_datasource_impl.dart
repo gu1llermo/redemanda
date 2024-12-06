@@ -17,6 +17,7 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     await Supabase.initialize(
       url: EnvironmentConfig.supabaseUrl,
       anonKey: EnvironmentConfig.supabaseAnonKey,
+      // authOptions: FlutterAuthClientOptions(),
     );
     supabase = Supabase.instance.client;
   }
@@ -43,7 +44,12 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     try {
       // es cuestión de probar sin colocarle el token ó refresh token allí,
       // ya que lo gestiona localmente la misma librería de supabase
-      final authResponse = await supabase.auth.refreshSession();
+      // tiene que ser el refreshtoken
+      final authResponse =
+          await supabase.auth.refreshSession(); // vamos a quitarlo nuevamente
+      // auqnue también puedo manejar la persistencia
+      // final authResponse =
+      //     await supabase.auth.refreshSession(token.isNotEmpty ? token : null);
       // cuando no existe una sesión en el equipo, la respuesta es un error
       // final authResponse = await supabase.auth.refreshSession(token);
 
@@ -57,10 +63,10 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
 
   @override
   Future<void> logout() async {
-    try {
-      await supabase.auth.signOut();
-    } on Exception catch (e) {
-      throw CustomError(e.toString());
-    }
+    await supabase.auth.signOut().onError(
+      (error, stackTrace) {
+        throw CustomError(error.toString());
+      },
+    );
   }
 }

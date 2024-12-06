@@ -6,7 +6,7 @@ part of 'auth_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authRepositoryHash() => r'ffe1af47574887c8dc0b233590348dd37b87946c';
+String _$authRepositoryHash() => r'f507b379dd2969aa6d276c3300d567d8a216a9dd';
 
 /// See also [authRepository].
 @ProviderFor(authRepository)
@@ -16,14 +16,14 @@ final authRepositoryProvider = Provider<AuthRepository>.internal(
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$authRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: const <ProviderOrFamily>[],
+  allTransitiveDependencies: const <ProviderOrFamily>{},
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthRepositoryRef = ProviderRef<AuthRepository>;
-String _$authHash() => r'd1d27eda5a7c42e8a1d2887c74431ab7f953f349';
+String _$authHash() => r'7b3b64adfc6152bea1a2b05d193ac53c1a557fcd';
 
 /// See also [Auth].
 @ProviderFor(Auth)
@@ -32,8 +32,16 @@ final authProvider = NotifierProvider<Auth, AuthState>.internal(
   name: r'authProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$authHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[
+    keyValueStorageServiceProvider,
+    authRepositoryProvider
+  ],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    keyValueStorageServiceProvider,
+    ...?keyValueStorageServiceProvider.allTransitiveDependencies,
+    authRepositoryProvider,
+    ...?authRepositoryProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$Auth = Notifier<AuthState>;

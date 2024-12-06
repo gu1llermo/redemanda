@@ -25,7 +25,7 @@ final keyValueStorageServiceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef KeyValueStorageServiceRef = ProviderRef<KeyValueStorageService>;
-String _$colorPreferencesHash() => r'1438eae30cdb7f380818b6e44aa2d85c77d3af07';
+String _$colorPreferencesHash() => r'ae006ab3224234162b749faf26352d4a74b20415';
 
 /// See also [ColorPreferences].
 @ProviderFor(ColorPreferences)
@@ -36,10 +36,15 @@ final colorPreferencesProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$colorPreferencesHash,
-  dependencies: <ProviderOrFamily>[keyValueStorageServiceProvider],
+  dependencies: <ProviderOrFamily>[
+    keyValueStorageServiceProvider,
+    themeNotifierProvider
+  ],
   allTransitiveDependencies: <ProviderOrFamily>{
     keyValueStorageServiceProvider,
-    ...?keyValueStorageServiceProvider.allTransitiveDependencies
+    ...?keyValueStorageServiceProvider.allTransitiveDependencies,
+    themeNotifierProvider,
+    ...?themeNotifierProvider.allTransitiveDependencies
   },
 );
 

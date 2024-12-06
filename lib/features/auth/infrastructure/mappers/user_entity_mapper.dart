@@ -9,6 +9,7 @@ class UserEntityMapper {
         fullName: json['fullName'],
         role: json['role'],
         token: json['token'] ?? '',
+        refreshToken: json['refreshToken'],
         // si no viene el token le colocamos un String vacío
       );
   static UserEntity authResponseToEntity(AuthResponse authResponse) {
@@ -20,6 +21,7 @@ class UserEntityMapper {
       fullName: user.userMetadata?['fullname'] ?? 'no-name',
       role: user.userMetadata?['role'] ?? 'user',
       token: session.accessToken,
+      refreshToken: session.refreshToken,
       // si no viene el token le colocamos un String vacío
     );
   }
