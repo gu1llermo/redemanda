@@ -146,9 +146,9 @@ class _ChangeModeCustomSwitch extends ConsumerWidget {
       second: true,
       spacing: 30.0,
       borderWidth: 2.0,
-      // style: ToggleStyle(
-      //   borderColor: Colors.transparent,
-      // ),
+      style: ToggleStyle(
+        borderColor: colors.inversePrimary,
+      ),
       height: 40,
       onChanged: (_) {
         ref.read(themeNotifierProvider.notifier).toggleTheme();
