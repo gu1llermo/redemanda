@@ -164,10 +164,6 @@ class _OptionButton extends StatelessWidget {
       icon: const Icon(Icons.more_vert),
       onSelected: (String choice) {
         switch (choice) {
-          case 'preview':
-            // Lógica de vista previa
-            print('Vista previa seleccionada');
-            break;
           case 'share':
             // Lógica de compartir
             print('Compartir seleccionada');
@@ -179,13 +175,6 @@ class _OptionButton extends StatelessWidget {
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-        const PopupMenuItem<String>(
-          value: 'preview',
-          child: ListTile(
-            leading: Icon(Icons.preview),
-            title: Text('Vista previa'),
-          ),
-        ),
         const PopupMenuItem<String>(
           value: 'share',
           child: ListTile(
