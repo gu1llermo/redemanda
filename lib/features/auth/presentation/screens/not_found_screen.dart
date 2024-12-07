@@ -65,7 +65,7 @@ class NotFoundScreen extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
                 child: Text(
-                  'Volver al Inicio',
+                  'Regresar',
                   style: textTheme.titleMedium,
                 ),
               ),
