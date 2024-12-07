@@ -205,4 +205,19 @@ class DocumentsDatasourceImpl extends DocumentsDatasource {
       throw CustomError('Error getAllDocuments: $e');
     }
   }
+
+  @override
+  Future<List<Document>> getDocumentsPaginated(
+      {required int page, required int pageSize, required int offset}) async {
+    final db = await database;
+    final finder = Finder(
+      limit: pageSize,
+      offset: offset,
+      sortOrders: [SortOrder('createdAt', false)],
+    );
+    final snapshots = await _store.find(db, finder: finder);
+    return snapshots
+        .map((snapshot) => DocumentMapper.jsonToEntity(snapshot.value))
+        .toList();
+  }
 }

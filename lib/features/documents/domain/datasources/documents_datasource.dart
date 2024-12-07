@@ -9,4 +9,6 @@ abstract class DocumentsDatasource {
   Future<List<Document>> getAllDocuments();
   Future<List<Document>> searchDocumentByDateRange(
       {required DateTime startDate, required DateTime endDate});
+  Future<List<Document>> getDocumentsPaginated(
+      {required int page, required int pageSize, required int offset});
 }

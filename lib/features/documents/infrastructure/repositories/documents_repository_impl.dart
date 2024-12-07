@@ -38,4 +38,11 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
       endDate: endDate,
     );
   }
+
+  @override
+  Future<List<Document>> getDocumentsPaginated(
+      {required int page, required int pageSize, required int offset}) async {
+    return await datasource.getDocumentsPaginated(
+        page: page, pageSize: pageSize, offset: offset);
+  }
 }
