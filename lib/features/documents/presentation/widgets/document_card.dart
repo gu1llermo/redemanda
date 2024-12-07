@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../shared/shared.dart';
+import '../../domain/domain.dart';
+import '../providers/providers.dart';
 
 class DocumentCardView extends StatelessWidget {
-  final int productId;
-  final String title;
-  final String description;
-  final DateTime creationDate;
+  final Document document;
 
   const DocumentCardView({
     super.key,
-    required this.title,
-    required this.description,
-    required this.creationDate,
-    required this.productId,
+    required this.document,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
+    final title = document.title;
+    final description = document.description;
+    final creationDate = document.createdAt;
 
     return Card(
       elevation: 4,
@@ -43,48 +45,57 @@ class DocumentCardView extends StatelessWidget {
                     ),
                   ),
                 ),
-                _OptionButton(productId),
+                _OptionButton(document),
               ],
             ),
 
             // Contenido de la tarjeta
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _CircleCard(colors: colors, title: title),
-                Expanded(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 8),
-                      Text(
-                        description,
-                        maxLines: 3,
-                        style: TextStyle(
-                          color: Colors.grey[600],
+            GestureDetector(
+              onTap: () => FileUtils.openWithDefaultApp(
+                context: context,
+                fileBytes: document.docxFile,
+                fileExtension: 'docx', // sin el punto
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _CircleCard(
+                    document: document,
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Text(
+                          description,
+                          maxLines: 3,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              '${creationDate.day}/${creationDate.month}/${creationDate.year}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.grey[500],
-                                fontSize: 12,
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                '${creationDate.day}/${creationDate.month}/${creationDate.year}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 12,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
 
             // Botón de opciones
@@ -99,14 +110,16 @@ class DocumentCardView extends StatelessWidget {
   }
 }
 
-class _CircleCard extends StatelessWidget {
+class _CircleCard extends ConsumerWidget {
   const _CircleCard({
-    required this.colors,
-    required this.title,
+    // required this.colors,
+    required this.document,
   });
 
-  final ColorScheme colors;
-  final String title;
+  // final ColorScheme colors;
+  // final String title;
+  // final int productId;
+  final Document document;
 
   String getIniciales(String title) {
     title = title.trim();
@@ -120,13 +133,16 @@ class _CircleCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = Theme.of(context).colorScheme;
+    final title = document.title;
+
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: CircleAvatar(
         radius: 30,
         // backgroundColor: Colors.transparent,
-        child: Container(
+        child: DecoratedBox(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
@@ -154,38 +170,106 @@ class _CircleCard extends StatelessWidget {
   }
 }
 
-class _OptionButton extends StatelessWidget {
-  const _OptionButton(this.productId);
-  final int productId;
+class _OptionButton extends ConsumerWidget {
+  const _OptionButton(this.document);
+  final Document document;
+
+  Future<void> mostrarDialogoConfirmacionEliminarDocumento({
+    required BuildContext context,
+    required WidgetRef ref,
+    required int id,
+  }) async {
+    bool? confirmacion = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.warning_outlined,
+                  color: Colors.orange,
+                  size: 64,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Eliminar Archivo',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  '¿Está seguro de que desea eliminar el archivo seleccionado? Esta acción no se puede deshacer.',
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                      ),
+                      onPressed: () {
+                        context.pop(false);
+                      },
+                      child: Text('Cancelar'),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      onPressed: () {
+                        context.pop(true);
+                      },
+                      child: Text('Eliminar'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    // Procesa la respuesta del usuario
+    if (confirmacion == true) {
+      // Lógica para eliminar el archivo
+      ref.read(documentsPaginationProvider.notifier).deleteDocument(id);
+    }
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return PopupMenuButton<String>(
       icon: const Icon(Icons.more_vert),
       onSelected: (String choice) {
         switch (choice) {
-          case 'preview':
-            // Lógica de vista previa
-            print('Vista previa seleccionada');
-            break;
           case 'share':
-            // Lógica de compartir
-            print('Compartir seleccionada');
+            FileUtils.share(
+              context: context,
+              file: document.docxFile,
+              fileName: '${document.title}.docx',
+            );
             break;
           case 'delete':
-            // Lógica de eliminar
-            print('Eliminar seleccionada');
+            mostrarDialogoConfirmacionEliminarDocumento(
+              context: context,
+              ref: ref,
+              id: document.id!,
+            );
             break;
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-        const PopupMenuItem<String>(
-          value: 'preview',
-          child: ListTile(
-            leading: Icon(Icons.preview),
-            title: Text('Vista previa'),
-          ),
-        ),
         const PopupMenuItem<String>(
           value: 'share',
           child: ListTile(

@@ -92,10 +92,7 @@ class _DocumentsView extends ConsumerWidget {
             itemBuilder: (context, index) {
               final document = documentsState.documents[index];
               return DocumentCardView(
-                creationDate: document.createdAt,
-                description: document.description,
-                productId: document.id!,
-                title: document.title,
+                document: document,
               );
             },
             itemCount: documentsState.documents.length,
