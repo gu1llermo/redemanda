@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
 
 import '../../../shared/widgets/widgets.dart';
 import '../providers/providers.dart';
@@ -40,39 +39,68 @@ class _DocumentsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final documentsState = ref.watch(documentsProvider);
+    final documentsState = ref.watch(documentsPaginationProvider);
+    final documentsNotifier = ref.read(documentsPaginationProvider.notifier);
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 40, top: 10),
-      child: MasonryGridView.builder(
-        physics: const ClampingScrollPhysics(),
-        gridDelegate: const SliverSimpleGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 400,
+    // Usar NotificationListener para paginación infinita
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scrollInfo) {
+        // Cargar más documentos cuando se está a menos del 20% de llegar al final
+        // scrollInfo.metrics.extentBefore es la cantidad de contenido ya desplazado
+        // scrollInfo.metrics.extentTotal es el tamaño total del contenido desplazable
+        if (scrollInfo.metrics.extentBefore / scrollInfo.metrics.extentTotal <
+                0.2 &&
+            documentsState.hasMoreDocuments) {
+          documentsNotifier.loadDocuments();
+          return true;
+        }
+        return false;
+      },
+      child: RefreshIndicator(
+        onRefresh: documentsNotifier.refreshDocuments,
+        // hace lo mismo que el código de abajo, pero el código de abajo es más entendible a
+        // mi parecer
+        // child: switch (documentsState.status) {
+        //   AsyncData(:final value) => MasonryGridView.builder(
+        //       physics: const ClampingScrollPhysics(),
+        //       gridDelegate:
+        //           const SliverSimpleGridDelegateWithMaxCrossAxisExtent(
+        //         maxCrossAxisExtent: 400,
+        //       ),
+        //       itemBuilder: (context, index) {
+        //         final document = documentsState.documents[index];
+        //         return DocumentCardView(
+        //           creationDate: document.createdAt,
+        //           description: document.description,
+        //           productId: document.id!,
+        //           title: document.title,
+        //         );
+        //       },
+        //       itemCount: documentsState.documents.length,
+        //     ),
+        //   AsyncError(:final error) => Center(child: Text('Error: $error')),
+        //   _ => const Center(child: CircularProgressIndicator()),
+        // },
+        child: documentsState.status.when(
+          loading: () => Center(child: CircularProgressIndicator()),
+          error: (error, _) => Center(child: Text('Error: $error')),
+          data: (_) => MasonryGridView.builder(
+            physics: const ClampingScrollPhysics(),
+            gridDelegate: const SliverSimpleGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 400,
+            ),
+            itemBuilder: (context, index) {
+              final document = documentsState.documents[index];
+              return DocumentCardView(
+                creationDate: document.createdAt,
+                description: document.description,
+                productId: document.id!,
+                title: document.title,
+              );
+            },
+            itemCount: documentsState.documents.length,
+          ),
         ),
-        itemBuilder: (context, index) {
-          final document = documentsState.documents[index];
-          final title = document.title;
-          final description = document.description;
-          final creationDate = document.createdAt;
-          final id = document.id!;
-
-          return DocumentCardView(
-            creationDate: creationDate,
-            description: description,
-            productId: id,
-            title: title,
-          );
-          // var nombre = lorem(paragraphs: 1, words: 4);
-          // var description = lorem(paragraphs: 2, words: 30);
-          // var document = Document.empty(
-          //   title: nombre,
-          //   description: description,
-          // );
-          // return DocumentCard(
-          //   document: document,
-          // );
-        },
-        itemCount: documentsState.documents.length,
       ),
     );
   }
