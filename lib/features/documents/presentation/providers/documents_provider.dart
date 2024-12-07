@@ -37,7 +37,7 @@ class DocumentsState {
       );
 }
 
-@riverpod
+@Riverpod(dependencies: [documentsRepository])
 class DocumentsPagination extends _$DocumentsPagination {
   @override
   DocumentsState build() {
