@@ -12,6 +12,7 @@ class Document {
   final List<String>? tags;
   final String? thumbnailPath;
   final Uint8List docxFile;
+  // final Uint8List pdfFile;
 
   const Document({
     this.id,
@@ -23,6 +24,7 @@ class Document {
     this.tags,
     this.thumbnailPath,
     required this.docxFile,
+    // required this.pdfFile,
   });
 
   Document copyWith({
@@ -35,6 +37,7 @@ class Document {
     List<String>? tags,
     String? thumbnailPath,
     Uint8List? docxFile,
+    // Uint8List? pdfFile,
   }) =>
       Document(
         id: id ?? this.id,
@@ -46,6 +49,7 @@ class Document {
         tags: tags ?? this.tags,
         thumbnailPath: thumbnailPath ?? this.thumbnailPath,
         docxFile: docxFile ?? this.docxFile,
+        // pdfFile: pdfFile ?? this.pdfFile,
       );
 
   // Método para calcular el tamaño del archivo en una unidad legible
@@ -73,6 +77,7 @@ class Document {
       sizeInBytes: 0,
       createdAt: DateTime.now(),
       docxFile: Uint8List(0),
+      // pdfFile: Uint8List(0),
       author: null,
       tags: [],
       thumbnailPath: null,

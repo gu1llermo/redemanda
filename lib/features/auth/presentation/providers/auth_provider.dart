@@ -1,17 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../config/config.dart';
-import '../../../shared/shared.dart';
+
 import '../../domain/domain.dart';
 import '../../infrastructure/infrastructure.dart';
 
 part 'auth_provider.g.dart';
 
-@Riverpod(
-    keepAlive: true, dependencies: [keyValueStorageService, authRepository])
+@Riverpod(keepAlive: true, dependencies: [authRepository])
 class Auth extends _$Auth {
   // Creamos métodos privados para manejar los repositorios
   // AuthRepository get _authRepository => AuthRepositoryImpl();

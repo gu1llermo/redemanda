@@ -13,6 +13,7 @@ class DocumentMapper {
         'tags': document.tags,
         'thumbnailPath': document.thumbnailPath,
         'docxFile': base64Encode(document.docxFile),
+        // 'pdfFile': base64Encode(document.pdfFile),
         // Convertir Uint8List a base64
       };
 
@@ -26,6 +27,7 @@ class DocumentMapper {
         tags: json['tags'] != null ? List<String>.from(json['tags']) : null,
         thumbnailPath: json['thumbnailPath'],
         docxFile: base64Decode(json['docxFile']),
+        // pdfFile: base64Decode(json['pdfFile']),
         // Convertir base64 a Uint8List
       );
 }

@@ -23,7 +23,7 @@ final authRepositoryProvider = Provider<AuthRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthRepositoryRef = ProviderRef<AuthRepository>;
-String _$authHash() => r'7b3b64adfc6152bea1a2b05d193ac53c1a557fcd';
+String _$authHash() => r'2c81f8bc791b0290192336fc5bb2a1f0e35f75bc';
 
 /// See also [Auth].
 @ProviderFor(Auth)
@@ -32,13 +32,8 @@ final authProvider = NotifierProvider<Auth, AuthState>.internal(
   name: r'authProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$authHash,
-  dependencies: <ProviderOrFamily>[
-    keyValueStorageServiceProvider,
-    authRepositoryProvider
-  ],
+  dependencies: <ProviderOrFamily>[authRepositoryProvider],
   allTransitiveDependencies: <ProviderOrFamily>{
-    keyValueStorageServiceProvider,
-    ...?keyValueStorageServiceProvider.allTransitiveDependencies,
     authRepositoryProvider,
     ...?authRepositoryProvider.allTransitiveDependencies
   },
