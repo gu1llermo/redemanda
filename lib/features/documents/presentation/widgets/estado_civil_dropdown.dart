@@ -4,14 +4,14 @@ import '../providers/providers.dart';
 
 class EstadoCivilDropdown extends StatelessWidget {
   final EstadoCivil estadoCivilInicial;
-  final Function(EstadoCivil?) onChanged;
+  final void Function(EstadoCivil)? onChanged;
   final Gender gender;
   final double? width;
 
   const EstadoCivilDropdown(
       {super.key,
       required this.estadoCivilInicial,
-      required this.onChanged,
+      this.onChanged,
       required this.gender,
       this.width});
 
@@ -28,7 +28,9 @@ class EstadoCivilDropdown extends StatelessWidget {
           color: Theme.of(context).dividerColor,
         ),
         onChanged: (EstadoCivil? nuevoEstado) {
-          onChanged(nuevoEstado);
+          if (nuevoEstado == null) return;
+          if (onChanged == null) return;
+          onChanged!(nuevoEstado);
         },
         items: EstadoCivil.values
             .map<DropdownMenuItem<EstadoCivil>>((EstadoCivil estado) {

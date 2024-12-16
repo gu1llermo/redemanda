@@ -26,17 +26,8 @@ class LoginScreen extends ConsumerWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  // colors.primary,
-                  // colors.secondary,
-                  // colors.primary,// queda bien en tema claro
-                  // colors.secondary,// queda bien en tema claro
-                  // isDarkMode ? colors.surface : colors.primary,
-                  // colors.secondary,
-                  // isDarkMode ? colors.secondary : colors.secondary,
-                  // isDarkMode ? colors.surface : colors.primary,
                   isDarkMode ? colors.secondary : colors.primary,
                   isDarkMode ? colors.surface : colors.secondary,
-                  // isDarkMode ? colors.secondary ,
                 ]),
           ),
           child: SingleChildScrollView(

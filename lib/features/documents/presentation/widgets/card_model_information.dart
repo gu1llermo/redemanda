@@ -25,6 +25,7 @@ class CardModelInformation extends StatelessWidget {
                     width: double.infinity,
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.end,
+                      alignment: WrapAlignment.spaceEvenly,
                       children: children,
                     )),
               ),

@@ -7,24 +7,26 @@ class AdvancedAutocompleteTextFieldOverlay extends ConsumerStatefulWidget {
   final String preferencesKey;
   final String labelText;
   final ValueChanged<String>? onChanged;
-  final ValueChanged<String>? onSubmitted;
+  // final ValueChanged<String>? onSubmitted;
   final int historialCount;
   final TextInputAction? textInputAction;
   final String? errorMessage;
   final String? helperText;
   final TextCapitalization textCapitalization;
+  final double width;
 
   const AdvancedAutocompleteTextFieldOverlay({
     super.key,
     required this.preferencesKey,
     this.labelText = 'Introduce un valor',
     this.onChanged,
-    this.onSubmitted,
+    // this.onSubmitted,
     this.historialCount = 3,
     this.textInputAction,
     this.errorMessage,
     this.helperText,
     this.textCapitalization = TextCapitalization.none,
+    this.width = double.infinity,
   });
 
   @override
@@ -141,7 +143,10 @@ class _AdvancedAutocompleteTextFieldState
   }
 
   Future<void> _saveTermToHistory(String term) async {
-    if (term.isEmpty) return;
+    if (term.isEmpty) {
+      widget.onChanged?.call(term);
+      return;
+    }
 
     final keyValueStorageService = ref.read(keyValueStorageServiceProvider);
 
@@ -158,7 +163,8 @@ class _AdvancedAutocompleteTextFieldState
           widget.preferencesKey, _historicalTerms);
     }
 
-    widget.onSubmitted?.call(term);
+    // widget.onSubmitted?.call(term);
+    widget.onChanged?.call(term);
     setState(() {
       _suggestions.clear();
       _removeOverlay();
@@ -213,21 +219,24 @@ class _AdvancedAutocompleteTextFieldState
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: TextField(
-        key: widget.key,
-        focusNode: _focusNode,
-        controller: _textController,
-        textCapitalization: widget.textCapitalization,
-        textInputAction: widget.textInputAction,
-        decoration: InputDecoration(
-          labelText: widget.labelText,
-          errorText: widget.errorMessage,
-          helperText: widget.helperText,
+    return SizedBox(
+      width: widget.width,
+      child: CompositedTransformTarget(
+        link: _layerLink,
+        child: TextField(
+          key: widget.key,
+          focusNode: _focusNode,
+          controller: _textController,
+          textCapitalization: widget.textCapitalization,
+          textInputAction: widget.textInputAction,
+          decoration: InputDecoration(
+            labelText: widget.labelText,
+            errorText: widget.errorMessage,
+            helperText: widget.helperText,
+          ),
+          onChanged: _generateSuggestions,
+          onSubmitted: _saveTermToHistory,
         ),
-        onChanged: _generateSuggestions,
-        onSubmitted: _saveTermToHistory,
       ),
     );
   }
