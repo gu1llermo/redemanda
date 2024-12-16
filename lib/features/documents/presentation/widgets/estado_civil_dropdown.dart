@@ -18,7 +18,7 @@ class EstadoCivilDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width ?? 100.0,
+      width: width ?? 120.0,
       child: DropdownButton<EstadoCivil>(
         value: estadoCivilInicial,
         hint: const Text('Seleccione estado civil'),

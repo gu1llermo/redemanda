@@ -1,27 +1,27 @@
 import 'package:formz/formz.dart';
 
 // Define input validation errors
-enum EmailError { empty, format }
+enum Abogado2EmailError { empty, format }
 
 // Extend FormzInput and provide the input type and error type.
-class Email extends FormzInput<String, EmailError> {
+class Abogado2Email extends FormzInput<String, Abogado2EmailError> {
   static final RegExp emailRegExp = RegExp(
     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
   );
 
   // Call super.pure to represent an unmodified form input.
-  const Email.pure() : super.pure('');
+  const Abogado2Email.pure() : super.pure('');
 
   // Call super.dirty to represent a modified form input.
-  const Email.dirty(super.value) : super.dirty();
+  const Abogado2Email.dirty(super.value) : super.dirty();
 
   String? get errorMessage {
     if (isValid || isPure) return null;
 
-    if (displayError == EmailError.empty) {
+    if (displayError == Abogado2EmailError.empty) {
       return 'El campo es requerido';
     }
-    if (displayError == EmailError.format) {
+    if (displayError == Abogado2EmailError.format) {
       return 'No tiene formato de correo electrónico';
     }
 
@@ -30,9 +30,9 @@ class Email extends FormzInput<String, EmailError> {
 
   // Override validator to handle validating a given input value.
   @override
-  EmailError? validator(String value) {
-    if (value.trim().isEmpty) return EmailError.empty;
-    if (!emailRegExp.hasMatch(value)) return EmailError.format;
+  Abogado2EmailError? validator(String value) {
+    if (value.trim().isEmpty) return Abogado2EmailError.empty;
+    if (!emailRegExp.hasMatch(value)) return Abogado2EmailError.format;
 
     return null;
   }
