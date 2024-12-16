@@ -5,34 +5,92 @@ import 'package:redemanda/features/shared/shared.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
-class NewDocumentScreen extends StatelessWidget {
+class NewDocumentScreen extends ConsumerWidget {
   const NewDocumentScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final newDocumentState = ref.watch(documentFormProvider);
+    final information = ListView(
+      children: const [
+        _InformacionDemandante(),
+        SizedBox(height: 5),
+        _InformacionAbogado1(),
+        SizedBox(height: 5),
+        _InformacionAbogado2(),
+        SizedBox(height: 5),
+        _InformacionDemandado(),
+        SizedBox(height: 5),
+        _InformacionRepresentanteLegal(),
+        SizedBox(height: 40),
+        // _SubmitButton()
+      ],
+    );
+    List<Widget> widgetOptions = <Widget>[
+      information,
+      Center(child: Text('Detalles del caso')),
+    ];
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(title: const Text('Nuevo Documento')),
         body: Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 40),
-          child: ListView(
-            children: const [
-              _InformacionDemandante(),
-              SizedBox(height: 10),
-              _InformacionAbogado1(),
-              SizedBox(height: 10),
-              _InformacionAbogado2(),
-              SizedBox(height: 10),
-              _InformacionDemandado(),
-              SizedBox(height: 10),
-              _InformacionRepresentanteLegal(),
-              SizedBox(height: 30),
-              _SubmitButton()
-            ],
+          child: IndexedStack(
+            index: newDocumentState.selectedIndex,
+            children: widgetOptions,
           ),
         ),
+        floatingActionButton: _GenerateButton(),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.info_outline_rounded),
+              label: 'Información',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.details_rounded),
+              label: 'Detalles',
+            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.school),
+            //   label: 'School',
+            // ),
+          ],
+          currentIndex: newDocumentState.selectedIndex,
+          selectedItemColor: Colors.amber[800],
+          onTap: ref.read(documentFormProvider.notifier).onSelectedIndexChanged,
+        ),
       ),
+    );
+  }
+}
+
+class _GenerateButton extends ConsumerWidget {
+  const _GenerateButton();
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final newDocumentState = ref.watch(documentFormProvider);
+    // return FloatingActionButton(
+    //   onPressed: () {
+
+    // },);
+    return FloatingActionButton(
+      tooltip: 'Generar Documento',
+      onPressed: newDocumentState.isPosting
+          ? null
+          : ref.read(documentFormProvider.notifier).onFormSubmit,
+      child: newDocumentState.isPosting
+          ? SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ),
+            )
+          : Icon(Icons.create_rounded),
     );
   }
 }

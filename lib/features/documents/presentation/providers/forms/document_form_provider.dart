@@ -11,6 +11,13 @@ class DocumentForm extends _$DocumentForm {
     return DocumentFormState();
   }
 
+  // index
+  void onSelectedIndexChanged(int value) {
+    state = state.copyWith(
+      selectedIndex: value,
+    );
+  }
+
 //* Demandante
   void onDemandanteGenderChanged(Gender value) {
     state = state.copyWith(
@@ -130,7 +137,20 @@ class DocumentForm extends _$DocumentForm {
   Future<void> onFormSubmit() async {
     final newState = state.copyWith(isFormPosted: true);
     _touchEveryThing(newState);
-    if (!state.isFormValid) return;
+    if (!state.isFormValid) {
+      // entonces me gustaría determinar la página que tiene el error
+      // 0 - InfoPage
+      int index = -1;
+      if (!_isValidInfoPage(state)) {
+        index = 0;
+      } // aquí sería else if para las demás condiciones
+      if (index != -1) {
+        // quiere decir que encontró la página
+        state = state.copyWith(selectedIndex: index);
+      }
+
+      return;
+    }
     // deshabilitar el botón de posteo
     state = state.copyWith(isPosting: true);
     // Utilizar el repositorio
@@ -168,9 +188,8 @@ class DocumentForm extends _$DocumentForm {
     }
   }
 
-  void _touchEveryThing(DocumentFormState newState) {
-    state = newState.copyWith(
-        isFormValid: Formz.validate([
+  bool _isValidInfoPage(DocumentFormState newState) {
+    return Formz.validate([
       // Demandante
       DemandanteFullName.dirty(newState.demandanteFullName.value),
       DemandanteRut.dirty(newState.demandanteRut.value),
@@ -192,12 +211,47 @@ class DocumentForm extends _$DocumentForm {
       RepresentanteLegalRut.dirty(newState.representanteLegalRut.value),
       RepresentanteLegalDomicilio.dirty(
           newState.representanteLegalDomicilio.value),
-      //
-    ]));
+    ]);
+  }
+
+  bool _isValidDetailsPage(DocumentFormState newState) {
+    return Formz.validate([
+      // // Demandante
+      // DemandanteFullName.dirty(newState.demandanteFullName.value),
+      // DemandanteRut.dirty(newState.demandanteRut.value),
+      // DemandanteNacionalidad.dirty(newState.demandanteNacionalidad.value),
+      // // Abogado 1
+      // Abogado1FullName.dirty(newState.abogado1FullName.value),
+      // Abogado1Rut.dirty(newState.abogado1Rut.value),
+      // Abogado1Email.dirty(newState.abogado1Email.value),
+      // // Abogado 2
+      // Abogado2FullName.dirty(newState.abogado2FullName.value),
+      // Abogado2Rut.dirty(newState.abogado2Rut.value),
+      // Abogado2Email.dirty(newState.abogado2Email.value),
+      // // Demandado
+      // DemandadoFullName.dirty(newState.demandadoFullName.value),
+      // DemandadoRut.dirty(newState.demandadoRut.value),
+      // // Representante Legal
+      // RepresentanteLegalFullName.dirty(
+      //     newState.representanteLegalFullName.value),
+      // RepresentanteLegalRut.dirty(newState.representanteLegalRut.value),
+      // RepresentanteLegalDomicilio.dirty(
+      //     newState.representanteLegalDomicilio.value),
+    ]);
+  }
+
+  void _touchEveryThing(DocumentFormState newState) {
+    state = newState.copyWith(
+      isFormValid: _isValidInfoPage(newState), // aquí utlizar operador && para
+      // que se cumplan todas las condiciones
+    );
   }
 }
 
 class DocumentFormState {
+  // index
+  final int selectedIndex; // para las diferentes páginas
+  // Utiles del formulario
   final bool isFormValid;
   final bool isFormPosted;
   final bool isPosting;
@@ -226,9 +280,14 @@ class DocumentFormState {
   //
 
   DocumentFormState({
+    // index
+    this.selectedIndex = 0,
+    // utiles del formulario
     this.isFormValid = false,
     this.isFormPosted = false,
     this.isPosting = false,
+    // index
+
     // Demandante
     this.demandanteGender = Gender.hombre,
     this.demandanteEstadoCivil = EstadoCivil.casado,
@@ -257,6 +316,9 @@ class DocumentFormState {
   });
 
   DocumentFormState copyWith({
+    // index
+    int? selectedIndex,
+    // utiles del formulario
     bool? isFormValid,
     bool? isFormPosted,
     bool? isPosting,
@@ -285,6 +347,9 @@ class DocumentFormState {
     //
   }) =>
       DocumentFormState(
+        // index
+        selectedIndex: selectedIndex ?? this.selectedIndex,
+        // utiles del formulario
         isFormValid: isFormValid ?? this.isFormValid,
         isFormPosted: isFormPosted ?? this.isFormPosted,
         isPosting: isPosting ?? this.isPosting,
