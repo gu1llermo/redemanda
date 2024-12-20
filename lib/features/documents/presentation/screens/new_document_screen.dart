@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:redemanda/features/shared/shared.dart';
 
+import '../../../../config/config.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
@@ -26,10 +29,25 @@ class NewDocumentScreen extends ConsumerWidget {
         // _SubmitButton()
       ],
     );
-    List<Widget> widgetOptions = <Widget>[
+    final details = ListView(children: [
+      _DetallesAdicionales(),
+      SizedBox(height: 5),
+    ]);
+    final widgetOptions = [
       information,
-      Center(child: Text('Detalles del caso')),
+      details,
     ];
+    // Listener para cambiar el índice seleccionado cuando cambia la página
+    // ref.listen(documentFormProvider.select((state) => state.selectedIndex),
+    //     (previous, next) {
+    //   if (previous != next) {
+    //     newDocumentState.pageController.animateToPage(
+    //       next,
+    //       duration: const Duration(milliseconds: 500),
+    //       curve: Curves.easeOut,
+    //     );
+    //   }
+    // });
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -37,6 +55,18 @@ class NewDocumentScreen extends ConsumerWidget {
         appBar: AppBar(title: const Text('Nuevo Documento')),
         body: Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 40),
+          // child: PageView(
+          //   controller: newDocumentState.pageController,
+          //   physics:
+          //       const NeverScrollableScrollPhysics(), // Prevenir desplazamiento manual
+          //   children: widgetOptions,
+          //   onPageChanged: (index) {
+          //     // Actualizar el índice seleccionado en el estado
+          //     ref
+          //         .read(documentFormProvider.notifier)
+          //         .onSelectedIndexChanged(index);
+          //   },
+          // ),
           child: IndexedStack(
             index: newDocumentState.selectedIndex,
             children: widgetOptions,
@@ -206,7 +236,7 @@ class _InformacionAbogado1 extends ConsumerWidget {
               : null,
         ),
         AdvancedAutocompleteTextFieldOverlay(
-          width: 250,
+          width: 300,
           labelText: 'Correo',
           preferencesKey: 'correo_abogado',
           onChanged:
@@ -250,7 +280,7 @@ class _InformacionAbogado2 extends ConsumerWidget {
               : null,
         ),
         AdvancedAutocompleteTextFieldOverlay(
-          width: 250,
+          width: 300,
           labelText: 'Correo',
           preferencesKey: 'correo_abogado',
           onChanged:
@@ -346,6 +376,72 @@ class _InformacionRepresentanteLegal extends ConsumerWidget {
           errorMessage: newDocumentState.isFormPosted
               ? newDocumentState.representanteLegalDomicilio.errorMessage
               : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _DetallesAdicionales extends ConsumerWidget {
+  const _DetallesAdicionales();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final newDocumentState = ref.watch(documentFormProvider);
+    // final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final fecha = newDocumentState.fechaInicioRelacionLaboral.value;
+    final fechaTxt = fecha != null
+        ? AppDateUtils.getCustomFormattedDate(fecha)
+        : 'Fecha no seleccionada';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Detalles adicionales del caso',
+          style: textTheme.titleLarge,
+        ),
+        const SizedBox(height: 5),
+        SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.end,
+            alignment: WrapAlignment.spaceEvenly,
+            children: [
+              AdvancedAutocompleteTextFieldOverlay(
+                preferencesKey: 'tribunal',
+                width: 200,
+                labelText: 'TRIBUNAL',
+                onChanged:
+                    ref.read(documentFormProvider.notifier).onTribunalChanged,
+                errorMessage: newDocumentState.isFormPosted
+                    ? newDocumentState.tribunal.errorMessage
+                    : null,
+              ),
+              DateTimeEntryCustom(
+                title: 'Fecha Inicio relación laboral',
+                onFechaChanged: ref
+                    .read(documentFormProvider.notifier)
+                    .onFechaInicioRelacionLaboralChanged,
+                errorMessage: newDocumentState.isFormPosted
+                    ? newDocumentState.fechaInicioRelacionLaboral.errorMessage
+                    : null,
+                fecha: newDocumentState.fechaInicioRelacionLaboral.value,
+              ),
+              Text(fechaTxt),
+              // DateTimeEntryCustom(
+              //   title: 'Fecha Termino relación laboral',
+              //   onFechaChanged: ref
+              //       .read(documentFormProvider.notifier)
+              //       .onFechaTerminoRelacionLaboralChanged,
+              //   errorMessage: newDocumentState.isFormPosted
+              //       ? newDocumentState.fechaTerminoRelacionLaboral.errorMessage
+              //       : null,
+              //   fecha: newDocumentState.fechaTerminoRelacionLaboral.value,
+              // ),
+            ],
+          ),
         ),
       ],
     );

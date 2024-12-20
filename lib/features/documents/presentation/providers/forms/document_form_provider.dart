@@ -2,13 +2,21 @@ import 'package:formz/formz.dart';
 import 'package:redemanda/features/shared/shared.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../../../config/config.dart';
+
 part 'document_form_provider.g.dart';
 
 @Riverpod()
 class DocumentForm extends _$DocumentForm {
   @override
   DocumentFormState build() {
+    // ref.onDispose(
+    //   () {
+    //     state.pageController.dispose();
+    //   },
+    // );
     return DocumentFormState();
+    // return DocumentFormState(pageController: PageController(keepPage: true));
   }
 
   // index
@@ -132,8 +140,22 @@ class DocumentForm extends _$DocumentForm {
     _touchEveryThing(newState);
   }
 
-  //*
+  //* Detalles adicionales del caso
+  void onTribunalChanged(String value) {
+    final tribunal = Tribunal.dirty(value);
+    final newState = state.copyWith(tribunal: tribunal);
+    _touchEveryThing(newState);
+  }
 
+  void onFechaInicioRelacionLaboralChanged(DateTime value) {
+    final fechaInicioRelacionLaboral = FechaInicioRelacionLaboral.dirty(value);
+    final newState = state.copyWith(
+      fechaInicioRelacionLaboral: fechaInicioRelacionLaboral,
+    );
+    _touchEveryThing(newState);
+  }
+
+  //* Botón de posteo
   Future<void> onFormSubmit() async {
     final newState = state.copyWith(isFormPosted: true);
     _touchEveryThing(newState);
@@ -143,7 +165,10 @@ class DocumentForm extends _$DocumentForm {
       int index = -1;
       if (!_isValidInfoPage(state)) {
         index = 0;
-      } // aquí sería else if para las demás condiciones
+      } else if (!_isValidDetailsPage(newState)) {
+        index = 1;
+      }
+      // aquí sería else if para las demás condiciones
       if (index != -1) {
         // quiere decir que encontró la página
         state = state.copyWith(selectedIndex: index);
@@ -154,6 +179,9 @@ class DocumentForm extends _$DocumentForm {
     // deshabilitar el botón de posteo
     state = state.copyWith(isPosting: true);
     // Utilizar el repositorio
+    final fechaInicioRelacionLaboral = AppDateUtils.getCustomFormattedDate(
+        state.fechaInicioRelacionLaboral.value!);
+
     final newDocument = {
       //*Demandante
       'nombre_demandante': state.demandanteFullName.value,
@@ -178,11 +206,17 @@ class DocumentForm extends _$DocumentForm {
       'domicilio_empresa': state.representanteLegalDomicilio.value,
       'don_cortesia_representante_legal':
           state.representanteLegalGender.donCortesia(),
-      //*
+      //* Detalles adicionales del caso
+      'tribunal': state.tribunal.value,
+      'fecha_inicio_relacion_laboral': fechaInicioRelacionLaboral,
+      //
     };
     try {
       // simulando un petición al server
       await Future.delayed(Duration(seconds: 2));
+      // return true;
+    } on Exception catch (e) {
+      // return false; // ocurrió un error en la petición al servidor
     } finally {
       state = state.copyWith(isPosting: false);
     }
@@ -216,34 +250,18 @@ class DocumentForm extends _$DocumentForm {
 
   bool _isValidDetailsPage(DocumentFormState newState) {
     return Formz.validate([
-      // // Demandante
-      // DemandanteFullName.dirty(newState.demandanteFullName.value),
-      // DemandanteRut.dirty(newState.demandanteRut.value),
-      // DemandanteNacionalidad.dirty(newState.demandanteNacionalidad.value),
-      // // Abogado 1
-      // Abogado1FullName.dirty(newState.abogado1FullName.value),
-      // Abogado1Rut.dirty(newState.abogado1Rut.value),
-      // Abogado1Email.dirty(newState.abogado1Email.value),
-      // // Abogado 2
-      // Abogado2FullName.dirty(newState.abogado2FullName.value),
-      // Abogado2Rut.dirty(newState.abogado2Rut.value),
-      // Abogado2Email.dirty(newState.abogado2Email.value),
-      // // Demandado
-      // DemandadoFullName.dirty(newState.demandadoFullName.value),
-      // DemandadoRut.dirty(newState.demandadoRut.value),
-      // // Representante Legal
-      // RepresentanteLegalFullName.dirty(
-      //     newState.representanteLegalFullName.value),
-      // RepresentanteLegalRut.dirty(newState.representanteLegalRut.value),
-      // RepresentanteLegalDomicilio.dirty(
-      //     newState.representanteLegalDomicilio.value),
+      // Detalles adicionales del caso
+      Tribunal.dirty(newState.tribunal.value),
+      FechaInicioRelacionLaboral.dirty(
+          newState.fechaInicioRelacionLaboral.value),
     ]);
   }
 
   void _touchEveryThing(DocumentFormState newState) {
     state = newState.copyWith(
-      isFormValid: _isValidInfoPage(newState), // aquí utlizar operador && para
+      // aquí utilizar operador && para
       // que se cumplan todas las condiciones
+      isFormValid: _isValidInfoPage(newState) && _isValidDetailsPage(newState),
     );
   }
 }
@@ -251,6 +269,7 @@ class DocumentForm extends _$DocumentForm {
 class DocumentFormState {
   // index
   final int selectedIndex; // para las diferentes páginas
+  // final PageController pageController;
   // Utiles del formulario
   final bool isFormValid;
   final bool isFormPosted;
@@ -277,11 +296,14 @@ class DocumentFormState {
   final RepresentanteLegalFullName representanteLegalFullName;
   final RepresentanteLegalRut representanteLegalRut;
   final RepresentanteLegalDomicilio representanteLegalDomicilio;
-  //
+  // Detalles adicionales del caso
+  final Tribunal tribunal;
+  final FechaInicioRelacionLaboral fechaInicioRelacionLaboral;
 
   DocumentFormState({
     // index
     this.selectedIndex = 0,
+    // required this.pageController,
     // utiles del formulario
     this.isFormValid = false,
     this.isFormPosted = false,
@@ -312,12 +334,16 @@ class DocumentFormState {
     this.representanteLegalRut = const RepresentanteLegalRut.dirty(''),
     this.representanteLegalDomicilio =
         const RepresentanteLegalDomicilio.dirty(''),
-    //
+    // Detalles adicionales del caso
+    this.tribunal = const Tribunal.dirty(''),
+    this.fechaInicioRelacionLaboral =
+        const FechaInicioRelacionLaboral.dirty(null),
   });
 
   DocumentFormState copyWith({
     // index
     int? selectedIndex,
+    // PageController? pageController,
     // utiles del formulario
     bool? isFormValid,
     bool? isFormPosted,
@@ -344,11 +370,14 @@ class DocumentFormState {
     RepresentanteLegalFullName? representanteLegalFullName,
     RepresentanteLegalRut? representanteLegalRut,
     RepresentanteLegalDomicilio? representanteLegalDomicilio,
-    //
+    // Detalles adicionales del caso
+    Tribunal? tribunal,
+    FechaInicioRelacionLaboral? fechaInicioRelacionLaboral,
   }) =>
       DocumentFormState(
         // index
         selectedIndex: selectedIndex ?? this.selectedIndex,
+        // pageController: pageController ?? this.pageController,
         // utiles del formulario
         isFormValid: isFormValid ?? this.isFormValid,
         isFormPosted: isFormPosted ?? this.isFormPosted,
@@ -381,6 +410,10 @@ class DocumentFormState {
             representanteLegalRut ?? this.representanteLegalRut,
         representanteLegalDomicilio:
             representanteLegalDomicilio ?? this.representanteLegalDomicilio,
+        // Detalles adicionales del caso
+        tribunal: tribunal ?? this.tribunal,
+        fechaInicioRelacionLaboral:
+            fechaInicioRelacionLaboral ?? this.fechaInicioRelacionLaboral,
         //
       );
 }

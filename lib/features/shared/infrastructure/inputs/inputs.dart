@@ -21,3 +21,6 @@ export 'document_form/demandado_rut.dart';
 export 'document_form/representante_legal_full_name.dart';
 export 'document_form/representante_legal_rut.dart';
 export 'document_form/representante_legal_domicilio.dart';
+// Detalles adicionales
+export 'document_form/tribunal.dart';
+export 'document_form/fecha_inicio_relacion_laboral.dart';
