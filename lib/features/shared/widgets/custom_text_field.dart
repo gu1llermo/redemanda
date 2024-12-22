@@ -1,50 +1,90 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 
-import '../../../config/config.dart';
-
-class CustomTextField extends ConsumerStatefulWidget {
-  // Atributos para personalización y reutilización
-
-  final String labelText;
+class CustomTextField extends StatelessWidget {
+  // Atributos existentes
+  final String? labelText;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
-
   final TextInputAction? textInputAction;
   final String? errorMessage;
   final String? helperText;
   final TextCapitalization textCapitalization;
+  final TextInputType? keyboardType;
+  final double width;
+  // Atributos para control numérico
+  final bool isNumeric;
+  final bool allowDecimals;
 
-  // Constructor con parámetros nombrados y algunos valores por defecto
-  const CustomTextField(
-      {super.key,
-      this.labelText = 'Introduce un valor',
-      this.onChanged,
-      this.onSubmitted,
-      this.textInputAction,
-      this.errorMessage,
-      this.helperText,
-      this.textCapitalization = TextCapitalization.none});
+  const CustomTextField({
+    super.key,
+    this.labelText,
+    this.onChanged,
+    this.onSubmitted,
+    this.textInputAction,
+    this.errorMessage,
+    this.helperText,
+    this.textCapitalization = TextCapitalization.none,
+    this.keyboardType,
+    this.width = 200,
+    this.isNumeric = false,
+    this.allowDecimals = false,
+  });
 
-  @override
-  ConsumerState<CustomTextField> createState() =>
-      _AdvancedAutocompleteTextFieldState();
-}
-
-class _AdvancedAutocompleteTextFieldState
-    extends ConsumerState<CustomTextField> {
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      textCapitalization: widget.textCapitalization,
-      textInputAction: widget.textInputAction,
-      decoration: InputDecoration(
-        labelText: widget.labelText,
-        errorText: widget.errorMessage,
-        helperText: widget.helperText,
+    return SizedBox(
+      width: width,
+      child: TextField(
+        textAlign: TextAlign.center,
+        textAlignVertical: TextAlignVertical.center,
+        textCapitalization: textCapitalization,
+        textInputAction: textInputAction,
+        // Forzar teclado numérico cuando es numérico
+        keyboardType: isNumeric
+            ? TextInputType.numberWithOptions(decimal: allowDecimals)
+            : keyboardType,
+        // Formatters para controlar la entrada
+        inputFormatters: isNumeric
+            ? [
+                // Permitir solo números y coma si es decimal
+                FilteringTextInputFormatter.allow(
+                    allowDecimals ? RegExp(r'[0-9,]') : RegExp(r'[0-9]')),
+                // Formateo específico según tipo
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  // Si está vacío, permitir
+                  if (newValue.text.isEmpty) {
+                    return newValue;
+                  }
+
+                  if (allowDecimals) {
+                    // Verificar formato decimal
+                    if (RegExp(r'^\d*,?\d*$').hasMatch(newValue.text)) {
+                      // Evitar múltiples comas
+                      if (newValue.text.indexOf(',') !=
+                          newValue.text.lastIndexOf(',')) {
+                        return oldValue;
+                      }
+                      return newValue;
+                    }
+                  } else {
+                    // Verificar formato entero
+                    if (RegExp(r'^\d+$').hasMatch(newValue.text)) {
+                      return newValue;
+                    }
+                  }
+                  return oldValue;
+                }),
+              ]
+            : null,
+        decoration: InputDecoration(
+          labelText: labelText,
+          errorText: errorMessage,
+          helperText: helperText,
+        ),
+        onChanged: onChanged?.call,
+        onSubmitted: onSubmitted?.call,
       ),
-      onChanged: widget.onChanged?.call,
-      onSubmitted: widget.onSubmitted.call,
     );
   }
 }

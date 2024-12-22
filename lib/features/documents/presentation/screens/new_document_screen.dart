@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:redemanda/features/shared/shared.dart';
@@ -13,6 +12,8 @@ class NewDocumentScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // final colors = Theme.of(context).colorScheme;
+
     final newDocumentState = ref.watch(documentFormProvider);
     final information = ListView(
       children: const [
@@ -89,6 +90,7 @@ class NewDocumentScreen extends ConsumerWidget {
             // ),
           ],
           currentIndex: newDocumentState.selectedIndex,
+          // selectedItemColor: colors.primary,
           selectedItemColor: Colors.amber[800],
           onTap: ref.read(documentFormProvider.notifier).onSelectedIndexChanged,
         ),
@@ -390,60 +392,110 @@ class _DetallesAdicionales extends ConsumerWidget {
     final newDocumentState = ref.watch(documentFormProvider);
     // final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final fecha = newDocumentState.fechaInicioRelacionLaboral.value;
-    final fechaTxt = fecha != null
-        ? AppDateUtils.getCustomFormattedDate(fecha)
-        : 'Fecha no seleccionada';
+    final remuneracion =
+        "\$${StringUtils.formatToNumber(newDocumentState.remuneracion.value)}";
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Detalles adicionales del caso',
-          style: textTheme.titleLarge,
-        ),
-        const SizedBox(height: 5),
-        SizedBox(
-          width: double.infinity,
-          child: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.end,
-            alignment: WrapAlignment.spaceEvenly,
-            children: [
-              AdvancedAutocompleteTextFieldOverlay(
-                preferencesKey: 'tribunal',
-                width: 200,
-                labelText: 'TRIBUNAL',
-                onChanged:
-                    ref.read(documentFormProvider.notifier).onTribunalChanged,
-                errorMessage: newDocumentState.isFormPosted
-                    ? newDocumentState.tribunal.errorMessage
-                    : null,
-              ),
-              DateTimeEntryCustom(
-                title: 'Fecha Inicio relación laboral',
-                onFechaChanged: ref
-                    .read(documentFormProvider.notifier)
-                    .onFechaInicioRelacionLaboralChanged,
-                errorMessage: newDocumentState.isFormPosted
-                    ? newDocumentState.fechaInicioRelacionLaboral.errorMessage
-                    : null,
-                fecha: newDocumentState.fechaInicioRelacionLaboral.value,
-              ),
-              Text(fechaTxt),
-              // DateTimeEntryCustom(
-              //   title: 'Fecha Termino relación laboral',
-              //   onFechaChanged: ref
-              //       .read(documentFormProvider.notifier)
-              //       .onFechaTerminoRelacionLaboralChanged,
-              //   errorMessage: newDocumentState.isFormPosted
-              //       ? newDocumentState.fechaTerminoRelacionLaboral.errorMessage
-              //       : null,
-              //   fecha: newDocumentState.fechaTerminoRelacionLaboral.value,
-              // ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Detalles adicionales del caso',
+            style: textTheme.titleLarge,
           ),
-        ),
-      ],
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.end,
+                runSpacing: 5,
+                spacing: 20,
+                children: [
+                  AdvancedAutocompleteTextFieldOverlay(
+                    preferencesKey: 'tribunal',
+                    width: 200,
+                    labelText: 'TRIBUNAL',
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onTribunalChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.tribunal.errorMessage
+                        : null,
+                  ),
+                  DateTimeEntryCustom(
+                    title: 'Fecha Inicio relación laboral',
+                    onFechaChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onFechaInicioRelacionLaboralChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState
+                            .fechaInicioRelacionLaboral.errorMessage
+                        : null,
+                    fecha: newDocumentState.fechaInicioRelacionLaboral.value,
+                  ),
+                  DateTimeEntryCustom(
+                    title: 'Fecha Termino relación laboral',
+                    onFechaChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onFechaTerminoRelacionLaboralChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState
+                            .fechaTerminoRelacionLaboral.errorMessage
+                        : null,
+                    fecha: newDocumentState.fechaTerminoRelacionLaboral.value,
+                  ),
+                  AdvancedAutocompleteTextFieldOverlay(
+                    preferencesKey: 'cargo_trabajador',
+                    width: 300,
+                    labelText: 'CARGO DEL TRABAJADOR',
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onCargoTrabajadorChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.cargoTrabajador.errorMessage
+                        : null,
+                  ),
+                  AdvancedAutocompleteTextFieldOverlay(
+                    preferencesKey: 'tipo_contrato',
+                    width: 300,
+                    labelText: 'TIPO DE CONTRATO',
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onTipoContratoChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.tipoContrato.errorMessage
+                        : null,
+                  ),
+                  CustomTextField(
+                    labelText: 'HORAS SEMANALES',
+                    isNumeric: true,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.horasSemanales.errorMessage
+                        : null,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onHorasSemanalesChanged,
+                  ),
+                  CustomTextField(
+                    labelText: 'REMUNERACIÓN $remuneracion',
+                    isNumeric: true,
+                    allowDecimals: true,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.remuneracion.errorMessage
+                        : null,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onRemuneracionChanged,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -6,7 +6,7 @@ class AppDateUtils {
   }
 
   static String getCustomFormattedDate(DateTime date,
-      [String format = "dd MMMM 'de' yyyy"]) {
+      [String format = "dd 'de' MMMM 'de' yyyy"]) {
     return DateFormat(format, 'es').format(date);
   }
 }

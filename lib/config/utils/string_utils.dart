@@ -1,4 +1,5 @@
 import 'package:diacritic/diacritic.dart';
+import 'package:intl/intl.dart';
 
 class StringUtils {
   static bool titleContains(String titleEntry, String searchTermEntry) {
@@ -83,5 +84,23 @@ class StringUtils {
     // Verificar si se cumple el umbral de coincidencia
     final percentageMatch = matchCount / searchWords.length;
     return percentageMatch >= matchThreshold;
+  }
+
+  static num parseToNum(String value) {
+    final formatter =
+        NumberFormat.decimalPattern('es'); // o el locale que necesites
+    return formatter.parse(value);
+  }
+
+  static String formatToNumber(String value) {
+    value = value.trim();
+    if (value.isEmpty) return value;
+    double number = double.parse(value.replaceAll(',', '.'));
+
+    // Creamos el formateador con el patrón deseado
+    final formatter = NumberFormat('#,##0.00', 'es');
+    // Formateamos el número
+    String formatted = formatter.format(number);
+    return formatted;
   }
 }
