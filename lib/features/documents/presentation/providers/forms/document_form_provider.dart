@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:redemanda/features/shared/shared.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -187,6 +188,38 @@ class DocumentForm extends _$DocumentForm {
     _touchEveryThing(newState);
   }
 
+  //* Detalles del Accidente
+  void onFechaAccidenteLaboralChanged(DateTime value) {
+    final fechaAccidenteLaboral = FechaAccidenteInput.dirty(
+      value,
+      fechaInicio: state.fechaInicioRelacionLaboral.value,
+      fechaTermino: state.fechaTerminoRelacionLaboral.value,
+    );
+    final newState =
+        state.copyWith(fechaAccidenteLaboral: fechaAccidenteLaboral);
+    _touchEveryThing(newState);
+  }
+
+  void onHoraAccidenteChanged(TimeOfDay value) {
+    final horaAccidente = HoraInput.dirty(value);
+    final newState = state.copyWith(horaAccidente: horaAccidente);
+    _touchEveryThing(newState);
+  }
+
+  void onRelatoAccidenteExtensoChanged(String value) {
+    final relatoAccidenteExtenso = SimpleStringInput.dirty(value);
+    final newState =
+        state.copyWith(relatoAccidenteExtenso: relatoAccidenteExtenso);
+    _touchEveryThing(newState);
+  }
+
+  void onRelatoHechosPosterioresChanged(String value) {
+    final relatoHechosPosteriores = SimpleStringInput.dirty(value);
+    final newState =
+        state.copyWith(relatoHechosPosteriores: relatoHechosPosteriores);
+    _touchEveryThing(newState);
+  }
+
   //* Botón de posteo
   Future<void> onFormSubmit() async {
     final newState = state.copyWith(isFormPosted: true);
@@ -250,7 +283,15 @@ class DocumentForm extends _$DocumentForm {
       'tipo_contrato': state.tipoContrato.value,
       'horas_semanales': state.horasSemanales.value,
       'remuneracion': remuneracion,
-      //
+      //* Detalles del Accidente
+      'fecha_accidente_laboral': AppDateUtils.getCustomFormattedDate(
+        state.fechaAccidenteLaboral.value!,
+      ),
+      'hora_accidente':
+          AppDateUtils.getFormattedHora(state.horaAccidente.value!),
+      'relato_del_accidente_extenso': state.relatoAccidenteExtenso.value,
+      'relato_hechos_posteriores_al_accidente_extenso':
+          state.relatoHechosPosteriores.value,
     };
     try {
       // simulando un petición al server
@@ -300,6 +341,15 @@ class DocumentForm extends _$DocumentForm {
       SimpleStringInput.dirty(newState.tipoContrato.value),
       PositiveIntegerInput.dirty(newState.horasSemanales.value),
       PositiveNumInput.dirty(newState.remuneracion.value),
+      // Detalles del Accidente
+      FechaAccidenteInput.dirty(
+        newState.fechaAccidenteLaboral.value,
+        fechaInicio: state.fechaInicioRelacionLaboral.value,
+        fechaTermino: state.fechaTerminoRelacionLaboral.value,
+      ),
+      HoraInput.dirty(state.horaAccidente.value),
+      SimpleStringInput.dirty(state.relatoAccidenteExtenso.value),
+      SimpleStringInput.dirty(state.relatoHechosPosteriores.value),
     ]);
   }
 
@@ -350,6 +400,11 @@ class DocumentFormState {
   final SimpleStringInput tipoContrato;
   final PositiveIntegerInput horasSemanales;
   final PositiveNumInput remuneracion;
+  // Detalles del Accidente
+  final FechaAccidenteInput fechaAccidenteLaboral;
+  final HoraInput horaAccidente;
+  final SimpleStringInput relatoAccidenteExtenso;
+  final SimpleStringInput relatoHechosPosteriores;
 
   DocumentFormState({
     // index
@@ -391,6 +446,11 @@ class DocumentFormState {
     this.tipoContrato = const SimpleStringInput.dirty(''),
     this.horasSemanales = const PositiveIntegerInput.dirty(''),
     this.remuneracion = const PositiveNumInput.dirty(''),
+    // Detalles del Accidente
+    this.fechaAccidenteLaboral = const FechaAccidenteInput.dirty(null),
+    this.horaAccidente = const HoraInput.dirty(null),
+    this.relatoAccidenteExtenso = const SimpleStringInput.dirty(''),
+    this.relatoHechosPosteriores = const SimpleStringInput.dirty(''),
   });
 
   DocumentFormState copyWith({
@@ -431,6 +491,11 @@ class DocumentFormState {
     SimpleStringInput? tipoContrato,
     PositiveIntegerInput? horasSemanales,
     PositiveNumInput? remuneracion,
+    // Detalles del Accidente
+    FechaAccidenteInput? fechaAccidenteLaboral,
+    HoraInput? horaAccidente,
+    SimpleStringInput? relatoAccidenteExtenso,
+    SimpleStringInput? relatoHechosPosteriores,
   }) =>
       DocumentFormState(
         // index
@@ -478,7 +543,14 @@ class DocumentFormState {
         tipoContrato: tipoContrato ?? this.tipoContrato,
         horasSemanales: horasSemanales ?? this.horasSemanales,
         remuneracion: remuneracion ?? this.remuneracion,
-        //
+        // Detalles del Accidente
+        fechaAccidenteLaboral:
+            fechaAccidenteLaboral ?? this.fechaAccidenteLaboral,
+        horaAccidente: horaAccidente ?? this.horaAccidente,
+        relatoAccidenteExtenso:
+            relatoAccidenteExtenso ?? this.relatoAccidenteExtenso,
+        relatoHechosPosteriores:
+            relatoHechosPosteriores ?? this.relatoHechosPosteriores,
       );
 }
 

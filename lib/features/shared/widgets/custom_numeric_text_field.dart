@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CustomTextField extends StatelessWidget {
-  // Atributos existentes
+class CustomNumericTextField extends StatelessWidget {
   final String? labelText;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -16,7 +15,7 @@ class CustomTextField extends StatelessWidget {
   final bool isNumeric;
   final bool allowDecimals;
 
-  const CustomTextField({
+  const CustomNumericTextField({
     super.key,
     this.labelText,
     this.onChanged,

@@ -394,7 +394,9 @@ class _DetallesAdicionales extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     final remuneracion =
         "\$${StringUtils.formatToNumber(newDocumentState.remuneracion.value)}";
-
+    final altura = MediaQuery.sizeOf(context).height;
+    final ancho = MediaQuery.sizeOf(context).width;
+    final factorAltura = ancho > 600 ? 0.2 : 0.3;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -469,7 +471,7 @@ class _DetallesAdicionales extends ConsumerWidget {
                         ? newDocumentState.tipoContrato.errorMessage
                         : null,
                   ),
-                  CustomTextField(
+                  CustomNumericTextField(
                     labelText: 'HORAS SEMANALES',
                     isNumeric: true,
                     errorMessage: newDocumentState.isFormPosted
@@ -479,7 +481,7 @@ class _DetallesAdicionales extends ConsumerWidget {
                         .read(documentFormProvider.notifier)
                         .onHorasSemanalesChanged,
                   ),
-                  CustomTextField(
+                  CustomNumericTextField(
                     labelText: 'REMUNERACIÓN $remuneracion',
                     isNumeric: true,
                     allowDecimals: true,
@@ -494,6 +496,73 @@ class _DetallesAdicionales extends ConsumerWidget {
               ),
             ),
           ),
+          const SizedBox(height: 5),
+          const Divider(),
+          Text(
+            'Detalles del accidente',
+            style: textTheme.titleLarge,
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.end,
+              runSpacing: 10,
+              spacing: 20,
+              children: [
+                DateTimeEntryCustom(
+                  title: 'Fecha del accidente laboral',
+                  onFechaChanged: ref
+                      .read(documentFormProvider.notifier)
+                      .onFechaAccidenteLaboralChanged,
+                  errorMessage: newDocumentState.isFormPosted
+                      ? newDocumentState.fechaAccidenteLaboral.errorMessage
+                      : null,
+                  fecha: newDocumentState.fechaAccidenteLaboral.value,
+                ),
+                SelectTimeEntryCustom(
+                  title: 'Hora del accidente',
+                  onHoraChanged: ref
+                      .read(documentFormProvider.notifier)
+                      .onHoraAccidenteChanged,
+                  errorMessage: newDocumentState.isFormPosted
+                      ? newDocumentState.horaAccidente.errorMessage
+                      : null,
+                  hora: newDocumentState.horaAccidente.value,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: [
+                CustomLargeTextField(
+                  labelText: 'Relato del accidente (Extenso)',
+                  height: altura * factorAltura,
+                  onChanged: ref
+                      .read(documentFormProvider.notifier)
+                      .onRelatoAccidenteExtensoChanged,
+                  errorMessage: newDocumentState.isFormPosted
+                      ? newDocumentState.relatoAccidenteExtenso.errorMessage
+                      : null,
+                ),
+                const SizedBox(height: 5),
+                CustomLargeTextField(
+                  labelText: 'Relato hechos posteriores al accidente (Extenso)',
+                  height: altura * factorAltura,
+                  onChanged: ref
+                      .read(documentFormProvider.notifier)
+                      .onRelatoHechosPosterioresChanged,
+                  errorMessage: newDocumentState.isFormPosted
+                      ? newDocumentState.relatoHechosPosteriores.errorMessage
+                      : null,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 35),
         ],
       ),
     );
