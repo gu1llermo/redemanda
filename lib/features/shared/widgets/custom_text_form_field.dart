@@ -51,7 +51,7 @@ class CustomTextFormField extends StatelessWidget {
         label: label != null ? Text(label!) : null,
         hintText: hint,
         hintStyle: textTheme.bodyMedium
-            ?.copyWith(color: colors.onSurface.withOpacity(0.6)),
+            ?.copyWith(color: colors.onSurface.withAlpha(153)),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         errorText: errorMessage,
