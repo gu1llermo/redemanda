@@ -8,6 +8,7 @@ class CustomDocumentoAdicionalTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final String? errorMessage;
   final TextInputType? keyboardType;
+  // final void Function(int)? onDelete;
 
   const CustomDocumentoAdicionalTextField({
     super.key,
@@ -17,6 +18,7 @@ class CustomDocumentoAdicionalTextField extends StatefulWidget {
     this.errorMessage,
     this.keyboardType,
     required this.index,
+    // this.onDelete,
   });
 
   @override
@@ -49,6 +51,12 @@ class _CustomDocumentoAdicionalTextFieldState
         decoration: InputDecoration(
           hintText: widget.hintText,
           errorText: widget.errorMessage,
+          // suffixIcon: IconButton(
+          //   icon: Icon(Icons.delete_forever_rounded),
+          //   onPressed: () {
+          //     widget.onDelete?.call(widget.index);
+          //   },
+          // ),
         ),
         onChanged: _onSearchChanged,
       ),

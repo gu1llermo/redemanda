@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -42,6 +44,7 @@ class _AdvancedAutocompleteTextFieldState
   final FocusNode _focusNode = FocusNode();
   OverlayEntry? _overlayEntry;
   final LayerLink _layerLink = LayerLink();
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -217,6 +220,13 @@ class _AdvancedAutocompleteTextFieldState
     }
   }
 
+  void _onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      _generateSuggestions(value);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -234,7 +244,8 @@ class _AdvancedAutocompleteTextFieldState
             errorText: widget.errorMessage,
             helperText: widget.helperText,
           ),
-          onChanged: _generateSuggestions,
+          onChanged: _onSearchChanged,
+          // onChanged: _generateSuggestions,
           onSubmitted: _saveTermToHistory,
         ),
       ),
@@ -243,6 +254,7 @@ class _AdvancedAutocompleteTextFieldState
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _textController.dispose();
     _focusNode.removeListener(_handleFocusChange);
     _focusNode.dispose();

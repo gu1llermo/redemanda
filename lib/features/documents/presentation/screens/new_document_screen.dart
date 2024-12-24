@@ -800,6 +800,7 @@ class _Compensaciones extends ConsumerWidget {
                               .onDocumentoAdicionalChanged,
                         ),
                         IconButton(
+                          tooltip: 'Eliminar item',
                           icon: const Icon(Icons.delete_forever_rounded),
                           onPressed: () {
                             ref
@@ -811,7 +812,9 @@ class _Compensaciones extends ConsumerWidget {
                     );
                   },
                 ),
+                const SizedBox(height: 5),
                 IconButton(
+                  tooltip: 'Agregar item',
                   icon: const Icon(Icons.add),
                   onPressed: () {
                     ref

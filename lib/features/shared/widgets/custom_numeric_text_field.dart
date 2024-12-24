@@ -1,7 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CustomNumericTextField extends StatelessWidget {
+class CustomNumericTextField extends StatefulWidget {
   final String? labelText;
   final String? hintText;
   final ValueChanged<String>? onChanged;
@@ -33,24 +34,45 @@ class CustomNumericTextField extends StatelessWidget {
   });
 
   @override
+  State<CustomNumericTextField> createState() => _CustomNumericTextFieldState();
+}
+
+class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
+  Timer? _debounce;
+
+  void _onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      widget.onChanged?.call(value);
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width,
+      width: widget.width,
       child: TextField(
         textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.center,
-        textCapitalization: textCapitalization,
-        textInputAction: textInputAction,
+        textCapitalization: widget.textCapitalization,
+        textInputAction: widget.textInputAction,
         // Forzar teclado numérico cuando es numérico
-        keyboardType: isNumeric
-            ? TextInputType.numberWithOptions(decimal: allowDecimals)
-            : keyboardType,
+        keyboardType: widget.isNumeric
+            ? TextInputType.numberWithOptions(decimal: widget.allowDecimals)
+            : widget.keyboardType,
         // Formatters para controlar la entrada
-        inputFormatters: isNumeric
+        inputFormatters: widget.isNumeric
             ? [
                 // Permitir solo números y coma si es decimal
-                FilteringTextInputFormatter.allow(
-                    allowDecimals ? RegExp(r'[0-9,]') : RegExp(r'[0-9]')),
+                FilteringTextInputFormatter.allow(widget.allowDecimals
+                    ? RegExp(r'[0-9,]')
+                    : RegExp(r'[0-9]')),
                 // Formateo específico según tipo
                 TextInputFormatter.withFunction((oldValue, newValue) {
                   // Si está vacío, permitir
@@ -58,7 +80,7 @@ class CustomNumericTextField extends StatelessWidget {
                     return newValue;
                   }
 
-                  if (allowDecimals) {
+                  if (widget.allowDecimals) {
                     // Verificar formato decimal
                     if (RegExp(r'^\d*,?\d*$').hasMatch(newValue.text)) {
                       // Evitar múltiples comas
@@ -79,13 +101,14 @@ class CustomNumericTextField extends StatelessWidget {
               ]
             : null,
         decoration: InputDecoration(
-          labelText: labelText,
-          errorText: errorMessage,
-          helperText: helperText,
-          hintText: hintText,
+          labelText: widget.labelText,
+          errorText: widget.errorMessage,
+          helperText: widget.helperText,
+          hintText: widget.hintText,
         ),
-        onChanged: onChanged?.call,
-        onSubmitted: onSubmitted?.call,
+        onChanged: _onSearchChanged,
+        // onChanged: widget.onChanged?.call,
+        onSubmitted: widget.onSubmitted?.call,
       ),
     );
   }
