@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomLargeTextField extends StatelessWidget {
   final String? labelText;
+  final String? hintText;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final TextInputAction? textInputAction;
@@ -15,6 +16,7 @@ class CustomLargeTextField extends StatelessWidget {
   const CustomLargeTextField({
     super.key,
     this.labelText,
+    this.hintText,
     this.onChanged,
     this.onSubmitted,
     this.textInputAction,
@@ -42,6 +44,7 @@ class CustomLargeTextField extends StatelessWidget {
         minLines: null,
         decoration: InputDecoration(
           labelText: labelText,
+          hintText: hintText,
           errorText: errorMessage,
           helperText: helperText,
           // Configuración del borde

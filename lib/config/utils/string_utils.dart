@@ -94,7 +94,7 @@ class StringUtils {
 
   static String formatToNumber(String value) {
     value = value.trim();
-    if (value.isEmpty) return value;
+    if (value.isEmpty || value.length == 1) return value;
     double number = double.parse(value.replaceAll(',', '.'));
 
     // Creamos el formateador con el patrón deseado

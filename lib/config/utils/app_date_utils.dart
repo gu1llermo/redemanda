@@ -8,7 +8,6 @@ class AppDateUtils {
 
   static String getFormattedHora(TimeOfDay hora) {
     return '${hora.hour.toString().padLeft(2, '0')}:${hora.minute.toString().padLeft(2, '0')}';
-    ;
   }
 
   static String getCustomFormattedDate(DateTime date,

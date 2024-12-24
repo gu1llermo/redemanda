@@ -220,6 +220,79 @@ class DocumentForm extends _$DocumentForm {
     _touchEveryThing(newState);
   }
 
+  //* Daños y perjuicios
+  void onPorcentajeIncapacidadChanged(String value) {
+    final porcentajeIncapacidad = PositiveIntegerInput.dirty(value);
+    final newState =
+        state.copyWith(porcentajeIncapacidad: porcentajeIncapacidad);
+    _touchEveryThing(newState);
+  }
+
+  void onMontoADemandarChanged(String value) {
+    final montoADemandar = PositiveNumInput.dirty(value);
+    final newState = state.copyWith(montoADemandar: montoADemandar);
+    _touchEveryThing(newState);
+  }
+
+  void onRelatoDaniosEsteticosChanged(String value) {
+    final relatoDaniosEsteticos = SimpleStringInput.dirty(value);
+    final newState =
+        state.copyWith(relatoDaniosEsteticos: relatoDaniosEsteticos);
+    _touchEveryThing(newState);
+  }
+
+  void onDanioActorChanged(String value) {
+    final danioActor = SimpleStringInput.dirty(value);
+    final newState = state.copyWith(danioActor: danioActor);
+    _touchEveryThing(newState);
+  }
+
+  void onDanioTrabajadorChanged(String value) {
+    final danioTrabajador = SimpleStringInput.dirty(value);
+    final newState = state.copyWith(danioTrabajador: danioTrabajador);
+    _touchEveryThing(newState);
+  }
+
+  // Compensaciones
+  void onMontoRemuneracionSegunEmpleadorChanged(String value) {
+    final montoRemuneracionSegunEmpleador = PositiveNumInput.dirty(value);
+    final newState = state.copyWith(
+      montoRemuneracionSegunEmpleador: montoRemuneracionSegunEmpleador,
+    );
+    _touchEveryThing(newState);
+  }
+
+  void onMontoRemuneracionArt172Changed(String value) {
+    final montoRemuneracionArt172 = PositiveNumInput.dirty(value);
+    final newState = state.copyWith(
+      montoRemuneracionArt172: montoRemuneracionArt172,
+    );
+    _touchEveryThing(newState);
+  }
+
+  void onRemoveDocumentosAdicionalesAIngresar(int index) {
+    state = state.copyWith(
+      documentosAdicionalesAIngresar:
+          List.from(state.documentosAdicionalesAIngresar)..removeAt(index),
+    );
+  }
+
+  void onDocumentoAdicionalChanged(String value, int index) {
+    state = state.copyWith(
+      documentosAdicionalesAIngresar:
+          List.from(state.documentosAdicionalesAIngresar)..[index] = value,
+    );
+  }
+
+  void onAddDocumentosAdicionalesAIngresar() {
+    state = state.copyWith(
+      documentosAdicionalesAIngresar: [
+        ...state.documentosAdicionalesAIngresar,
+        ''
+      ],
+    );
+  }
+
   //* Botón de posteo
   Future<void> onFormSubmit() async {
     final newState = state.copyWith(isFormPosted: true);
@@ -232,6 +305,10 @@ class DocumentForm extends _$DocumentForm {
         index = 0;
       } else if (!_isValidDetailsPage(newState)) {
         index = 1;
+      } else if (!_isValidDaniosPage(newState)) {
+        index = 2;
+      } else if (!_isValidCompensacionesPage(newState)) {
+        index = 3;
       }
       // aquí sería else if para las demás condiciones
       if (index != -1) {
@@ -248,8 +325,6 @@ class DocumentForm extends _$DocumentForm {
         state.fechaInicioRelacionLaboral.value!);
     final fechaTerminoRelacionLaboral = AppDateUtils.getCustomFormattedDate(
         state.fechaTerminoRelacionLaboral.value!);
-    // formatear remuneración
-    final remuneracion = StringUtils.formatToNumber(state.remuneracion.value);
 
     final newDocument = {
       //*Demandante
@@ -282,7 +357,7 @@ class DocumentForm extends _$DocumentForm {
       'cargo_trabajador': state.cargoTrabajador.value,
       'tipo_contrato': state.tipoContrato.value,
       'horas_semanales': state.horasSemanales.value,
-      'remuneracion': remuneracion,
+      'remuneracion': StringUtils.formatToNumber(state.remuneracion.value),
       //* Detalles del Accidente
       'fecha_accidente_laboral': AppDateUtils.getCustomFormattedDate(
         state.fechaAccidenteLaboral.value!,
@@ -292,6 +367,20 @@ class DocumentForm extends _$DocumentForm {
       'relato_del_accidente_extenso': state.relatoAccidenteExtenso.value,
       'relato_hechos_posteriores_al_accidente_extenso':
           state.relatoHechosPosteriores.value,
+      //* Daños y perjuicios
+      'porcentaje_incapacidad': state.porcentajeIncapacidad.value,
+      'monto_a_demandar':
+          StringUtils.formatToNumber(state.montoADemandar.value),
+      'relato_danios_esteticos': state.relatoDaniosEsteticos.value,
+      'danio_que_tiene_el_actor': state.danioActor.value,
+      'danio_del_trabajador': state.danioTrabajador.value,
+      //* Compensaciones
+      'monto_de_remuneracion_segun_empleador': StringUtils.formatToNumber(
+          state.montoRemuneracionSegunEmpleador.value),
+      'monto_remuneracion_segun_articulo_172': StringUtils.formatToNumber(
+        state.montoRemuneracionArt172.value,
+      ),
+      'lista_documentos_ingresar_demanda': state.documentosAdicionalesAIngresar,
     };
     try {
       // simulando un petición al server
@@ -303,6 +392,37 @@ class DocumentForm extends _$DocumentForm {
       state = state.copyWith(isPosting: false);
     }
   }
+
+  // bool _isValidInfoPage(DocumentFormState newState) {
+  //   return Formz.validate([
+  //     ..._getInfoPageFields(newState),
+  //   ]);
+  // }
+
+  // List<FormzInput<dynamic, dynamic>> _getInfoPageFields(
+  //     DocumentFormState newState) {
+  //   return [
+  //     // Demandante
+  //     SimpleStringInput.dirty(newState.demandanteFullName.value),
+  //     SimpleStringInput.dirty(newState.demandanteRut.value),
+  //     SimpleStringInput.dirty(newState.demandanteNacionalidad.value),
+  //     // Abogado 1
+  //     SimpleStringInput.dirty(newState.abogado1FullName.value),
+  //     SimpleStringInput.dirty(newState.abogado1Rut.value),
+  //     Email.dirty(newState.abogado1Email.value),
+  //     // Abogado 2
+  //     SimpleStringInput.dirty(newState.abogado2FullName.value),
+  //     SimpleStringInput.dirty(newState.abogado2Rut.value),
+  //     Email.dirty(newState.abogado2Email.value),
+  //     // Demandado
+  //     SimpleStringInput.dirty(newState.demandadoFullName.value),
+  //     SimpleStringInput.dirty(newState.demandadoRut.value),
+  //     // Representante Legal
+  //     SimpleStringInput.dirty(newState.representanteLegalFullName.value),
+  //     SimpleStringInput.dirty(newState.representanteLegalRut.value),
+  //     SimpleStringInput.dirty(newState.representanteLegalDomicilio.value),
+  //   ];
+  // }
 
   bool _isValidInfoPage(DocumentFormState newState) {
     return Formz.validate([
@@ -353,11 +473,76 @@ class DocumentForm extends _$DocumentForm {
     ]);
   }
 
+  bool _isValidDaniosPage(DocumentFormState newState) {
+    return Formz.validate([
+      // Daños y perjuicios
+      PositiveIntegerInput.dirty(newState.porcentajeIncapacidad.value),
+      PositiveNumInput.dirty(newState.montoADemandar.value),
+      SimpleStringInput.dirty(newState.relatoDaniosEsteticos.value),
+      SimpleStringInput.dirty(newState.danioActor.value),
+      SimpleStringInput.dirty(newState.danioTrabajador.value),
+    ]);
+  }
+
+  bool _isValidCompensacionesPage(DocumentFormState newState) {
+    return Formz.validate([
+      // Compensaciones
+      PositiveNumInput.dirty(newState.montoRemuneracionSegunEmpleador.value),
+      PositiveNumInput.dirty(newState.montoRemuneracionArt172.value),
+    ]);
+  }
+  // bool _isValidDetailsPage(DocumentFormState newState) {
+  //   return Formz.validate([
+  //     ..._getDetailsPageFields(newState),
+  //   ]);
+  // }
+
+  // List<FormzInput<dynamic, dynamic>> _getDetailsPageFields(
+  //     DocumentFormState newState) {
+  //   return [
+  //     // Detalles adicionales del caso
+  //     SimpleStringInput.dirty(newState.tribunal.value),
+  //     FechaInput.dirty(newState.fechaInicioRelacionLaboral.value),
+  //     FechaTerminoInput.dirty(
+  //       newState.fechaTerminoRelacionLaboral.value,
+  //       fechaInicio: newState.fechaInicioRelacionLaboral.value,
+  //     ),
+  //     SimpleStringInput.dirty(newState.cargoTrabajador.value),
+  //     SimpleStringInput.dirty(newState.tipoContrato.value),
+  //     PositiveIntegerInput.dirty(newState.horasSemanales.value),
+  //     PositiveNumInput.dirty(newState.remuneracion.value),
+  //     // Detalles del Accidente
+  //     FechaAccidenteInput.dirty(
+  //       newState.fechaAccidenteLaboral.value,
+  //       fechaInicio: state.fechaInicioRelacionLaboral.value,
+  //       fechaTermino: state.fechaTerminoRelacionLaboral.value,
+  //     ),
+  //     HoraInput.dirty(state.horaAccidente.value),
+  //     SimpleStringInput.dirty(state.relatoAccidenteExtenso.value),
+  //     SimpleStringInput.dirty(state.relatoHechosPosteriores.value),
+  //   ];
+  // }
+
+  // bool _isValidAllPages(DocumentFormState newState) {
+  //   // tuve que hacerlo así para que se validaran todos los campos
+  //   // ya que si uso el operador && apenas la primera condición es falsa
+  //   // deja de evaluar las demás
+  //   // tampoco funcionó así, genera el mismo comportamiento
+  //   return Formz.validate([
+  //     ..._getDetailsPageFields(newState),
+  //     ..._getInfoPageFields(newState),
+  //   ]);
+  // }
+
   void _touchEveryThing(DocumentFormState newState) {
     state = newState.copyWith(
       // aquí utilizar operador && para
       // que se cumplan todas las condiciones
-      isFormValid: _isValidInfoPage(newState) && _isValidDetailsPage(newState),
+      // isFormValid: _isValidAllPages(newState),
+      isFormValid: _isValidInfoPage(newState) &&
+          _isValidDetailsPage(newState) &&
+          _isValidDaniosPage(newState) &&
+          _isValidCompensacionesPage(newState),
     );
   }
 }
@@ -405,6 +590,17 @@ class DocumentFormState {
   final HoraInput horaAccidente;
   final SimpleStringInput relatoAccidenteExtenso;
   final SimpleStringInput relatoHechosPosteriores;
+  // Daños y perjuicios
+  final PositiveIntegerInput porcentajeIncapacidad;
+  final PositiveNumInput montoADemandar;
+  final SimpleStringInput relatoDaniosEsteticos;
+  final SimpleStringInput danioActor;
+  final SimpleStringInput danioTrabajador;
+  // Compensaciones
+  final PositiveNumInput montoRemuneracionSegunEmpleador;
+  final PositiveNumInput montoRemuneracionArt172;
+  // Lista de documentos adicionales
+  final List<String> documentosAdicionalesAIngresar;
 
   DocumentFormState({
     // index
@@ -451,6 +647,17 @@ class DocumentFormState {
     this.horaAccidente = const HoraInput.dirty(null),
     this.relatoAccidenteExtenso = const SimpleStringInput.dirty(''),
     this.relatoHechosPosteriores = const SimpleStringInput.dirty(''),
+    // Daños y perjuicios
+    this.porcentajeIncapacidad = const PositiveIntegerInput.dirty(''),
+    this.montoADemandar = const PositiveNumInput.dirty(''),
+    this.relatoDaniosEsteticos = const SimpleStringInput.dirty(''),
+    this.danioActor = const SimpleStringInput.dirty(''),
+    this.danioTrabajador = const SimpleStringInput.dirty(''),
+    // Compensaciones
+    this.montoRemuneracionSegunEmpleador = const PositiveNumInput.dirty(''),
+    this.montoRemuneracionArt172 = const PositiveNumInput.dirty(''),
+    // Lista de documentos adicionales
+    this.documentosAdicionalesAIngresar = const [],
   });
 
   DocumentFormState copyWith({
@@ -496,6 +703,17 @@ class DocumentFormState {
     HoraInput? horaAccidente,
     SimpleStringInput? relatoAccidenteExtenso,
     SimpleStringInput? relatoHechosPosteriores,
+    // Daños y perjuicios
+    PositiveIntegerInput? porcentajeIncapacidad,
+    PositiveNumInput? montoADemandar,
+    SimpleStringInput? relatoDaniosEsteticos,
+    SimpleStringInput? danioActor,
+    SimpleStringInput? danioTrabajador,
+    // Compensaciones
+    PositiveNumInput? montoRemuneracionSegunEmpleador,
+    PositiveNumInput? montoRemuneracionArt172,
+    // Lista de documentos adicionales
+    List<String>? documentosAdicionalesAIngresar,
   }) =>
       DocumentFormState(
         // index
@@ -551,6 +769,22 @@ class DocumentFormState {
             relatoAccidenteExtenso ?? this.relatoAccidenteExtenso,
         relatoHechosPosteriores:
             relatoHechosPosteriores ?? this.relatoHechosPosteriores,
+        // Daños y perjuicios
+        porcentajeIncapacidad:
+            porcentajeIncapacidad ?? this.porcentajeIncapacidad,
+        montoADemandar: montoADemandar ?? this.montoADemandar,
+        relatoDaniosEsteticos:
+            relatoDaniosEsteticos ?? this.relatoDaniosEsteticos,
+        danioActor: danioActor ?? this.danioActor,
+        danioTrabajador: danioTrabajador ?? this.danioTrabajador,
+        // Compensaciones
+        montoRemuneracionSegunEmpleador: montoRemuneracionSegunEmpleador ??
+            this.montoRemuneracionSegunEmpleador,
+        montoRemuneracionArt172:
+            montoRemuneracionArt172 ?? this.montoRemuneracionArt172,
+        // Lista de documentos adicionales
+        documentosAdicionalesAIngresar: documentosAdicionalesAIngresar ??
+            this.documentosAdicionalesAIngresar,
       );
 }
 

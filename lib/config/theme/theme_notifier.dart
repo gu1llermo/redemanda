@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:redemanda/config/config.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/shared/shared.dart';
 
@@ -26,7 +27,8 @@ class ColorPreferences extends _$ColorPreferences {
       KeyValueStorageService keyValueStorageService) async {
     final color = Color(
         await keyValueStorageService.getValue<int>(_colorSeed) ??
-            colorSeed.value);
+            AppColorUtils.colorToInt(colorSeed));
+    // colorSeed.value);
     state = color;
   }
 
@@ -35,7 +37,9 @@ class ColorPreferences extends _$ColorPreferences {
   }
 
   void changeColorSeed(Color newColor) {
-    newColor = Color.fromARGB(255, newColor.red, newColor.green, newColor.blue);
+    newColor = Color.from(
+        alpha: 1.0, red: newColor.r, green: newColor.g, blue: newColor.b);
+    // newColor = Color.fromARGB(255, newColor.red, newColor.green, newColor.blue);
     final keyValueStorageService = ref.read(keyValueStorageServiceProvider);
     state = newColor;
 
@@ -44,7 +48,8 @@ class ColorPreferences extends _$ColorPreferences {
 
   Future<void> _saveColorToPrefs(
       KeyValueStorageService keyValueStorageService, Color newColor) async {
-    await keyValueStorageService.setKeyValue<int>(_colorSeed, newColor.value);
+    await keyValueStorageService.setKeyValue<int>(
+        _colorSeed, AppColorUtils.colorToInt(newColor));
   }
 }
 
@@ -98,12 +103,18 @@ class AppThemes {
         brightness: Brightness.light,
         useMaterial3: true,
         colorSchemeSeed: seedColor,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.indigo[900],
+        ),
       );
 
   static ThemeData darkTheme([Color? seedColor]) => ThemeData(
         brightness: Brightness.dark,
         useMaterial3: true,
         colorSchemeSeed: seedColor,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.amber[800],
+        ),
       );
 }
 

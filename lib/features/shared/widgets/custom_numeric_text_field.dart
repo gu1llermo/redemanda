@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 class CustomNumericTextField extends StatelessWidget {
   final String? labelText;
+  final String? hintText;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final TextInputAction? textInputAction;
@@ -18,6 +19,7 @@ class CustomNumericTextField extends StatelessWidget {
   const CustomNumericTextField({
     super.key,
     this.labelText,
+    this.hintText,
     this.onChanged,
     this.onSubmitted,
     this.textInputAction,
@@ -80,6 +82,7 @@ class CustomNumericTextField extends StatelessWidget {
           labelText: labelText,
           errorText: errorMessage,
           helperText: helperText,
+          hintText: hintText,
         ),
         onChanged: onChanged?.call,
         onSubmitted: onSubmitted?.call,

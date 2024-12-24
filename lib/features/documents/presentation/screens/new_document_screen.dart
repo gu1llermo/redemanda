@@ -32,11 +32,21 @@ class NewDocumentScreen extends ConsumerWidget {
     );
     final details = ListView(children: [
       _DetallesAdicionales(),
-      SizedBox(height: 5),
     ]);
+    final danios = ListView(children: [
+      _Danios(),
+    ]);
+    final compensaciones = ListView(
+      physics: ScrollPhysics(),
+      children: [
+        _Compensaciones(),
+      ],
+    );
     final widgetOptions = [
       information,
       details,
+      danios,
+      compensaciones,
     ];
     // Listener para cambiar el índice seleccionado cuando cambia la página
     // ref.listen(documentFormProvider.select((state) => state.selectedIndex),
@@ -75,6 +85,7 @@ class NewDocumentScreen extends ConsumerWidget {
         ),
         floatingActionButton: _GenerateButton(),
         bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.info_outline_rounded),
@@ -84,14 +95,16 @@ class NewDocumentScreen extends ConsumerWidget {
               icon: Icon(Icons.details_rounded),
               label: 'Detalles',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.school),
-            //   label: 'School',
-            // ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.broken_image),
+              label: 'Daños',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.request_page_outlined),
+              label: 'Compensaciones',
+            ),
           ],
           currentIndex: newDocumentState.selectedIndex,
-          // selectedItemColor: colors.primary,
-          selectedItemColor: Colors.amber[800],
           onTap: ref.read(documentFormProvider.notifier).onSelectedIndexChanged,
         ),
       ),
@@ -562,7 +575,254 @@ class _DetallesAdicionales extends ConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(height: 35),
+          const SizedBox(height: 40),
+        ],
+      ),
+    );
+  }
+}
+
+class _Danios extends ConsumerWidget {
+  const _Danios();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final newDocumentState = ref.watch(documentFormProvider);
+    // final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final montoADemandar =
+        "\$${StringUtils.formatToNumber(newDocumentState.montoADemandar.value)}";
+    final porcentajeIncapacidad =
+        "${newDocumentState.porcentajeIncapacidad.value}%";
+    final altura = MediaQuery.sizeOf(context).height;
+    // final ancho = MediaQuery.sizeOf(context).width;
+    // final factorAltura = ancho > 600 ? 0.15 : 0.2;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Daños y perjuicios',
+            style: textTheme.titleLarge,
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.end,
+                runSpacing: 5,
+                spacing: 20,
+                children: [
+                  CustomNumericTextField(
+                    width: 250,
+                    labelText:
+                        'Porcentaje de incapacidad $porcentajeIncapacidad',
+                    isNumeric: true,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.porcentajeIncapacidad.errorMessage
+                        : null,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onPorcentajeIncapacidadChanged,
+                  ),
+                  CustomNumericTextField(
+                    labelText: 'Monto a demandar $montoADemandar',
+                    width: 250,
+                    isNumeric: true,
+                    allowDecimals: true,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.montoADemandar.errorMessage
+                        : null,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onMontoADemandarChanged,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: [
+                CustomLargeTextField(
+                  labelText: 'Relato daños estéticos',
+                  height: altura * 0.23,
+                  onChanged: ref
+                      .read(documentFormProvider.notifier)
+                      .onRelatoDaniosEsteticosChanged,
+                  errorMessage: newDocumentState.isFormPosted
+                      ? newDocumentState.relatoDaniosEsteticos.errorMessage
+                      : null,
+                ),
+                const SizedBox(height: 5),
+                CustomLargeTextField(
+                  labelText: 'Daño que tiene el actor',
+                  hintText:
+                      'En virtud de lo anterior, es menester hacer presente S.S., que hasta el día de hoy ${newDocumentState.demandanteGender.donCortesia()} ${newDocumentState.demandanteFullName.value} tiene una (daño que tiene el actor)',
+                  height: altura * 0.15,
+                  onChanged: ref
+                      .read(documentFormProvider.notifier)
+                      .onDanioActorChanged,
+                  errorMessage: newDocumentState.isFormPosted
+                      ? newDocumentState.danioActor.errorMessage
+                      : null,
+                ),
+                const SizedBox(height: 5),
+                CustomLargeTextField(
+                  labelText: 'Daño del trabajador',
+                  height: altura * 0.1,
+                  onChanged: ref
+                      .read(documentFormProvider.notifier)
+                      .onDanioTrabajadorChanged,
+                  errorMessage: newDocumentState.isFormPosted
+                      ? newDocumentState.danioTrabajador.errorMessage
+                      : null,
+                ),
+                const SizedBox(height: 5),
+                CustomLargeTextField(
+                  labelText: 'Medidas necesarias empresa demandada',
+                  hintText:
+                      'En definitiva, la empresa demandada no tomó todas las medidas necesarias, tales como:',
+                  height: altura * 0.15,
+                  // onChanged: ref
+                  //     .read(documentFormProvider.notifier)
+                  //     .onMedidasNecesariasEmpresaDemandadaChanged,
+                  // errorMessage: newDocumentState.isFormPosted
+                  //     ? newDocumentState.medidasNecesariasEmpresaDemandada.errorMessage
+                  //     : null,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 40),
+        ],
+      ),
+    );
+  }
+}
+
+class _Compensaciones extends ConsumerWidget {
+  const _Compensaciones();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final newDocumentState = ref.watch(documentFormProvider);
+    // final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final montoRemuneracionSegunEmpleador =
+        "\$${StringUtils.formatToNumber(newDocumentState.montoRemuneracionSegunEmpleador.value)}";
+    final montoRemuneracionArt172 =
+        "\$${StringUtils.formatToNumber(newDocumentState.montoRemuneracionArt172.value)}";
+
+    // final altura = MediaQuery.sizeOf(context).height;
+    // final ancho = MediaQuery.sizeOf(context).width;
+    // final factorAltura = ancho > 600 ? 0.15 : 0.2;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Cálculo de remuneración',
+            style: textTheme.titleLarge,
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.end,
+                runSpacing: 5,
+                spacing: 20,
+                children: [
+                  CustomNumericTextField(
+                    width: 400,
+                    labelText:
+                        'Monto remuneración empleador $montoRemuneracionSegunEmpleador',
+                    hintText: 'Monto de remuneración según empleador',
+                    isNumeric: true,
+                    allowDecimals: true,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState
+                            .montoRemuneracionSegunEmpleador.errorMessage
+                        : null,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onMontoRemuneracionSegunEmpleadorChanged,
+                  ),
+                  CustomNumericTextField(
+                    labelText:
+                        'Monto remuneración art. 172 $montoRemuneracionArt172',
+                    hintText: 'Monto de remuneración según el artículo 172',
+                    width: 400,
+                    isNumeric: true,
+                    allowDecimals: true,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.montoRemuneracionArt172.errorMessage
+                        : null,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onMontoRemuneracionArt172Changed,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'SEGUNDO OTROSÍ (Lista de documentos a ingresar en la demanda)',
+                ),
+                const SizedBox(height: 5),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount:
+                      newDocumentState.documentosAdicionalesAIngresar.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        CustomDocumentoAdicionalTextField(
+                          hintText: 'Documento a ingresar en la demanda',
+                          index: index,
+                          onChanged: ref
+                              .read(documentFormProvider.notifier)
+                              .onDocumentoAdicionalChanged,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete_forever_rounded),
+                          onPressed: () {
+                            ref
+                                .read(documentFormProvider.notifier)
+                                .onRemoveDocumentosAdicionalesAIngresar(index);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    ref
+                        .read(documentFormProvider.notifier)
+                        .onAddDocumentosAdicionalesAIngresar();
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 40),
         ],
       ),
     );

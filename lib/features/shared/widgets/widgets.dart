@@ -9,3 +9,4 @@ export 'advanced_autocomplete_text_field.dart';
 export 'advanced_autocomplete_text_field_overlay.dart';
 export 'custom_numeric_text_field.dart';
 export 'custom_large_text_field.dart';
+export 'custom_documento_adicional_text_field.dart';
