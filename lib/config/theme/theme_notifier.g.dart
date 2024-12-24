@@ -25,7 +25,7 @@ final keyValueStorageServiceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef KeyValueStorageServiceRef = ProviderRef<KeyValueStorageService>;
-String _$colorPreferencesHash() => r'688fe140de0ba55233f3d0320aaf73ed638e9e3f';
+String _$colorPreferencesHash() => r'284f7f688e07fc5d1246917b4da653796688ee11';
 
 /// See also [ColorPreferences].
 @ProviderFor(ColorPreferences)

@@ -1,20 +1,20 @@
 import 'package:formz/formz.dart';
 
 // Define input validation errors
-enum FullNameError { empty }
+enum DemandadoFullNameError { empty }
 
 // Extend FormzInput and provide the input type and error type.
-class FullName extends FormzInput<String, FullNameError> {
+class DemandadoFullName extends FormzInput<String, DemandadoFullNameError> {
   // Call super.pure to represent an unmodified form input.
-  const FullName.pure() : super.pure('');
+  const DemandadoFullName.pure() : super.pure('');
 
   // Call super.dirty to represent a modified form input.
-  const FullName.dirty(super.value) : super.dirty();
+  const DemandadoFullName.dirty(super.value) : super.dirty();
 
   String? get errorMessage {
     if (isValid || isPure) return null;
 
-    if (displayError == FullNameError.empty) {
+    if (displayError == DemandadoFullNameError.empty) {
       return 'El campo es requerido';
     }
 
@@ -23,8 +23,8 @@ class FullName extends FormzInput<String, FullNameError> {
 
   // Override validator to handle validating a given input value.
   @override
-  FullNameError? validator(String value) {
-    if (value.trim().isEmpty) return FullNameError.empty;
+  DemandadoFullNameError? validator(String value) {
+    if (value.trim().isEmpty) return DemandadoFullNameError.empty;
 
     return null;
   }

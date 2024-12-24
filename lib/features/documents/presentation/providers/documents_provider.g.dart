@@ -7,7 +7,7 @@ part of 'documents_provider.dart';
 // **************************************************************************
 
 String _$documentsPaginationHash() =>
-    r'364957c35b0becc925ba90d1bed40f7ec1e42b36';
+    r'b3d78b0088bef2bb071b9d46a8ee79d1f69c1880';
 
 /// See also [DocumentsPagination].
 @ProviderFor(DocumentsPagination)
@@ -18,8 +18,11 @@ final documentsPaginationProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$documentsPaginationHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[documentsRepositoryProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    documentsRepositoryProvider,
+    ...?documentsRepositoryProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$DocumentsPagination = AutoDisposeNotifier<DocumentsState>;
