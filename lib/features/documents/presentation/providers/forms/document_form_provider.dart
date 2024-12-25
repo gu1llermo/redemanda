@@ -11,13 +11,7 @@ part 'document_form_provider.g.dart';
 class DocumentForm extends _$DocumentForm {
   @override
   DocumentFormState build() {
-    // ref.onDispose(
-    //   () {
-    //     state.pageController.dispose();
-    //   },
-    // );
     return DocumentFormState();
-    // return DocumentFormState(pageController: PageController(keepPage: true));
   }
 
   // index
@@ -550,7 +544,6 @@ class DocumentForm extends _$DocumentForm {
 class DocumentFormState {
   // index
   final int selectedIndex; // para las diferentes páginas
-  // final PageController pageController;
   // Utiles del formulario
   final bool isFormValid;
   final bool isFormPosted;
