@@ -448,7 +448,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -586,35 +586,31 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                 ),
               ),
               const SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  children: [
-                    CustomLargeTextField(
-                      labelText: 'Relato del accidente (Extenso)',
-                      height: altura * factorAltura,
-                      onChanged: ref
-                          .read(documentFormProvider.notifier)
-                          .onRelatoAccidenteExtensoChanged,
-                      errorMessage: newDocumentState.isFormPosted
-                          ? newDocumentState.relatoAccidenteExtenso.errorMessage
-                          : null,
-                    ),
-                    const SizedBox(height: 5),
-                    CustomLargeTextField(
-                      labelText:
-                          'Relato hechos posteriores al accidente (Extenso)',
-                      height: altura * factorAltura,
-                      onChanged: ref
-                          .read(documentFormProvider.notifier)
-                          .onRelatoHechosPosterioresChanged,
-                      errorMessage: newDocumentState.isFormPosted
-                          ? newDocumentState
-                              .relatoHechosPosteriores.errorMessage
-                          : null,
-                    ),
-                  ],
-                ),
+              Column(
+                children: [
+                  CustomLargeTextField(
+                    labelText: 'Relato del accidente (Extenso)',
+                    height: altura * factorAltura,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onRelatoAccidenteExtensoChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.relatoAccidenteExtenso.errorMessage
+                        : null,
+                  ),
+                  const SizedBox(height: 5),
+                  CustomLargeTextField(
+                    labelText:
+                        'Relato hechos posteriores al accidente (Extenso)',
+                    height: altura * factorAltura,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onRelatoHechosPosterioresChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.relatoHechosPosteriores.errorMessage
+                        : null,
+                  ),
+                ],
               ),
               const SizedBox(height: 40),
             ],
@@ -650,7 +646,7 @@ class _DaniosState extends ConsumerState<_Danios>
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -785,7 +781,7 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
       physics: ScrollPhysics(),
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
