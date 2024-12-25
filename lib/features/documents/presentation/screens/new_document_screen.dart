@@ -4,15 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:redemanda/features/shared/shared.dart';
 
 import '../../../../config/config.dart';
+import '../../../../core/core.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
-
-// Mixin para mantener vivas las páginas
-mixin KeepPageAliveMixin<T extends ConsumerStatefulWidget>
-    on ConsumerState<T>, AutomaticKeepAliveClientMixin<T> {
-  @override
-  bool get wantKeepAlive => true;
-}
 
 class NewDocumentScreen extends ConsumerStatefulWidget {
   const NewDocumentScreen({super.key});
