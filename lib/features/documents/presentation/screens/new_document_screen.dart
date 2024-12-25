@@ -57,7 +57,8 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 40),
           child: PageView(
             controller: pageController,
-            physics: const BouncingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
+            // physics: const BouncingScrollPhysics(),
             onPageChanged: (index) {
               ref
                   .read(documentFormProvider.notifier)
@@ -96,7 +97,7 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
             pageController.animateToPage(
               index,
               duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
+              curve: Curves.linear,
             );
             ref
                 .read(documentFormProvider.notifier)
@@ -697,59 +698,56 @@ class _DaniosState extends ConsumerState<_Danios>
                 ),
               ),
               const SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  children: [
-                    CustomLargeTextField(
-                      labelText: 'Relato daños estéticos',
-                      height: altura * 0.23,
-                      onChanged: ref
-                          .read(documentFormProvider.notifier)
-                          .onRelatoDaniosEsteticosChanged,
-                      errorMessage: newDocumentState.isFormPosted
-                          ? newDocumentState.relatoDaniosEsteticos.errorMessage
-                          : null,
-                    ),
-                    const SizedBox(height: 5),
-                    CustomLargeTextField(
-                      labelText: 'Daño que tiene el actor',
-                      hintText:
-                          'En virtud de lo anterior, es menester hacer presente S.S., que hasta el día de hoy ${newDocumentState.demandanteGender.donCortesia()} ${newDocumentState.demandanteFullName.value} tiene una (daño que tiene el actor)',
-                      height: altura * 0.15,
-                      onChanged: ref
-                          .read(documentFormProvider.notifier)
-                          .onDanioActorChanged,
-                      errorMessage: newDocumentState.isFormPosted
-                          ? newDocumentState.danioActor.errorMessage
-                          : null,
-                    ),
-                    const SizedBox(height: 5),
-                    CustomLargeTextField(
-                      labelText: 'Daño del trabajador',
-                      height: altura * 0.1,
-                      onChanged: ref
-                          .read(documentFormProvider.notifier)
-                          .onDanioTrabajadorChanged,
-                      errorMessage: newDocumentState.isFormPosted
-                          ? newDocumentState.danioTrabajador.errorMessage
-                          : null,
-                    ),
-                    const SizedBox(height: 5),
-                    CustomLargeTextField(
-                      labelText: 'Medidas necesarias empresa demandada',
-                      hintText:
-                          'En definitiva, la empresa demandada no tomó todas las medidas necesarias, tales como:',
-                      height: altura * 0.15,
-                      // onChanged: ref
-                      //     .read(documentFormProvider.notifier)
-                      //     .onMedidasNecesariasEmpresaDemandadaChanged,
-                      // errorMessage: newDocumentState.isFormPosted
-                      //     ? newDocumentState.medidasNecesariasEmpresaDemandada.errorMessage
-                      //     : null,
-                    ),
-                  ],
-                ),
+              Column(
+                children: [
+                  CustomLargeTextField(
+                    labelText: 'Relato daños estéticos',
+                    height: altura * 0.23,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onRelatoDaniosEsteticosChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.relatoDaniosEsteticos.errorMessage
+                        : null,
+                  ),
+                  const SizedBox(height: 5),
+                  CustomLargeTextField(
+                    labelText: 'Daño que tiene el actor',
+                    hintText:
+                        'En virtud de lo anterior, es menester hacer presente S.S., que hasta el día de hoy ${newDocumentState.demandanteGender.donCortesia()} ${newDocumentState.demandanteFullName.value} tiene una (daño que tiene el actor)',
+                    height: altura * 0.15,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onDanioActorChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.danioActor.errorMessage
+                        : null,
+                  ),
+                  const SizedBox(height: 5),
+                  CustomLargeTextField(
+                    labelText: 'Daño del trabajador',
+                    height: altura * 0.1,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onDanioTrabajadorChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState.danioTrabajador.errorMessage
+                        : null,
+                  ),
+                  const SizedBox(height: 5),
+                  CustomLargeTextField(
+                    labelText: 'Medidas necesarias empresa demandada',
+                    hintText:
+                        'En definitiva, la empresa demandada no tomó todas las medidas necesarias, tales como:',
+                    height: altura * 0.15,
+                    // onChanged: ref
+                    //     .read(documentFormProvider.notifier)
+                    //     .onMedidasNecesariasEmpresaDemandadaChanged,
+                    // errorMessage: newDocumentState.isFormPosted
+                    //     ? newDocumentState.medidasNecesariasEmpresaDemandada.errorMessage
+                    //     : null,
+                  ),
+                ],
               ),
               const SizedBox(height: 40),
             ],
