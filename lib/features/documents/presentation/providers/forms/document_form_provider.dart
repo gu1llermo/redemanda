@@ -325,7 +325,7 @@ class DocumentForm extends _$DocumentForm {
         state.fechaInicioRelacionLaboral.value!);
     final fechaTerminoRelacionLaboral = AppDateUtils.getCustomFormattedDate(
         state.fechaTerminoRelacionLaboral.value!);
-
+    final nameTemplate = 'template_01.docx';
     final newDocumentRequest = {
       //*Demandante
       'nombre_demandante': state.demandanteFullName.value,
