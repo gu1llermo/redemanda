@@ -18,7 +18,7 @@ class UserEntityMapper {
     return UserEntity(
       id: user.id,
       email: user.email!, // siempre tiene que tener un email
-      fullName: user.userMetadata?['fullname'] ?? 'no-name',
+      fullName: user.userMetadata?['fullName'] ?? 'no-name',
       role: user.userMetadata?['role'] ?? 'user',
       token: session.accessToken,
       refreshToken: session.refreshToken,
