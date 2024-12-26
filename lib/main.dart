@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'config/config.dart';
-import 'features/auth/infrastructure/datasources/supabase_auth_datasource_impl.dart';
 import 'features/shared/shared.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EnvironmentConfig.initialize();
 
-  await SupabaseAuthDatasourceImpl.initialize();
+  await Supabase.initialize(
+    url: EnvironmentConfig.supabaseUrl,
+    anonKey: EnvironmentConfig.supabaseAnonKey,
+  );
 
   await AppDesktopServiceImpl().config();
 
