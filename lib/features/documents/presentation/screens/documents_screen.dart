@@ -3,33 +3,67 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../auth/presentation/providers/providers.dart';
+import '../../../credits/credits.dart';
 import '../../../shared/widgets/widgets.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
-class DocumentsScreen extends StatelessWidget {
+class DocumentsScreen extends ConsumerWidget {
   const DocumentsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = GlobalKey<ScaffoldState>();
+    final userId = ref.watch(authProvider).user?.id;
+    // final userId = ref.watch(supabaseClientProvider).auth.currentUser?.id;
 
     return Scaffold(
       drawer: SideMenu(
         scaffoldKey: scaffoldKey,
       ),
       appBar: AppBar(
-        title: const Text('Documentos'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Documentos'),
+            const UserCreditsWidget(),
+          ],
+        ),
         actions: [SearchOptionButton()],
       ),
       body: const _DocumentsView(),
-      floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Nuevo documento'),
-        icon: const Icon(Icons.note_add),
-        onPressed: () {
-          context.push('/new-document');
-        },
-      ),
+      floatingActionButton: userId == null
+          ? const SizedBox.shrink()
+          : ref.watch(userCreditsProvider(userId)).when(
+                data: (credits) => FloatingActionButton.extended(
+                  label: const Text('Nuevo documento'),
+                  icon: const Icon(Icons.note_add),
+                  onPressed: () {
+                    if (credits > 0) {
+                      context.push('/new-document');
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'No tienes créditos suficientes para crear un nuevo documento'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                ),
+                loading: () => const FloatingActionButton.extended(
+                  label: Text('Cargando...'),
+                  icon: Icon(Icons.hourglass_empty),
+                  onPressed: null,
+                ),
+                error: (error, stackTrace) => FloatingActionButton.extended(
+                  label: const Text('Error'),
+                  icon: const Icon(Icons.error),
+                  onPressed: null,
+                ),
+              ),
     );
   }
 }
