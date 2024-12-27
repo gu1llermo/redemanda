@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast_io.dart';
@@ -5,6 +7,7 @@ import 'package:sembast/sembast_memory.dart';
 import 'package:sembast_web/sembast_web.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../config/config.dart';
 import '../../../auth/infrastructure/infrastructure.dart';
@@ -19,8 +22,9 @@ class DocumentsDatasourceImpl extends DocumentsDatasource {
   late StoreRef<int, Map<String, Object?>> _store;
   bool openDatabaseFromMemory = false;
   Database? _database;
+  final SupabaseClient supabase;
 
-  DocumentsDatasourceImpl({required this.accesToken}) {
+  DocumentsDatasourceImpl({required this.accesToken, required this.supabase}) {
     dio = Dio(BaseOptions(baseUrl: EnvironmentConfig.supabaseUrl, headers: {
       'Authorization': 'Bearer $accesToken',
     }));
@@ -47,10 +51,43 @@ class DocumentsDatasourceImpl extends DocumentsDatasource {
   }
 
   @override
-  Future<Document> createDocument(Map<String, dynamic> documentData) async {
-    // TODO: implement createDocument
-    throw UnimplementedError();
-    // todo: cuando el recibe el documento aquí mismo lo guardo en la base de datos local
+  Future<Document> createDocument(Map<String, dynamic> documentRequest) async {
+    try {
+      // Call Supabase Edge Function to generate document
+      final response = await dio.post(
+        '/functions/v1/generate-document',
+        data: documentRequest,
+      );
+
+      if (response.statusCode != 200) {
+        throw CustomError(
+            'Error generando el documento: ${response.statusMessage}');
+      }
+
+      // Extract base64 document from response
+      final base64Doc = response.data['docxBase64'] as String;
+
+      // Convert base64 to Uint8List
+      final docxFile = Uint8List.fromList(base64Decode(base64Doc));
+
+      // Get document data from the request
+      final data = documentRequest['data'] as Map<String, dynamic>;
+
+      // Create new Document instance
+      final newDocument = Document(
+        title: data['nombre_demandante'] ?? 'Sin título',
+        description: data['nombre_demandado'] ?? 'Sin descripción',
+        sizeInBytes: docxFile.length,
+        createdAt: DateTime.now(),
+        docxFile: docxFile,
+        author: supabase.auth.currentUser?.email,
+      );
+
+      // Save document to local database
+      return await saveDocument(newDocument);
+    } catch (e) {
+      throw CustomError('Error createDocument: $e');
+    }
   }
 
   Future<Document> saveDocument(Document document) async {
@@ -106,8 +143,8 @@ class DocumentsDatasourceImpl extends DocumentsDatasource {
       }
       return DocumentMapper.jsonToEntity(mapRecord);
     } catch (e) {
-      debugPrint('Error getting document by ID: $e');
-      rethrow;
+      //debugPrint('Error getting document by ID: $e');
+      throw CustomError('Error getting document by ID: $e');
     }
   }
 

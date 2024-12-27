@@ -1,15 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-part 'user_credits_provider.g.dart';
+import '../../../auth/presentation/providers/providers.dart';
 
-@riverpod
-SupabaseClient supabaseClient(Ref ref) {
-  return Supabase.instance.client;
-}
+part 'user_credits_provider.g.dart';
 
 @riverpod
 class UserCredits extends _$UserCredits {

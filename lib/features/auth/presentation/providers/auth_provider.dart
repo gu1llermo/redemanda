@@ -133,7 +133,13 @@ class AuthState {
       );
 }
 
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(dependencies: [])
+SupabaseClient supabaseClient(Ref ref) {
+  return Supabase.instance.client;
+}
+
+@Riverpod(keepAlive: true, dependencies: [supabaseClient])
 AuthRepository authRepository(Ref ref) {
-  return AuthRepositoryImpl();
+  return AuthRepositoryImpl(
+      SupabaseAuthDatasourceImpl(ref.read(supabaseClientProvider)));
 }

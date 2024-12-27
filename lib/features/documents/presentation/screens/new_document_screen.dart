@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:redemanda/features/shared/shared.dart';
 
@@ -42,6 +43,14 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
       _Danios(),
       _Compensaciones(),
     ];
+
+    ref.listen(
+      documentFormProvider,
+      (previous, next) {
+        if (next.errorMessage.isEmpty) return;
+        AppErrorsUtils.onError(context, next.errorMessage);
+      },
+    );
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -147,7 +156,19 @@ class _GenerateButton extends ConsumerWidget {
       tooltip: 'Generar Documento',
       onPressed: newDocumentState.isPosting
           ? null
-          : ref.read(documentFormProvider.notifier).onFormSubmit,
+          : () {
+              ref.read(documentFormProvider.notifier).onFormSubmit().then(
+                (value) {
+                  if (value != null) {
+                    // aquí tengo que pensar qué hacer
+                    if (!context.mounted) return;
+                    context.pop();
+                  }
+                },
+              );
+              // si el documento se genera correctamente entonces
+              // tengo que pensar qué hacer
+            },
       child: newDocumentState.isPosting
           ? SizedBox(
               height: 20,

@@ -75,14 +75,14 @@ class LoginScreen extends ConsumerWidget {
 class _LoginForm extends ConsumerWidget {
   const _LoginForm();
 
-  void onError(BuildContext context, String errorMessage) {
-    NotificationService().showNotification(
-      context: context,
-      message: errorMessage,
-      title: 'Error',
-      type: FlushbarType.error,
-    );
-  }
+  // void onError(BuildContext context, String errorMessage) {
+  //   NotificationService().showNotification(
+  //     context: context,
+  //     message: errorMessage,
+  //     title: 'Error',
+  //     type: FlushbarType.error,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -96,7 +96,7 @@ class _LoginForm extends ConsumerWidget {
       authProvider,
       (previous, next) {
         if (next.errorMessage.isEmpty) return;
-        onError(context, next.errorMessage);
+        AppErrorsUtils.onError(context, next.errorMessage);
       },
     );
 
