@@ -5,3 +5,4 @@ export 'utils/app_utils.dart';
 export 'utils/string_utils.dart';
 export 'utils/app_date_utils.dart';
 export 'utils/app_color_utils.dart';
+export 'utils/app_errors_utils.dart';

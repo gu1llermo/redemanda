@@ -19,6 +19,7 @@ class DocumentCardView extends StatelessWidget {
     final title = document.title;
     final description = document.description;
     final creationDate = document.createdAt;
+    final textTheme = Theme.of(context).textTheme;
 
     return Card(
       elevation: 4,
@@ -38,10 +39,11 @@ class DocumentCardView extends StatelessWidget {
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: textTheme.titleLarge,
+                      // style: const TextStyle(
+                      //   fontSize: 18,
+                      //   fontWeight: FontWeight.bold,
+                      // ),
                     ),
                   ),
                 ),
@@ -65,8 +67,10 @@ class DocumentCardView extends StatelessWidget {
                   ),
                   Expanded(
                     child: Column(
+                      //mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 8),
+                        //const SizedBox(height: 8),
                         Text(
                           description,
                           maxLines: 3,

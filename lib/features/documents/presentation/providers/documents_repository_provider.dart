@@ -6,9 +6,10 @@ import '../../infrastructure/infrastructure.dart';
 
 part 'documents_repository_provider.g.dart';
 
-@Riverpod(dependencies: [Auth])
+@Riverpod(dependencies: [Auth, supabaseClient])
 DocumentsRepository documentsRepository(Ref ref) {
   final accessToken = ref.watch(authProvider).user?.token ?? '';
-  final datasource = DocumentsDatasourceImpl(accesToken: accessToken);
+  final datasource = DocumentsDatasourceImpl(
+      accesToken: accessToken, supabase: ref.read(supabaseClientProvider));
   return DocumentsRepositoryImpl(datasource);
 }

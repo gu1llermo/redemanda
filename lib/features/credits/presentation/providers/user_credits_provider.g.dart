@@ -6,23 +6,6 @@ part of 'user_credits_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$supabaseClientHash() => r'834a58d6ae4b94e36f4e04a10d8a7684b929310e';
-
-/// See also [supabaseClient].
-@ProviderFor(supabaseClient)
-final supabaseClientProvider = AutoDisposeProvider<SupabaseClient>.internal(
-  supabaseClient,
-  name: r'supabaseClientProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$supabaseClientHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef SupabaseClientRef = AutoDisposeProviderRef<SupabaseClient>;
 String _$userCreditsHash() => r'f270794fa02c18f51a923a47303675412629107d';
 
 /// Copied from Dart SDK

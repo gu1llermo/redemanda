@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:redemanda/features/shared/shared.dart';
 
@@ -42,6 +43,26 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
       _Danios(),
       _Compensaciones(),
     ];
+
+    ref.listen(
+      documentFormProvider,
+      (previous, next) {
+        if (next.errorMessage.isEmpty) return;
+        AppErrorsUtils.onError(context, next.errorMessage);
+      },
+    );
+
+    ref.listen(
+      documentFormProvider.select((state) => state.selectedIndex),
+      (previous, next) {
+        // Lógica cuando cambia specificAttribute
+        pageController.animateToPage(
+          next,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.linear,
+        );
+      },
+    );
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -87,16 +108,7 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
             ),
           ],
           currentIndex: newDocumentState.selectedIndex,
-          onTap: (index) {
-            pageController.animateToPage(
-              index,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.linear,
-            );
-            ref
-                .read(documentFormProvider.notifier)
-                .onSelectedIndexChanged(index);
-          },
+          onTap: ref.read(documentFormProvider.notifier).onSelectedIndexChanged,
         ),
       ),
     );
@@ -147,7 +159,56 @@ class _GenerateButton extends ConsumerWidget {
       tooltip: 'Generar Documento',
       onPressed: newDocumentState.isPosting
           ? null
-          : ref.read(documentFormProvider.notifier).onFormSubmit,
+          : () {
+              ref.read(documentFormProvider.notifier).onFormSubmit().then(
+                (document) {
+                  if (document != null) {
+                    // aquí tengo que pensar qué hacer
+                    if (!context.mounted) return;
+
+                    AppErrorsUtils.onSucces(
+                      context,
+                      'Documento generado correctamente!',
+                      Row(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              NotificationService()
+                                  .dismissCurrentNotification();
+                              FileUtils.openWithDefaultApp(
+                                context: context,
+                                fileBytes: document.docxFile,
+                                fileExtension: 'docx', // sin el punto
+                              );
+                            },
+                            child: const Text(
+                              'Ver',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          TextButton(
+                            onPressed: () {
+                              NotificationService()
+                                  .dismissCurrentNotification();
+                              context.pop();
+                            },
+                            child: const Text(
+                              'Salir',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    //   context.pop();
+                  }
+                },
+              );
+              // si el documento se genera correctamente entonces
+              // tengo que pensar qué hacer
+            },
       child: newDocumentState.isPosting
           ? SizedBox(
               height: 20,
@@ -254,7 +315,7 @@ class _InformacionAbogado1 extends ConsumerWidget {
         AdvancedAutocompleteTextFieldOverlay(
           width: 300,
           labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_abogado',
+          preferencesKey: 'nombre_abogado_1',
           onChanged:
               ref.read(documentFormProvider.notifier).onAbogado1FullNameChanged,
           errorMessage: newDocumentState.isFormPosted
@@ -264,7 +325,7 @@ class _InformacionAbogado1 extends ConsumerWidget {
         AdvancedAutocompleteTextFieldOverlay(
           width: 200,
           labelText: 'Rut/CI',
-          preferencesKey: 'rut_abogado',
+          preferencesKey: 'rut_abogado_1',
           onChanged:
               ref.read(documentFormProvider.notifier).onAbogado1RutChanged,
           errorMessage: newDocumentState.isFormPosted
@@ -274,7 +335,7 @@ class _InformacionAbogado1 extends ConsumerWidget {
         AdvancedAutocompleteTextFieldOverlay(
           width: 300,
           labelText: 'Correo',
-          preferencesKey: 'correo_abogado',
+          preferencesKey: 'correo_abogado_1',
           onChanged:
               ref.read(documentFormProvider.notifier).onAbogado1EmailChanged,
           errorMessage: newDocumentState.isFormPosted
@@ -298,7 +359,7 @@ class _InformacionAbogado2 extends ConsumerWidget {
         AdvancedAutocompleteTextFieldOverlay(
           width: 300,
           labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_abogado',
+          preferencesKey: 'nombre_abogado_2',
           onChanged:
               ref.read(documentFormProvider.notifier).onAbogado2FullNameChanged,
           errorMessage: newDocumentState.isFormPosted
@@ -308,7 +369,7 @@ class _InformacionAbogado2 extends ConsumerWidget {
         AdvancedAutocompleteTextFieldOverlay(
           width: 200,
           labelText: 'Rut/CI',
-          preferencesKey: 'rut_abogado',
+          preferencesKey: 'rut_abogado_2',
           onChanged:
               ref.read(documentFormProvider.notifier).onAbogado2RutChanged,
           errorMessage: newDocumentState.isFormPosted
@@ -318,7 +379,7 @@ class _InformacionAbogado2 extends ConsumerWidget {
         AdvancedAutocompleteTextFieldOverlay(
           width: 300,
           labelText: 'Correo',
-          preferencesKey: 'correo_abogado',
+          preferencesKey: 'correo_abogado_2',
           onChanged:
               ref.read(documentFormProvider.notifier).onAbogado2EmailChanged,
           errorMessage: newDocumentState.isFormPosted
@@ -730,12 +791,13 @@ class _DaniosState extends ConsumerState<_Danios>
                     hintText:
                         'En definitiva, la empresa demandada no tomó todas las medidas necesarias, tales como:',
                     height: altura * 0.15,
-                    // onChanged: ref
-                    //     .read(documentFormProvider.notifier)
-                    //     .onMedidasNecesariasEmpresaDemandadaChanged,
-                    // errorMessage: newDocumentState.isFormPosted
-                    //     ? newDocumentState.medidasNecesariasEmpresaDemandada.errorMessage
-                    //     : null,
+                    onChanged: ref
+                        .read(documentFormProvider.notifier)
+                        .onMedidasNecesariasEmpresaDemandadaChanged,
+                    errorMessage: newDocumentState.isFormPosted
+                        ? newDocumentState
+                            .medidasNecesariasEmpresaDemandada.errorMessage
+                        : null,
                   ),
                 ],
               ),

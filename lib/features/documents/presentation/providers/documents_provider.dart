@@ -1,3 +1,4 @@
+import 'package:redemanda/features/auth/infrastructure/errors/auth_errors.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/domain.dart';
@@ -11,14 +12,18 @@ class DocumentsState {
   final bool hasMoreDocuments;
   final int currentPage;
   final int pageSize;
-  final AsyncValue<void> status;
+  final bool isLoading;
+  final String errorMessage;
+  // final AsyncValue<void> status;
 
   DocumentsState({
     this.documents = const [],
     this.hasMoreDocuments = true,
     this.currentPage = 1,
     this.pageSize = 10,
-    this.status = const AsyncValue.data(null),
+    this.isLoading = false,
+    this.errorMessage = '',
+    // this.status = const AsyncValue.data(null),
   });
 
   DocumentsState copyWith({
@@ -26,14 +31,18 @@ class DocumentsState {
     bool? hasMoreDocuments,
     int? currentPage,
     int? pageSize,
-    AsyncValue<void>? status,
+    bool? isLoading,
+    String? errorMessage,
+    // AsyncValue<void>? status,
   }) =>
       DocumentsState(
         documents: documents ?? this.documents,
         hasMoreDocuments: hasMoreDocuments ?? this.hasMoreDocuments,
         currentPage: currentPage ?? this.currentPage,
         pageSize: pageSize ?? this.pageSize,
-        status: status ?? this.status,
+        isLoading: isLoading ?? this.isLoading,
+        errorMessage: errorMessage ?? this.errorMessage,
+        // status: status ?? this.status,
       );
 }
 
@@ -41,18 +50,21 @@ class DocumentsState {
 class DocumentsPagination extends _$DocumentsPagination {
   @override
   DocumentsState build() {
+    Future.microtask(loadDocuments);
     return DocumentsState();
   }
 
   // Cargar documentos con paginación
   Future<void> loadDocuments({bool refresh = false}) async {
     // Si ya estamos cargando o no hay más documentos, no hacemos nada
-    if (state.status is AsyncLoading && !refresh) return;
+    // if (state.status is AsyncLoading && !refresh) return;
+    if (state.isLoading) return;
+    // if (state.isLoading && !refresh) return;
 
     try {
       // Iniciar carga
       state = state.copyWith(
-        status: const AsyncValue.loading(),
+        isLoading: true,
       );
 
       final documentsRepository = ref.read(documentsRepositoryProvider);
@@ -77,12 +89,21 @@ class DocumentsPagination extends _$DocumentsPagination {
             refresh ? newDocuments : [...state.documents, ...newDocuments],
         hasMoreDocuments: hasMoreDocuments,
         currentPage: state.currentPage + 1,
-        status: const AsyncValue.data(null),
+        isLoading: false,
+        errorMessage: '',
+        // status: const AsyncValue.data(null),
       );
-    } catch (error, stackTrace) {
+    } on CustomError catch (e) {
+      // Manejar errores personalizados
+      state = state.copyWith(
+        errorMessage: e.errorMessage,
+        isLoading: false,
+      );
+    } on Exception catch (e) {
       // Manejar errores
       state = state.copyWith(
-        status: AsyncValue.error(error, stackTrace),
+        errorMessage: e.toString(),
+        isLoading: false,
       );
     }
   }
@@ -98,25 +119,32 @@ class DocumentsPagination extends _$DocumentsPagination {
   }
 
   // Método para crear un nuevo documento
-  Future<bool> createDocument(Map<String, dynamic> documentData) async {
+  Future<Document?> createDocument(Map<String, dynamic> documentRequest) async {
     try {
       final documentsRepository = ref.read(documentsRepositoryProvider);
       final newDocument =
-          await documentsRepository.createDocument(documentData);
-
+          await documentsRepository.createDocument(documentRequest);
       // Actualizar lista de documentos
       state = state.copyWith(
         documents: [newDocument, ...state.documents],
+        errorMessage: '',
       );
-
-      return true;
+      return newDocument;
+    } on NetworkException catch (e) {
+      state = state.copyWith(
+        errorMessage: e.message,
+      );
+      return null;
     } catch (e) {
-      return false;
+      state = state.copyWith(
+        errorMessage: e.toString(),
+      );
+      return null;
     }
   }
 
   // Método para eliminar un documento
-  Future<bool> deleteDocument(int id) async {
+  Future<void> deleteDocument(int id) async {
     try {
       final documentsRepository = ref.read(documentsRepositoryProvider);
       await documentsRepository.deleteDocument(id);
@@ -124,18 +152,26 @@ class DocumentsPagination extends _$DocumentsPagination {
       // Eliminar de la lista local
       state = state.copyWith(
         documents: state.documents.where((doc) => doc.id != id).toList(),
+        errorMessage: '',
       );
-
-      return true;
+    } on CustomError catch (e) {
+      state = state.copyWith(
+        errorMessage: e.errorMessage,
+      );
     } catch (e) {
-      return false;
+      state = state.copyWith(
+        errorMessage: e.toString(),
+      );
     }
   }
 
   // Método para buscar documentos
-  Future<void> searchDocuments(String term) async {
+  Future<void> searchDocumentsByTerm(String term) async {
     try {
-      state = state.copyWith(status: const AsyncValue.loading());
+      // state = state.copyWith(status: const AsyncValue.loading());
+      state = state.copyWith(
+        isLoading: true,
+      );
 
       final documentsRepository = ref.read(documentsRepositoryProvider);
       final searchResults =
@@ -143,12 +179,49 @@ class DocumentsPagination extends _$DocumentsPagination {
 
       state = state.copyWith(
         documents: searchResults,
-        status: const AsyncValue.data(null),
+        isLoading: false,
         hasMoreDocuments: false,
+        errorMessage: '',
       );
-    } catch (error, stackTrace) {
+    } on CustomError catch (e) {
       state = state.copyWith(
-        status: AsyncValue.error(error, stackTrace),
+        isLoading: false,
+        errorMessage: e.errorMessage,
+      );
+    } catch (error) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: error.toString(),
+      );
+    }
+  }
+
+  Future<void> searchDocumentsByRange(
+      {required DateTime startDate, required DateTime endDate}) async {
+    try {
+      state = state.copyWith(
+        isLoading: true,
+      );
+
+      final documentsRepository = ref.read(documentsRepositoryProvider);
+      final searchResults = await documentsRepository.searchDocumentByRange(
+          startDate: startDate, endDate: endDate);
+
+      state = state.copyWith(
+        documents: searchResults,
+        isLoading: false,
+        hasMoreDocuments: false,
+        errorMessage: '',
+      );
+    } on CustomError catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: e.errorMessage,
+      );
+    } catch (error) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: error.toString(),
       );
     }
   }

@@ -37,6 +37,7 @@ dependencies:
   flutter_hsvcolor_picker: ^1.5.1
   share_plus: ^10.1.2
   intl: ^0.19.0
+  auto_size_text_pro: ^3.0.1
 
 dev_dependencies:
   flutter_test:

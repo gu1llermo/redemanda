@@ -6,7 +6,24 @@ part of 'auth_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authRepositoryHash() => r'f507b379dd2969aa6d276c3300d567d8a216a9dd';
+String _$supabaseClientHash() => r'def8687e2ab4f3326b4362209d619e9abab27b65';
+
+/// See also [supabaseClient].
+@ProviderFor(supabaseClient)
+final supabaseClientProvider = AutoDisposeProvider<SupabaseClient>.internal(
+  supabaseClient,
+  name: r'supabaseClientProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$supabaseClientHash,
+  dependencies: const <ProviderOrFamily>[],
+  allTransitiveDependencies: const <ProviderOrFamily>{},
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SupabaseClientRef = AutoDisposeProviderRef<SupabaseClient>;
+String _$authRepositoryHash() => r'eee3006b7dd121ac8ca7edd6e6099eab8fe471d3';
 
 /// See also [authRepository].
 @ProviderFor(authRepository)
@@ -16,14 +33,17 @@ final authRepositoryProvider = Provider<AuthRepository>.internal(
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$authRepositoryHash,
-  dependencies: const <ProviderOrFamily>[],
-  allTransitiveDependencies: const <ProviderOrFamily>{},
+  dependencies: <ProviderOrFamily>[supabaseClientProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    supabaseClientProvider,
+    ...?supabaseClientProvider.allTransitiveDependencies
+  },
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthRepositoryRef = ProviderRef<AuthRepository>;
-String _$authHash() => r'2c81f8bc791b0290192336fc5bb2a1f0e35f75bc';
+String _$authHash() => r'51d0b8b460dc0f1b3542d2d846fb0231866ce5b2';
 
 /// See also [Auth].
 @ProviderFor(Auth)
@@ -32,10 +52,15 @@ final authProvider = NotifierProvider<Auth, AuthState>.internal(
   name: r'authProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$authHash,
-  dependencies: <ProviderOrFamily>[authRepositoryProvider],
+  dependencies: <ProviderOrFamily>[
+    authRepositoryProvider,
+    supabaseClientProvider
+  ],
   allTransitiveDependencies: <ProviderOrFamily>{
     authRepositoryProvider,
-    ...?authRepositoryProvider.allTransitiveDependencies
+    ...?authRepositoryProvider.allTransitiveDependencies,
+    supabaseClientProvider,
+    ...?supabaseClientProvider.allTransitiveDependencies
   },
 );
 

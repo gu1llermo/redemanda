@@ -7,7 +7,10 @@ import '../../../../config/config.dart';
 import '../../domain/domain.dart';
 
 class SupabaseAuthDatasourceImpl extends AuthDatasource {
-  final SupabaseClient _supabase = Supabase.instance.client;
+  // final SupabaseClient _supabase = Supabase.instance.client;
+  final SupabaseClient supabase;
+
+  SupabaseAuthDatasourceImpl(this.supabase);
 
   final dio = Dio(BaseOptions(
     baseUrl: EnvironmentConfig.supabaseUrl,
@@ -16,7 +19,7 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
   @override
   Future<UserEntity> login(String email, String password) async {
     try {
-      final authResponse = await _supabase.auth
+      final authResponse = await supabase.auth
           .signInWithPassword(password: password, email: email);
 
       final userEntity = UserEntityMapper.authResponseToEntity(authResponse);
@@ -37,7 +40,7 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
       // ya que lo gestiona localmente la misma librería de supabase
       // tiene que ser el refreshtoken
       final authResponse =
-          await _supabase.auth.refreshSession(); // vamos a quitarlo nuevamente
+          await supabase.auth.refreshSession(); // vamos a quitarlo nuevamente
       // auqnue también puedo manejar la persistencia
       // final authResponse =
       //     await supabase.auth.refreshSession(token.isNotEmpty ? token : null);
@@ -54,7 +57,7 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
 
   @override
   Future<void> logout() async {
-    await _supabase.auth.signOut().onError(
+    await supabase.auth.signOut().onError(
       (error, stackTrace) {
         throw CustomError(error.toString());
       },

@@ -11,7 +11,7 @@ class SearchOptionButton extends StatelessWidget {
         padding: const EdgeInsets.only(right: 5),
         child: const Icon(
           Icons.search,
-          size: 30,
+          // size: 30,
         ),
       ),
       tooltip: 'Buscar',
