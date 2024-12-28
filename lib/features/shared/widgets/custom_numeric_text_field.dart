@@ -16,6 +16,7 @@ class CustomNumericTextField extends StatefulWidget {
   // Atributos para control numérico
   final bool isNumeric;
   final bool allowDecimals;
+  final String initialValue;
 
   const CustomNumericTextField({
     super.key,
@@ -31,6 +32,7 @@ class CustomNumericTextField extends StatefulWidget {
     this.width = 200,
     this.isNumeric = false,
     this.allowDecimals = false,
+    this.initialValue = '',
   });
 
   @override
@@ -39,6 +41,7 @@ class CustomNumericTextField extends StatefulWidget {
 
 class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
   Timer? _debounce;
+  late final TextEditingController _textController;
 
   void _onSearchChanged(String value) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -48,8 +51,23 @@ class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void didUpdateWidget(CustomNumericTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      _textController.text = widget.initialValue;
+    }
+  }
+
+  @override
   void dispose() {
     _debounce?.cancel();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -60,6 +78,7 @@ class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
       child: TextField(
         textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.center,
+        controller: _textController,
         textCapitalization: widget.textCapitalization,
         textInputAction: widget.textInputAction,
         // Forzar teclado numérico cuando es numérico

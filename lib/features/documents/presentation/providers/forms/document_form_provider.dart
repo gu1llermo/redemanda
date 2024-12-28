@@ -9,7 +9,7 @@ import '../providers.dart';
 
 part 'document_form_provider.g.dart';
 
-@Riverpod()
+@Riverpod(dependencies: [DocumentsPagination])
 class DocumentForm extends _$DocumentForm {
   @override
   DocumentFormState build() {
@@ -299,96 +299,99 @@ class DocumentForm extends _$DocumentForm {
 
   //* Botón de posteo
   Future<Document?> onFormSubmit() async {
-    final newState = state.copyWith(isFormPosted: true);
-    _touchEveryThing(newState);
-    if (!state.isFormValid) {
-      // entonces me gustaría determinar la página que tiene el error
-      // 0 - InfoPage
-      int index = -1;
-      if (!_isValidInfoPage(state)) {
-        index = 0;
-      } else if (!_isValidDetailsPage(newState)) {
-        index = 1;
-      } else if (!_isValidDaniosPage(newState)) {
-        index = 2;
-      } else if (!_isValidCompensacionesPage(newState)) {
-        index = 3;
-      }
-      // aquí sería else if para las demás condiciones
-      if (index != -1) {
-        // quiere decir que encontró la página
-        state = state.copyWith(selectedIndex: index);
-      }
-
-      return null;
-    }
-    // deshabilitar el botón de posteo
-    state = state.copyWith(isPosting: true);
-    //
-    final fechaInicioRelacionLaboral = AppDateUtils.getCustomFormattedDate(
-        state.fechaInicioRelacionLaboral.value!);
-    final fechaTerminoRelacionLaboral = AppDateUtils.getCustomFormattedDate(
-        state.fechaTerminoRelacionLaboral.value!);
-    final nameTemplate = 'template_01.docx';
-    final data = {
-      //*Demandante
-      'nombre_demandante': state.demandanteFullName.value,
-      'rut_demandante': state.demandanteRut.value,
-      'nacionalidad': state.demandanteNacionalidad.value,
-      'estado_civil': state.demandanteEstadoCivil.texto(state.demandanteGender),
-      'don_cortesia_demandante': state.demandanteGender.donCortesia(),
-      //* Abogado 1
-      'nombre_abogado_1': state.abogado1FullName.value,
-      'rut_abogado_1': state.abogado1Rut.value,
-      'correo_abogado_1': state.abogado1Email.value,
-      //* Abogado 2
-      'nombre_abogado_2': state.abogado2FullName.value,
-      'rut_abogado_2': state.abogado2Rut.value,
-      'correo_abogado_2': state.abogado2Email.value,
-      //* Demandado
-      'nombre_demandado': state.demandadoFullName.value,
-      'rut_demandado': state.demandadoRut.value,
-      //* Representante Legal
-      'nombre_representante_legal': state.representanteLegalFullName.value,
-      'rut_representante_legal': state.representanteLegalRut.value,
-      'domicilio_empresa': state.representanteLegalDomicilio.value,
-      'don_cortesia_representante_legal':
-          state.representanteLegalGender.donCortesia(),
-      //* Detalles adicionales del caso
-      'tribunal': state.tribunal.value,
-      'fecha_inicio_relacion_laboral': fechaInicioRelacionLaboral,
-      'fecha_termino_relacion_laboral': fechaTerminoRelacionLaboral,
-      'cargo_trabajador': state.cargoTrabajador.value,
-      'tipo_de_contrato': state.tipoContrato.value,
-      'horas_semanales_jornada_laboral': state.horasSemanales.value,
-      'remuneracion': StringUtils.formatToNumber(state.remuneracion.value),
-      //* Detalles del Accidente
-      'fecha_accidente_laboral': AppDateUtils.getCustomFormattedDate(
-        state.fechaAccidenteLaboral.value!,
-      ),
-      'hora_accidente':
-          AppDateUtils.getFormattedHora(state.horaAccidente.value!),
-      'relato_del_accidente_extenso': state.relatoAccidenteExtenso.value,
-      'relato_hechos_posteriores_al_accidente_extenso':
-          state.relatoHechosPosteriores.value,
-      //* Daños y perjuicios
-      'porcentaje_incapacidad': state.porcentajeIncapacidad.value,
-      'monto_a_demandar':
-          StringUtils.formatToNumber(state.montoADemandar.value),
-      'relato_danios_esteticos': state.relatoDaniosEsteticos.value,
-      'danio_que_tiene_el_actor': state.danioActor.value,
-      'danio_del_trabajador': state.danioTrabajador.value,
-      'medidas_necesarias_empresa_demandada':
-          state.medidasNecesariasEmpresaDemandada.value,
-      //* Compensaciones
-      'monto_de_remuneracion_segun_empleador': StringUtils.formatToNumber(
-          state.montoRemuneracionSegunEmpleador.value),
-      'monto_remuneracion_segun_articulo_172': StringUtils.formatToNumber(
-        state.montoRemuneracionArt172.value,
-      ),
-      'lista_documentos_ingresar_demanda': state.documentosAdicionalesAIngresar,
-    };
     try {
+      final newState = state.copyWith(isFormPosted: true);
+      _touchEveryThing(newState);
+      if (!state.isFormValid) {
+        // entonces me gustaría determinar la página que tiene el error
+        // 0 - InfoPage
+        int index = -1;
+        if (!_isValidInfoPage(state)) {
+          index = 0;
+        } else if (!_isValidDetailsPage(newState)) {
+          index = 1;
+        } else if (!_isValidDaniosPage(newState)) {
+          index = 2;
+        } else if (!_isValidCompensacionesPage(newState)) {
+          index = 3;
+        }
+        // aquí sería else if para las demás condiciones
+        if (index != -1) {
+          // quiere decir que encontró la página
+          state = state.copyWith(selectedIndex: index);
+        }
+
+        throw Exception('Por favor, complete todos los campos');
+      }
+      // deshabilitar el botón de posteo
+      state = state.copyWith(isPosting: true);
+      //
+      final fechaInicioRelacionLaboral = AppDateUtils.getCustomFormattedDate(
+          state.fechaInicioRelacionLaboral.value!);
+      final fechaTerminoRelacionLaboral = AppDateUtils.getCustomFormattedDate(
+          state.fechaTerminoRelacionLaboral.value!);
+      final nameTemplate = 'template_01.docx';
+      final data = {
+        //*Demandante
+        'nombre_demandante': state.demandanteFullName.value,
+        'rut_demandante': state.demandanteRut.value,
+        'nacionalidad': state.demandanteNacionalidad.value,
+        'estado_civil':
+            state.demandanteEstadoCivil.texto(state.demandanteGender),
+        'don_cortesia_demandante': state.demandanteGender.donCortesia(),
+        //* Abogado 1
+        'nombre_abogado_1': state.abogado1FullName.value,
+        'rut_abogado_1': state.abogado1Rut.value,
+        'correo_abogado_1': state.abogado1Email.value,
+        //* Abogado 2
+        'nombre_abogado_2': state.abogado2FullName.value,
+        'rut_abogado_2': state.abogado2Rut.value,
+        'correo_abogado_2': state.abogado2Email.value,
+        //* Demandado
+        'nombre_demandado': state.demandadoFullName.value,
+        'rut_demandado': state.demandadoRut.value,
+        //* Representante Legal
+        'nombre_representante_legal': state.representanteLegalFullName.value,
+        'rut_representante_legal': state.representanteLegalRut.value,
+        'domicilio_empresa': state.representanteLegalDomicilio.value,
+        'don_cortesia_representante_legal':
+            state.representanteLegalGender.donCortesia(),
+        //* Detalles adicionales del caso
+        'tribunal': state.tribunal.value,
+        'fecha_inicio_relacion_laboral': fechaInicioRelacionLaboral,
+        'fecha_termino_relacion_laboral': fechaTerminoRelacionLaboral,
+        'cargo_trabajador': state.cargoTrabajador.value,
+        'tipo_de_contrato': state.tipoContrato.value,
+        'horas_semanales_jornada_laboral': state.horasSemanales.value,
+        'remuneracion': StringUtils.formatToNumber(state.remuneracion.value),
+        //* Detalles del Accidente
+        'fecha_accidente_laboral': AppDateUtils.getCustomFormattedDate(
+          state.fechaAccidenteLaboral.value!,
+        ),
+        'hora_accidente':
+            AppDateUtils.getFormattedHora(state.horaAccidente.value!),
+        'relato_del_accidente_extenso': state.relatoAccidenteExtenso.value,
+        'relato_hechos_posteriores_al_accidente_extenso':
+            state.relatoHechosPosteriores.value,
+        //* Daños y perjuicios
+        'porcentaje_incapacidad': state.porcentajeIncapacidad.value,
+        'monto_a_demandar':
+            StringUtils.formatToNumber(state.montoADemandar.value),
+        'relato_danios_esteticos': state.relatoDaniosEsteticos.value,
+        'danio_que_tiene_el_actor': state.danioActor.value,
+        'danio_del_trabajador': state.danioTrabajador.value,
+        'medidas_necesarias_empresa_demandada':
+            state.medidasNecesariasEmpresaDemandada.value,
+        //* Compensaciones
+        'monto_de_remuneracion_segun_empleador': StringUtils.formatToNumber(
+            state.montoRemuneracionSegunEmpleador.value),
+        'monto_remuneracion_segun_articulo_172': StringUtils.formatToNumber(
+          state.montoRemuneracionArt172.value,
+        ),
+        'lista_documentos_ingresar_demanda':
+            state.documentosAdicionalesAIngresar,
+      };
+
       final documentRequest = {
         'name_template': nameTemplate,
         'data': data,

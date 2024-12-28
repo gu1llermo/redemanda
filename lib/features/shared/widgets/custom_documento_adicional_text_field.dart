@@ -8,7 +8,7 @@ class CustomDocumentoAdicionalTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final String? errorMessage;
   final TextInputType? keyboardType;
-  // final void Function(int)? onDelete;
+  final String initialValue;
 
   const CustomDocumentoAdicionalTextField({
     super.key,
@@ -18,7 +18,7 @@ class CustomDocumentoAdicionalTextField extends StatefulWidget {
     this.errorMessage,
     this.keyboardType,
     required this.index,
-    // this.onDelete,
+    this.initialValue = '',
   });
 
   @override
@@ -29,10 +29,26 @@ class CustomDocumentoAdicionalTextField extends StatefulWidget {
 class _CustomDocumentoAdicionalTextFieldState
     extends State<CustomDocumentoAdicionalTextField> {
   Timer? _debounce;
+  late final TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void didUpdateWidget(CustomDocumentoAdicionalTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      _textController.text = widget.initialValue;
+    }
+  }
 
   @override
   void dispose() {
     _debounce?.cancel();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -48,6 +64,7 @@ class _CustomDocumentoAdicionalTextFieldState
     return Expanded(
       child: TextField(
         textInputAction: widget.textInputAction,
+        controller: _textController,
         decoration: InputDecoration(
           hintText: widget.hintText,
           errorText: widget.errorMessage,
