@@ -24,6 +24,8 @@ class NotificationService {
     required String message,
     String? title,
     FlushbarType type = FlushbarType.info,
+    Duration? duration,
+    Widget? customButton, // Añadimos este parámetro
   }) {
     Color backgroundColor;
     IconData icon;
@@ -32,16 +34,13 @@ class NotificationService {
       case FlushbarType.success:
         backgroundColor = Colors.green;
         icon = Icons.check_circle;
-        break;
       case FlushbarType.error:
         backgroundColor = Colors.red;
         icon = Icons.error;
-        break;
       case FlushbarType.warning:
         backgroundColor = Colors.orange;
         icon = Icons.warning;
-        break;
-      default:
+      case FlushbarType.info:
         backgroundColor = Colors.blue;
         icon = Icons.info;
     }
@@ -51,7 +50,7 @@ class NotificationService {
     _currentFlushbar = Flushbar(
       message: message,
       title: title,
-      duration: const Duration(seconds: 3),
+      duration: duration,
       flushbarPosition: FlushbarPosition.BOTTOM,
       backgroundColor: backgroundColor,
       borderRadius: BorderRadius.circular(8),
@@ -67,18 +66,14 @@ class NotificationService {
       dismissDirection: FlushbarDismissDirection.HORIZONTAL,
       isDismissible: true,
       // Puedes agregar un botón si gustas
-      // mainButton: TextButton(
-      //   child: const Text(
-      //     'DESHACER',
-      //     style: TextStyle(color: Colors.white),
-      //   ),
-      //   onPressed: () {
-      //     // Acción al presionar el botón
-      //     // Ocultar el Flushbar inmediatamente
-      //     _currentFlushbar?.dismiss();
-      //     // Aquí puedes agregar cualquier otra acción que quieras realizar
-      //   },
-      // ),
+      mainButton: customButton ??
+          TextButton(
+            onPressed: dismissCurrentNotification,
+            child: const Text(
+              'Ok',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
     );
     // Mostrar el Flushbar
     _currentFlushbar!.show(context);

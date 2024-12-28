@@ -3,7 +3,7 @@ import '../domain.dart';
 abstract class DocumentsDatasource {
   Future<Document> getDocumentById(int id);
   Future<List<Document>> searchDocumentByTerm(String term);
-  Future<Document> createDocument(Map<String, dynamic> documentData);
+  Future<Document> createDocument(Map<String, dynamic> documentRequest);
   // algo que parece un Documento
   Future<void> deleteDocument(int id);
   Future<List<Document>> getAllDocuments();

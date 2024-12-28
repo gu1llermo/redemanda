@@ -7,7 +7,7 @@ part of 'documents_provider.dart';
 // **************************************************************************
 
 String _$documentsPaginationHash() =>
-    r'b3d78b0088bef2bb071b9d46a8ee79d1f69c1880';
+    r'076668a246b03a58734923ba12b1addbf38deda2';
 
 /// See also [DocumentsPagination].
 @ProviderFor(DocumentsPagination)

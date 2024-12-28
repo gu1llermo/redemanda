@@ -28,7 +28,7 @@ class _SideMenuState extends ConsumerState<SideMenu> {
     final hasNotch = MediaQuery.viewPaddingOf(context).top > 20;
     final textStyles = Theme.of(context).textTheme;
     final auth = ref.watch(authProvider);
-    final name = auth.user?.fullName ?? 'Usuario';
+    final name = auth.user?.email ?? 'Usuario';
     final colors = Theme.of(context).colorScheme;
     final themeMode = ref.watch(themeNotifierProvider);
     final isDarkMode = themeMode == ThemeMode.dark;

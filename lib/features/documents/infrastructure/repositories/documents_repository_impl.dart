@@ -6,8 +6,8 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   DocumentsRepositoryImpl(this.datasource);
 
   @override
-  Future<Document> createDocument(Map<String, dynamic> documentData) {
-    return datasource.createDocument(documentData);
+  Future<Document> createDocument(Map<String, dynamic> documentRequest) {
+    return datasource.createDocument(documentRequest);
   }
 
   @override

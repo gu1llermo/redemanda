@@ -4,6 +4,8 @@ import 'package:redemanda/features/shared/shared.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../../config/config.dart';
+import '../../../domain/domain.dart';
+import '../providers.dart';
 
 part 'document_form_provider.g.dart';
 
@@ -247,6 +249,14 @@ class DocumentForm extends _$DocumentForm {
     _touchEveryThing(newState);
   }
 
+  void onMedidasNecesariasEmpresaDemandadaChanged(String value) {
+    final medidasNecesariasEmpresaDemandada = SimpleStringInput.dirty(value);
+    final newState = state.copyWith(
+      medidasNecesariasEmpresaDemandada: medidasNecesariasEmpresaDemandada,
+    );
+    _touchEveryThing(newState);
+  }
+
   // Compensaciones
   void onMontoRemuneracionSegunEmpleadorChanged(String value) {
     final montoRemuneracionSegunEmpleador = PositiveNumInput.dirty(value);
@@ -288,7 +298,7 @@ class DocumentForm extends _$DocumentForm {
   }
 
   //* Botón de posteo
-  Future<void> onFormSubmit() async {
+  Future<Document?> onFormSubmit() async {
     final newState = state.copyWith(isFormPosted: true);
     _touchEveryThing(newState);
     if (!state.isFormValid) {
@@ -310,17 +320,17 @@ class DocumentForm extends _$DocumentForm {
         state = state.copyWith(selectedIndex: index);
       }
 
-      return;
+      return null;
     }
     // deshabilitar el botón de posteo
     state = state.copyWith(isPosting: true);
-    // Utilizar el repositorio
+    //
     final fechaInicioRelacionLaboral = AppDateUtils.getCustomFormattedDate(
         state.fechaInicioRelacionLaboral.value!);
     final fechaTerminoRelacionLaboral = AppDateUtils.getCustomFormattedDate(
         state.fechaTerminoRelacionLaboral.value!);
     final nameTemplate = 'template_01.docx';
-    final newDocumentRequest = {
+    final data = {
       //*Demandante
       'nombre_demandante': state.demandanteFullName.value,
       'rut_demandante': state.demandanteRut.value,
@@ -330,11 +340,11 @@ class DocumentForm extends _$DocumentForm {
       //* Abogado 1
       'nombre_abogado_1': state.abogado1FullName.value,
       'rut_abogado_1': state.abogado1Rut.value,
-      'correo_abogado_1': state.abogado1Email,
+      'correo_abogado_1': state.abogado1Email.value,
       //* Abogado 2
       'nombre_abogado_2': state.abogado2FullName.value,
       'rut_abogado_2': state.abogado2Rut.value,
-      'correo_abogado_2': state.abogado2Email,
+      'correo_abogado_2': state.abogado2Email.value,
       //* Demandado
       'nombre_demandado': state.demandadoFullName.value,
       'rut_demandado': state.demandadoRut.value,
@@ -349,8 +359,8 @@ class DocumentForm extends _$DocumentForm {
       'fecha_inicio_relacion_laboral': fechaInicioRelacionLaboral,
       'fecha_termino_relacion_laboral': fechaTerminoRelacionLaboral,
       'cargo_trabajador': state.cargoTrabajador.value,
-      'tipo_contrato': state.tipoContrato.value,
-      'horas_semanales': state.horasSemanales.value,
+      'tipo_de_contrato': state.tipoContrato.value,
+      'horas_semanales_jornada_laboral': state.horasSemanales.value,
       'remuneracion': StringUtils.formatToNumber(state.remuneracion.value),
       //* Detalles del Accidente
       'fecha_accidente_laboral': AppDateUtils.getCustomFormattedDate(
@@ -368,6 +378,8 @@ class DocumentForm extends _$DocumentForm {
       'relato_danios_esteticos': state.relatoDaniosEsteticos.value,
       'danio_que_tiene_el_actor': state.danioActor.value,
       'danio_del_trabajador': state.danioTrabajador.value,
+      'medidas_necesarias_empresa_demandada':
+          state.medidasNecesariasEmpresaDemandada.value,
       //* Compensaciones
       'monto_de_remuneracion_segun_empleador': StringUtils.formatToNumber(
           state.montoRemuneracionSegunEmpleador.value),
@@ -377,13 +389,20 @@ class DocumentForm extends _$DocumentForm {
       'lista_documentos_ingresar_demanda': state.documentosAdicionalesAIngresar,
     };
     try {
+      final documentRequest = {
+        'name_template': nameTemplate,
+        'data': data,
+      };
       // simulando un petición al server
-      await Future.delayed(Duration(seconds: 2));
-      // return true;
+      // await Future.delayed(Duration(seconds: 2));
+      final newDocument = await ref
+          .read(documentsPaginationProvider.notifier)
+          .createDocument(documentRequest);
+      state = state.copyWith(isPosting: false, errorMessage: '');
+      return newDocument;
     } on Exception catch (e) {
-      // return false; // ocurrió un error en la petición al servidor
-    } finally {
-      state = state.copyWith(isPosting: false);
+      state = state.copyWith(isPosting: false, errorMessage: e.toString());
+      return null;
     }
   }
 
@@ -475,6 +494,7 @@ class DocumentForm extends _$DocumentForm {
       SimpleStringInput.dirty(newState.relatoDaniosEsteticos.value),
       SimpleStringInput.dirty(newState.danioActor.value),
       SimpleStringInput.dirty(newState.danioTrabajador.value),
+      SimpleStringInput.dirty(newState.medidasNecesariasEmpresaDemandada.value),
     ]);
   }
 
@@ -542,6 +562,8 @@ class DocumentForm extends _$DocumentForm {
 }
 
 class DocumentFormState {
+  // errorMessage
+  final String errorMessage;
   // index
   final int selectedIndex; // para las diferentes páginas
   // Utiles del formulario
@@ -589,6 +611,7 @@ class DocumentFormState {
   final SimpleStringInput relatoDaniosEsteticos;
   final SimpleStringInput danioActor;
   final SimpleStringInput danioTrabajador;
+  final SimpleStringInput medidasNecesariasEmpresaDemandada;
   // Compensaciones
   final PositiveNumInput montoRemuneracionSegunEmpleador;
   final PositiveNumInput montoRemuneracionArt172;
@@ -596,6 +619,7 @@ class DocumentFormState {
   final List<String> documentosAdicionalesAIngresar;
 
   DocumentFormState({
+    this.errorMessage = '',
     // index
     this.selectedIndex = 0,
     // required this.pageController,
@@ -646,6 +670,7 @@ class DocumentFormState {
     this.relatoDaniosEsteticos = const SimpleStringInput.dirty(''),
     this.danioActor = const SimpleStringInput.dirty(''),
     this.danioTrabajador = const SimpleStringInput.dirty(''),
+    this.medidasNecesariasEmpresaDemandada = const SimpleStringInput.dirty(''),
     // Compensaciones
     this.montoRemuneracionSegunEmpleador = const PositiveNumInput.dirty(''),
     this.montoRemuneracionArt172 = const PositiveNumInput.dirty(''),
@@ -654,6 +679,7 @@ class DocumentFormState {
   });
 
   DocumentFormState copyWith({
+    String? errorMessage,
     // index
     int? selectedIndex,
     // PageController? pageController,
@@ -702,6 +728,7 @@ class DocumentFormState {
     SimpleStringInput? relatoDaniosEsteticos,
     SimpleStringInput? danioActor,
     SimpleStringInput? danioTrabajador,
+    SimpleStringInput? medidasNecesariasEmpresaDemandada,
     // Compensaciones
     PositiveNumInput? montoRemuneracionSegunEmpleador,
     PositiveNumInput? montoRemuneracionArt172,
@@ -709,6 +736,7 @@ class DocumentFormState {
     List<String>? documentosAdicionalesAIngresar,
   }) =>
       DocumentFormState(
+        errorMessage: errorMessage ?? this.errorMessage,
         // index
         selectedIndex: selectedIndex ?? this.selectedIndex,
         // pageController: pageController ?? this.pageController,
@@ -770,6 +798,8 @@ class DocumentFormState {
             relatoDaniosEsteticos ?? this.relatoDaniosEsteticos,
         danioActor: danioActor ?? this.danioActor,
         danioTrabajador: danioTrabajador ?? this.danioTrabajador,
+        medidasNecesariasEmpresaDemandada: medidasNecesariasEmpresaDemandada ??
+            this.medidasNecesariasEmpresaDemandada,
         // Compensaciones
         montoRemuneracionSegunEmpleador: montoRemuneracionSegunEmpleador ??
             this.montoRemuneracionSegunEmpleador,

@@ -7,7 +7,7 @@ part of 'documents_repository_provider.dart';
 // **************************************************************************
 
 String _$documentsRepositoryHash() =>
-    r'21ea02181a9652bcb2c849d66acddc53747efa7a';
+    r'2e17578c1164256d51db9b7f087c2a94ec8c5961';
 
 /// See also [documentsRepository].
 @ProviderFor(documentsRepository)
@@ -18,10 +18,12 @@ final documentsRepositoryProvider =
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$documentsRepositoryHash,
-  dependencies: <ProviderOrFamily>[authProvider],
+  dependencies: <ProviderOrFamily>[authProvider, supabaseClientProvider],
   allTransitiveDependencies: <ProviderOrFamily>{
     authProvider,
-    ...?authProvider.allTransitiveDependencies
+    ...?authProvider.allTransitiveDependencies,
+    supabaseClientProvider,
+    ...?supabaseClientProvider.allTransitiveDependencies
   },
 );
 
