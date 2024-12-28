@@ -6,7 +6,7 @@ part of 'document_form_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$documentFormHash() => r'c3454c8e05b683992a51724877dbeff0900419d1';
+String _$documentFormHash() => r'0c5de5ec1315ccbbd0236f275f6c03c328fd878b';
 
 /// See also [DocumentForm].
 @ProviderFor(DocumentForm)

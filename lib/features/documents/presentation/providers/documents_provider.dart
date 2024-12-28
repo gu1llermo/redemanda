@@ -1,3 +1,4 @@
+import 'package:redemanda/features/auth/infrastructure/errors/auth_errors.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/domain.dart';
@@ -49,6 +50,7 @@ class DocumentsState {
 class DocumentsPagination extends _$DocumentsPagination {
   @override
   DocumentsState build() {
+    Future.microtask(loadDocuments);
     return DocumentsState();
   }
 
@@ -91,12 +93,17 @@ class DocumentsPagination extends _$DocumentsPagination {
         errorMessage: '',
         // status: const AsyncValue.data(null),
       );
+    } on CustomError catch (e) {
+      // Manejar errores personalizados
+      state = state.copyWith(
+        errorMessage: e.errorMessage,
+        isLoading: false,
+      );
     } on Exception catch (e) {
       // Manejar errores
       state = state.copyWith(
         errorMessage: e.toString(),
         isLoading: false,
-        // status: AsyncValue.error(error, stackTrace),
       );
     }
   }
@@ -117,18 +124,19 @@ class DocumentsPagination extends _$DocumentsPagination {
       final documentsRepository = ref.read(documentsRepositoryProvider);
       final newDocument =
           await documentsRepository.createDocument(documentRequest);
-
       // Actualizar lista de documentos
       state = state.copyWith(
         documents: [newDocument, ...state.documents],
         errorMessage: '',
       );
       return newDocument;
+    } on NetworkException catch (e) {
+      state = state.copyWith(
+        errorMessage: e.message,
+      );
+      return null;
     } catch (e) {
       state = state.copyWith(
-        // no estoy muy seguro que debería
-        // actualizar el error aquí, porque si falla la creación
-        // no sé si estará montado el context de DocumentsScreen
         errorMessage: e.toString(),
       );
       return null;
@@ -145,6 +153,10 @@ class DocumentsPagination extends _$DocumentsPagination {
       state = state.copyWith(
         documents: state.documents.where((doc) => doc.id != id).toList(),
         errorMessage: '',
+      );
+    } on CustomError catch (e) {
+      state = state.copyWith(
+        errorMessage: e.errorMessage,
       );
     } catch (e) {
       state = state.copyWith(
@@ -171,6 +183,11 @@ class DocumentsPagination extends _$DocumentsPagination {
         hasMoreDocuments: false,
         errorMessage: '',
       );
+    } on CustomError catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: e.errorMessage,
+      );
     } catch (error) {
       state = state.copyWith(
         isLoading: false,
@@ -195,6 +212,11 @@ class DocumentsPagination extends _$DocumentsPagination {
         isLoading: false,
         hasMoreDocuments: false,
         errorMessage: '',
+      );
+    } on CustomError catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: e.errorMessage,
       );
     } catch (error) {
       state = state.copyWith(

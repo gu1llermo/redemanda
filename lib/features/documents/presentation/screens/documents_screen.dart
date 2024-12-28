@@ -91,9 +91,10 @@ class _DocumentsView extends ConsumerWidget {
         // Cargar más documentos cuando se está a menos del 20% de llegar al final
         // scrollInfo.metrics.extentBefore es la cantidad de contenido ya desplazado
         // scrollInfo.metrics.extentTotal es el tamaño total del contenido desplazable
-        if (scrollInfo.metrics.extentBefore / scrollInfo.metrics.extentTotal <
-                0.2 &&
-            documentsState.hasMoreDocuments) {
+        if (scrollInfo.metrics.pixels >=
+                scrollInfo.metrics.maxScrollExtent * 0.9 &&
+            documentsState.hasMoreDocuments &&
+            !documentsState.isLoading) {
           documentsNotifier.loadDocuments();
           return true;
         }

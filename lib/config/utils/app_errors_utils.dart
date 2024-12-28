@@ -12,4 +12,15 @@ class AppErrorsUtils {
       type: FlushbarType.error,
     );
   }
+
+  static void onSucces(BuildContext context, String message,
+      [Widget? customWidget]) {
+    if (!context.mounted) return;
+    NotificationService().showNotification(
+      context: context,
+      message: message,
+      type: FlushbarType.success,
+      customButton: customWidget,
+    );
+  }
 }

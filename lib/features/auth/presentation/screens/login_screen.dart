@@ -179,7 +179,8 @@ class _LoginForm extends ConsumerWidget {
                 TextButton(
                     onPressed: () {},
                     child: Text(
-                      '¿Olvidó su contraseña?',
+                      ' ',
+                      // '¿Olvidó su contraseña?',
                       style: TextStyle(color: colors.primary),
                     )),
                 SizedBox(height: 30),

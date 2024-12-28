@@ -27,8 +27,47 @@ class DocumentsDatasourceImpl extends DocumentsDatasource {
   DocumentsDatasourceImpl({required this.accesToken, required this.supabase}) {
     dio = Dio(BaseOptions(baseUrl: EnvironmentConfig.supabaseUrl, headers: {
       'Authorization': 'Bearer $accesToken',
-    }));
+    }))
+      ..interceptors.add(_createAuthInterceptor());
     _store = intMapStoreFactory.store(nameStore);
+  }
+
+  Interceptor _createAuthInterceptor() {
+    return InterceptorsWrapper(
+      onError: (DioException error, handler) async {
+        if (error.response?.statusCode == 401) {
+          try {
+            // Intentar renovar el token
+            final response = await supabase.auth.refreshSession();
+            if (response.session != null) {
+              // Actualizar el token en la solicitud original
+              final newToken = response.session!.accessToken;
+              error.requestOptions.headers['Authorization'] =
+                  'Bearer $newToken';
+
+              // Reintentar la solicitud original
+              final opts = Options(
+                method: error.requestOptions.method,
+                headers: error.requestOptions.headers,
+              );
+
+              final retryResponse = await dio.request(
+                error.requestOptions.path,
+                options: opts,
+                data: error.requestOptions.data,
+                queryParameters: error.requestOptions.queryParameters,
+              );
+
+              return handler.resolve(retryResponse);
+            }
+          } catch (e) {
+            // Si falla la renovación, propagar el error original
+            return handler.next(error);
+          }
+        }
+        return handler.next(error);
+      },
+    );
   }
 
   Future<Database> get database async => _database ??= await _createDatabase();
@@ -53,7 +92,6 @@ class DocumentsDatasourceImpl extends DocumentsDatasource {
   @override
   Future<Document> createDocument(Map<String, dynamic> documentRequest) async {
     try {
-      // Call Supabase Edge Function to generate document
       final response = await dio.post(
         '/functions/v1/generate-document',
         data: documentRequest,
@@ -64,29 +102,40 @@ class DocumentsDatasourceImpl extends DocumentsDatasource {
             'Error generando el documento: ${response.statusMessage}');
       }
 
-      // Extract base64 document from response
       final base64Doc = response.data['docxBase64'] as String;
 
-      // Convert base64 to Uint8List
-      final docxFile = Uint8List.fromList(base64Decode(base64Doc));
+      // Decode base64 while preserving binary format
+      final docxFile = base64Decode(base64Doc);
 
-      // Get document data from the request
       final data = documentRequest['data'] as Map<String, dynamic>;
+      final title = '${data['nombre_demandante']}';
+      final description = '''
+rut: ${data['rut_demandante']}
+Demandado: ${data['nombre_demandado']}
+''';
 
-      // Create new Document instance
       final newDocument = Document(
-        title: data['nombre_demandante'] ?? 'Sin título',
-        description: data['nombre_demandado'] ?? 'Sin descripción',
+        title: title,
+        description: description,
         sizeInBytes: docxFile.length,
         createdAt: DateTime.now(),
         docxFile: docxFile,
         author: supabase.auth.currentUser?.email,
       );
 
-      // Save document to local database
       return await saveDocument(newDocument);
+    } on DioException catch (e) {
+      throw NetworkException.fromDioError(e);
+
+      // if (e.response?.statusCode == 401) {
+      //   throw CustomError(
+      //       'Sesión expirada. Por favor, inicie sesión nuevamente.');
+      // }
+
+      // throw CustomError('Error al crear documento: ${e.message}');
     } catch (e) {
-      throw CustomError('Error createDocument: $e');
+      throw CustomError('Error al crear documento: $e');
+      //throw CustomError('Error createDocument: $e');
     }
   }
 

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:redemanda/features/auth/infrastructure/mappers/user_entity_mapper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -7,21 +10,83 @@ import '../../infrastructure/infrastructure.dart';
 
 part 'auth_provider.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [authRepository])
+@Riverpod(keepAlive: true, dependencies: [authRepository, supabaseClient])
 class Auth extends _$Auth {
-  // Creamos métodos privados para manejar los repositorios
-  // AuthRepository get _authRepository => AuthRepositoryImpl();
-  // KeyValueStorageService get _keyValueStorageService =>
-  //     KeyValueStorageServiceImpl();
-  // final String _token = 'token';
+  Timer? _refreshTimer;
+  // Definir constantes para el manejo del tiempo
+  static const tokenRefreshThreshold =
+      Duration(minutes: 5); // Renovar 5 minutos antes
+  static const sessionDuration = Duration(hours: 1); // Duración total del token
 
   @override
   AuthState build() {
-    //ref.watch(authRepositoryProvider);
+    ref.onDispose(() {
+      _refreshTimer?.cancel();
+    });
 
-    // Posterga la ejecución del chequeo de estado de autenticación
-    Future.microtask(_checkAuthStatus);
+    Future.microtask(() {
+      _checkAuthStatus();
+      _initializeAuthListener();
+    });
+
     return AuthState();
+  }
+
+  void _initializeAuthListener() {
+    final supabase = ref.read(supabaseClientProvider);
+    supabase.auth.onAuthStateChange.listen((data) {
+      final AuthChangeEvent event = data.event;
+      final Session? session = data.session;
+
+      switch (event) {
+        case AuthChangeEvent.signedIn:
+          if (session != null) _startRefreshTimer(session);
+          break;
+        case AuthChangeEvent.signedOut:
+          _refreshTimer?.cancel();
+          break;
+        case AuthChangeEvent.tokenRefreshed:
+          if (session != null) {
+            _setLoggedUser(UserEntityMapper.fromSupabaseSession(session));
+            _startRefreshTimer(session);
+          }
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  void _startRefreshTimer(Session session) {
+    _refreshTimer?.cancel();
+
+    final now = DateTime.now().toUtc();
+    final expiresAt =
+        DateTime.fromMillisecondsSinceEpoch(session.expiresAt! * 1000).toUtc();
+    final timeUntilRefresh = expiresAt.difference(now) - tokenRefreshThreshold;
+
+    if (timeUntilRefresh.isNegative) {
+      // Si ya está próximo a expirar, renovar inmediatamente
+      _refreshSession();
+    } else {
+      _refreshTimer = Timer(timeUntilRefresh, _refreshSession);
+    }
+  }
+
+  Future<void> _refreshSession() async {
+    try {
+      final supabase = ref.read(supabaseClientProvider);
+      final response = await supabase.auth.refreshSession();
+
+      if (response.session != null) {
+        _setLoggedUser(UserEntityMapper.fromSupabaseSession(response.session!));
+        // Reiniciar el timer para la siguiente renovación
+        _startRefreshTimer(response.session!);
+      }
+    } catch (e) {
+      // Si falla la renovación, intentar hacer logout
+      logout('Error al renovar la sesión');
+    }
   }
 
   Future<void> loginUser(String email, String password) async {
