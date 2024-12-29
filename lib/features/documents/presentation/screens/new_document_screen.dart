@@ -44,11 +44,18 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
       _Compensaciones(),
     ];
 
+    // ref.listen(
+    //   documentFormProvider,
+    //   (previous, next) {
+    //     if (next.errorMessage.isEmpty) return;
+    //     AppErrorsUtils.onError(context, next.errorMessage);
+    //   },
+    // );
     ref.listen(
-      documentFormProvider,
+      documentFormProvider.select((state) => state.errorMessage),
       (previous, next) {
-        if (next.errorMessage.isEmpty) return;
-        AppErrorsUtils.onError(context, next.errorMessage);
+        if (next.isEmpty) return;
+        AppErrorsUtils.onError(context, next);
       },
     );
 
@@ -56,11 +63,14 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
       documentFormProvider.select((state) => state.selectedIndex),
       (previous, next) {
         // Lógica cuando cambia specificAttribute
-        pageController.animateToPage(
-          next,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.linear,
-        );
+        if (next != newDocumentState.selectedIndex) {
+          pageController.animateToPage(
+            next,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            // curve: Curves.linear,
+          );
+        }
       },
     );
 
@@ -72,13 +82,14 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 40),
           child: PageView(
             controller: pageController,
-            physics: const ClampingScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
+            // physics: const ClampingScrollPhysics(),
             // physics: const BouncingScrollPhysics(),
-            onPageChanged: (index) {
-              ref
-                  .read(documentFormProvider.notifier)
-                  .onSelectedIndexChanged(index);
-            },
+            // onPageChanged: (index) {
+            //   ref
+            //       .read(documentFormProvider.notifier)
+            //       .onSelectedIndexChanged(index);
+            // },
             children: widgetOptions,
           ),
           // child: IndexedStack(
@@ -108,7 +119,25 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
             ),
           ],
           currentIndex: newDocumentState.selectedIndex,
-          onTap: ref.read(documentFormProvider.notifier).onSelectedIndexChanged,
+          onTap: (index) {
+            // pageController
+            //     .animateToPage(
+            //   index,
+            //   duration: const Duration(milliseconds: 300),
+            //   curve: Curves.linear,
+            // )
+            //     .then(
+            //   (value) {
+            //     ref
+            //         .read(documentFormProvider.notifier)
+            //         .onSelectedIndexChanged(index);
+            //   },
+            // );
+
+            ref
+                .read(documentFormProvider.notifier)
+                .onSelectedIndexChanged(index);
+          },
         ),
       ),
     );
@@ -127,19 +156,301 @@ class _InformationState extends ConsumerState<_Information>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final newDocumentState = ref.watch(documentFormProvider);
+
     return ListView(
-      children: const [
-        _InformacionDemandante(),
+      padding: const EdgeInsets.only(bottom: 40),
+      children: [
+        // _InformacionDemandante(),
+        _InformacionDemandante(ref: ref, newDocumentState: newDocumentState),
         SizedBox(height: 5),
-        _InformacionAbogado1(),
+        //_InformacionAbogado1(),
+        _InformacionAbogado1(ref: ref, newDocumentState: newDocumentState),
         SizedBox(height: 5),
-        _InformacionAbogado2(),
+        //_InformacionAbogado2(),
+        _InformacionAbogado2(ref: ref, newDocumentState: newDocumentState),
         SizedBox(height: 5),
-        _InformacionDemandado(),
+        //_InformacionDemandado(),
+        _InformacionDemandado(ref: ref, newDocumentState: newDocumentState),
         SizedBox(height: 5),
-        _InformacionRepresentanteLegal(),
-        SizedBox(height: 40),
+        //_InformacionRepresentanteLegal(),
+        _InformacionRepresentanteLegal(
+            ref: ref, newDocumentState: newDocumentState),
+        //SizedBox(height: 40),
         // _SubmitButton()
+      ],
+    );
+  }
+}
+
+class _InformacionRepresentanteLegal extends StatelessWidget {
+  const _InformacionRepresentanteLegal({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentFormState newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Representante Legal',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_representante_legal',
+          initialValue: newDocumentState.representanteLegalFullName.value,
+          onChanged: ref
+              .read(documentFormProvider.notifier)
+              .onRepresentanteLegalFullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.representanteLegalFullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_representante_legal',
+          initialValue: newDocumentState.representanteLegalRut.value,
+          onChanged: ref
+              .read(documentFormProvider.notifier)
+              .onRepresentanteLegalRutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.representanteLegalRut.errorMessage
+              : null,
+        ),
+        GenderSelector(
+          selectedGender: newDocumentState.representanteLegalGender,
+          onGenderChanged: ref
+              .read(documentFormProvider.notifier)
+              .onRepresentanteLegalGenderChanged,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 400,
+          labelText: 'Domicilio Empresa',
+          preferencesKey: 'domicilio_empresa',
+          initialValue: newDocumentState.representanteLegalDomicilio.value,
+          onChanged: ref
+              .read(documentFormProvider.notifier)
+              .onRepresentanteLegalDomicilioChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.representanteLegalDomicilio.errorMessage
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _InformacionDemandado extends StatelessWidget {
+  const _InformacionDemandado({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentFormState newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Demandado',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 400,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_demandado',
+          initialValue: newDocumentState.demandadoFullName.value,
+          onChanged: ref
+              .read(documentFormProvider.notifier)
+              .onDemandadoFullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandadoFullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_demandado',
+          initialValue: newDocumentState.demandadoRut.value,
+          onChanged:
+              ref.read(documentFormProvider.notifier).onDemandadoRutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandadoRut.errorMessage
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _InformacionAbogado2 extends StatelessWidget {
+  const _InformacionAbogado2({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentFormState newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Abogado 2',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_abogado_2',
+          initialValue: newDocumentState.abogado2FullName.value,
+          onChanged:
+              ref.read(documentFormProvider.notifier).onAbogado2FullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado2FullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_abogado_2',
+          initialValue: newDocumentState.abogado2Rut.value,
+          onChanged:
+              ref.read(documentFormProvider.notifier).onAbogado2RutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado2Rut.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Correo',
+          preferencesKey: 'correo_abogado_2',
+          initialValue: newDocumentState.abogado2Email.value,
+          onChanged:
+              ref.read(documentFormProvider.notifier).onAbogado2EmailChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado2Email.errorMessage
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _InformacionAbogado1 extends StatelessWidget {
+  const _InformacionAbogado1({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentFormState newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Abogado 1',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_abogado_1',
+          initialValue: newDocumentState.abogado1FullName.value,
+          onChanged:
+              ref.read(documentFormProvider.notifier).onAbogado1FullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado1FullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_abogado_1',
+          initialValue: newDocumentState.abogado1Rut.value,
+          onChanged:
+              ref.read(documentFormProvider.notifier).onAbogado1RutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado1Rut.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Correo',
+          preferencesKey: 'correo_abogado_1',
+          initialValue: newDocumentState.abogado1Email.value,
+          onChanged:
+              ref.read(documentFormProvider.notifier).onAbogado1EmailChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado1Email.errorMessage
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _InformacionDemandante extends StatelessWidget {
+  const _InformacionDemandante({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentFormState newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Demandante',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_demandante',
+          initialValue: newDocumentState.demandanteFullName.value,
+          onChanged: ref
+              .read(documentFormProvider.notifier)
+              .onDemandanteFullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandanteFullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_demandante',
+          initialValue: newDocumentState.demandanteRut.value,
+          onChanged:
+              ref.read(documentFormProvider.notifier).onDemandanteRutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandanteRut.errorMessage
+              : null,
+        ),
+        GenderSelector(
+          selectedGender: newDocumentState.demandanteGender,
+          onGenderChanged:
+              ref.read(documentFormProvider.notifier).onDemandanteGenderChanged,
+        ),
+        EstadoCivilDropdown(
+          estadoCivilInicial: newDocumentState.demandanteEstadoCivil,
+          gender: newDocumentState.demandanteGender,
+          onChanged: ref
+              .read(documentFormProvider.notifier)
+              .onDemandanteEstadoCivilChanged,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 180,
+          labelText: 'Nacionalidad',
+          preferencesKey: 'nacionalidad',
+          initialValue: newDocumentState.demandanteNacionalidad.value,
+          onChanged: ref
+              .read(documentFormProvider.notifier)
+              .onDemandanteNacionalidadChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandanteNacionalidad.errorMessage
+              : null,
+        ),
       ],
     );
   }
@@ -245,240 +556,6 @@ class _SubmitButton extends ConsumerWidget {
   }
 }
 
-class _InformacionDemandante extends ConsumerWidget {
-  const _InformacionDemandante();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final newDocumentState = ref.watch(documentFormProvider);
-    return CardModelInformation(
-      title: 'Demandante',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_demandante',
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onDemandanteFullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandanteFullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_demandante',
-          onChanged:
-              ref.read(documentFormProvider.notifier).onDemandanteRutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandanteRut.errorMessage
-              : null,
-        ),
-        GenderSelector(
-          selectedGender: newDocumentState.demandanteGender,
-          onGenderChanged:
-              ref.read(documentFormProvider.notifier).onDemandanteGenderChanged,
-        ),
-        EstadoCivilDropdown(
-          estadoCivilInicial: newDocumentState.demandanteEstadoCivil,
-          gender: newDocumentState.demandanteGender,
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onDemandanteEstadoCivilChanged,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 180,
-          labelText: 'Nacionalidad',
-          preferencesKey: 'nacionalidad',
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onDemandanteNacionalidadChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandanteNacionalidad.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
-class _InformacionAbogado1 extends ConsumerWidget {
-  const _InformacionAbogado1();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final newDocumentState = ref.watch(documentFormProvider);
-    return CardModelInformation(
-      title: 'Abogado 1',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_abogado_1',
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado1FullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado1FullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_abogado_1',
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado1RutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado1Rut.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Correo',
-          preferencesKey: 'correo_abogado_1',
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado1EmailChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado1Email.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
-class _InformacionAbogado2 extends ConsumerWidget {
-  const _InformacionAbogado2();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final newDocumentState = ref.watch(documentFormProvider);
-    return CardModelInformation(
-      title: 'Abogado 2',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_abogado_2',
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado2FullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2FullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_abogado_2',
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado2RutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2Rut.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Correo',
-          preferencesKey: 'correo_abogado_2',
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado2EmailChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2Email.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
-class _InformacionDemandado extends ConsumerWidget {
-  const _InformacionDemandado();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final newDocumentState = ref.watch(documentFormProvider);
-    return CardModelInformation(
-      title: 'Demandado',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 400,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_demandado',
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onDemandadoFullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandadoFullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_demandado',
-          onChanged:
-              ref.read(documentFormProvider.notifier).onDemandadoRutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandadoRut.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
-class _InformacionRepresentanteLegal extends ConsumerWidget {
-  const _InformacionRepresentanteLegal();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final newDocumentState = ref.watch(documentFormProvider);
-    return CardModelInformation(
-      title: 'Representante Legal',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_representante_legal',
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onRepresentanteLegalFullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.representanteLegalFullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_representante_legal',
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onRepresentanteLegalRutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.representanteLegalRut.errorMessage
-              : null,
-        ),
-        GenderSelector(
-          selectedGender: newDocumentState.representanteLegalGender,
-          onGenderChanged: ref
-              .read(documentFormProvider.notifier)
-              .onRepresentanteLegalGenderChanged,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 400,
-          labelText: 'Domicilio Empresa',
-          preferencesKey: 'domicilio_empresa',
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onRepresentanteLegalDomicilioChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.representanteLegalDomicilio.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
 class _DetallesAdicionales extends ConsumerStatefulWidget {
   const _DetallesAdicionales();
 
@@ -497,8 +574,9 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
     final textTheme = Theme.of(context).textTheme;
     final remuneracion =
         "\$${StringUtils.formatToNumber(newDocumentState.remuneracion.value)}";
-    final altura = MediaQuery.sizeOf(context).height;
-    final ancho = MediaQuery.sizeOf(context).width;
+    final size = MediaQuery.sizeOf(context);
+    final altura = size.height;
+    final ancho = size.width;
     final factorAltura = ancho > 600 ? 0.2 : 0.3;
     return ListView(
       children: [
@@ -525,6 +603,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                         preferencesKey: 'tribunal',
                         width: 200,
                         labelText: 'TRIBUNAL',
+                        initialValue: newDocumentState.tribunal.value,
                         onChanged: ref
                             .read(documentFormProvider.notifier)
                             .onTribunalChanged,
@@ -560,6 +639,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                         preferencesKey: 'cargo_trabajador',
                         width: 300,
                         labelText: 'CARGO DEL TRABAJADOR',
+                        initialValue: newDocumentState.cargoTrabajador.value,
                         onChanged: ref
                             .read(documentFormProvider.notifier)
                             .onCargoTrabajadorChanged,
@@ -571,6 +651,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                         preferencesKey: 'tipo_contrato',
                         width: 300,
                         labelText: 'TIPO DE CONTRATO',
+                        initialValue: newDocumentState.tipoContrato.value,
                         onChanged: ref
                             .read(documentFormProvider.notifier)
                             .onTipoContratoChanged,
@@ -581,6 +662,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                       CustomNumericTextField(
                         labelText: 'HORAS SEMANALES',
                         isNumeric: true,
+                        initialValue: newDocumentState.horasSemanales.value,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState.horasSemanales.errorMessage
                             : null,
@@ -592,6 +674,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                         labelText: 'REMUNERACIÓN $remuneracion',
                         isNumeric: true,
                         allowDecimals: true,
+                        initialValue: newDocumentState.remuneracion.value,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState.remuneracion.errorMessage
                             : null,
@@ -646,6 +729,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                   CustomLargeTextField(
                     labelText: 'Relato del accidente (Extenso)',
                     height: altura * factorAltura,
+                    initialValue: newDocumentState.relatoAccidenteExtenso.value,
                     onChanged: ref
                         .read(documentFormProvider.notifier)
                         .onRelatoAccidenteExtensoChanged,
@@ -658,6 +742,8 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                     labelText:
                         'Relato hechos posteriores al accidente (Extenso)',
                     height: altura * factorAltura,
+                    initialValue:
+                        newDocumentState.relatoHechosPosteriores.value,
                     onChanged: ref
                         .read(documentFormProvider.notifier)
                         .onRelatoHechosPosterioresChanged,
@@ -724,6 +810,8 @@ class _DaniosState extends ConsumerState<_Danios>
                         labelText:
                             'Porcentaje de incapacidad $porcentajeIncapacidad',
                         isNumeric: true,
+                        initialValue:
+                            newDocumentState.porcentajeIncapacidad.value,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState
                                 .porcentajeIncapacidad.errorMessage
@@ -737,6 +825,7 @@ class _DaniosState extends ConsumerState<_Danios>
                         width: 250,
                         isNumeric: true,
                         allowDecimals: true,
+                        initialValue: newDocumentState.montoADemandar.value,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState.montoADemandar.errorMessage
                             : null,
@@ -754,6 +843,7 @@ class _DaniosState extends ConsumerState<_Danios>
                   CustomLargeTextField(
                     labelText: 'Relato daños estéticos',
                     height: altura * 0.23,
+                    initialValue: newDocumentState.relatoDaniosEsteticos.value,
                     onChanged: ref
                         .read(documentFormProvider.notifier)
                         .onRelatoDaniosEsteticosChanged,
@@ -767,6 +857,7 @@ class _DaniosState extends ConsumerState<_Danios>
                     hintText:
                         'En virtud de lo anterior, es menester hacer presente S.S., que hasta el día de hoy ${newDocumentState.demandanteGender.donCortesia()} ${newDocumentState.demandanteFullName.value} tiene una (daño que tiene el actor)',
                     height: altura * 0.15,
+                    initialValue: newDocumentState.danioActor.value,
                     onChanged: ref
                         .read(documentFormProvider.notifier)
                         .onDanioActorChanged,
@@ -778,6 +869,7 @@ class _DaniosState extends ConsumerState<_Danios>
                   CustomLargeTextField(
                     labelText: 'Daño del trabajador',
                     height: altura * 0.1,
+                    initialValue: newDocumentState.danioTrabajador.value,
                     onChanged: ref
                         .read(documentFormProvider.notifier)
                         .onDanioTrabajadorChanged,
@@ -791,6 +883,8 @@ class _DaniosState extends ConsumerState<_Danios>
                     hintText:
                         'En definitiva, la empresa demandada no tomó todas las medidas necesarias, tales como:',
                     height: altura * 0.15,
+                    initialValue: newDocumentState
+                        .medidasNecesariasEmpresaDemandada.value,
                     onChanged: ref
                         .read(documentFormProvider.notifier)
                         .onMedidasNecesariasEmpresaDemandadaChanged,
@@ -862,6 +956,8 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                         hintText: 'Monto de remuneración según empleador',
                         isNumeric: true,
                         allowDecimals: true,
+                        initialValue: newDocumentState
+                            .montoRemuneracionSegunEmpleador.value,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState
                                 .montoRemuneracionSegunEmpleador.errorMessage
@@ -877,6 +973,8 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                         width: 400,
                         isNumeric: true,
                         allowDecimals: true,
+                        initialValue:
+                            newDocumentState.montoRemuneracionArt172.value,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState
                                 .montoRemuneracionArt172.errorMessage
@@ -910,6 +1008,8 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                             CustomDocumentoAdicionalTextField(
                               hintText: 'Documento a ingresar en la demanda',
                               index: index,
+                              initialValue: newDocumentState
+                                  .documentosAdicionalesAIngresar[index],
                               onChanged: ref
                                   .read(documentFormProvider.notifier)
                                   .onDocumentoAdicionalChanged,

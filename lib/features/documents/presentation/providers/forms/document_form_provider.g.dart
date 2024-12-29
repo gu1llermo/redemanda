@@ -6,7 +6,7 @@ part of 'document_form_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$documentFormHash() => r'0c5de5ec1315ccbbd0236f275f6c03c328fd878b';
+String _$documentFormHash() => r'328fb9845ee8726e2bbec61cb9ff6abca937ffe0';
 
 /// See also [DocumentForm].
 @ProviderFor(DocumentForm)
@@ -16,8 +16,11 @@ final documentFormProvider =
   name: r'documentFormProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$documentFormHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: <ProviderOrFamily>[documentsPaginationProvider],
+  allTransitiveDependencies: <ProviderOrFamily>{
+    documentsPaginationProvider,
+    ...?documentsPaginationProvider.allTransitiveDependencies
+  },
 );
 
 typedef _$DocumentForm = AutoDisposeNotifier<DocumentFormState>;

@@ -24,7 +24,7 @@ class FullName extends FormzInput<String, FullNameError> {
   // Override validator to handle validating a given input value.
   @override
   FullNameError? validator(String value) {
-    if (value.trim().isEmpty) return FullNameError.empty;
+    if (value.isEmpty) return FullNameError.empty;
 
     return null;
   }

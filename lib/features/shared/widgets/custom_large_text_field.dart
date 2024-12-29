@@ -10,6 +10,7 @@ class CustomLargeTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final String? errorMessage;
   final String? helperText;
+  final String initialValue;
 
   final TextInputType? keyboardType;
   final double width;
@@ -27,6 +28,7 @@ class CustomLargeTextField extends StatefulWidget {
     this.keyboardType,
     this.width = double.infinity,
     this.height = 200,
+    this.initialValue = '',
   });
 
   @override
@@ -35,6 +37,7 @@ class CustomLargeTextField extends StatefulWidget {
 
 class _CustomLargeTextFieldState extends State<CustomLargeTextField> {
   Timer? _debounce;
+  late final TextEditingController _textController;
 
   void _onSearchChanged(String value) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -44,8 +47,23 @@ class _CustomLargeTextFieldState extends State<CustomLargeTextField> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void didUpdateWidget(CustomLargeTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      _textController.text = widget.initialValue;
+    }
+  }
+
+  @override
   void dispose() {
     _debounce?.cancel();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -59,7 +77,7 @@ class _CustomLargeTextFieldState extends State<CustomLargeTextField> {
       height: widget.height,
       child: TextField(
         textInputAction: widget.textInputAction,
-        // textAlign: TextAlign.start,
+        controller: _textController,
         textAlignVertical: TextAlignVertical.top,
         expands: true,
         maxLines: null,

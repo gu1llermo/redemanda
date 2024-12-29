@@ -24,7 +24,7 @@ class SimpleStringInput extends FormzInput<String, SimpleStringInputError> {
   // Override validator to handle validating a given input value.
   @override
   SimpleStringInputError? validator(String value) {
-    if (value.trim().isEmpty) return SimpleStringInputError.empty;
+    if (value.isEmpty) return SimpleStringInputError.empty;
 
     return null;
   }
