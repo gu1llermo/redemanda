@@ -28,10 +28,10 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'  # Esto usará la última versión estable de Flutter
-      - name: Check Flutter Version
-        run: |
-          flutter --version
-          flutter doctor
+      # - name: Check Flutter Version
+      #   run: |
+      #     flutter --version
+      #     flutter doctor
       # Obtener dependencias y activar web
       - run: flutter config --enable-web
       - run: flutter pub get
