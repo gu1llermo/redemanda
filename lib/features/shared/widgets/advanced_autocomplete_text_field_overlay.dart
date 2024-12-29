@@ -2,7 +2,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../providers/providers.dart';
 
 class AdvancedAutocompleteTextFieldOverlay extends ConsumerStatefulWidget {
@@ -59,9 +58,6 @@ class _AdvancedAutocompleteTextFieldState
                   shouldGenerateSuggestions: false);
         },
       );
-      // ref
-      //     .read(autocompleteNotifierProvider(widget.preferencesKey).notifier)
-      //     .updateText(widget.initialValue, shouldGenerateSuggestions: false);
     }
   }
 

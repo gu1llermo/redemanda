@@ -52,13 +52,13 @@ class _CustomLargeTextFieldState extends State<CustomLargeTextField> {
     _textController = TextEditingController(text: widget.initialValue);
   }
 
-  @override
-  void didUpdateWidget(CustomLargeTextField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.initialValue != oldWidget.initialValue) {
-      _textController.text = widget.initialValue;
-    }
-  }
+  // @override
+  // void didUpdateWidget(CustomLargeTextField oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (widget.initialValue != oldWidget.initialValue) {
+  //     _textController.text = widget.initialValue;
+  //   }
+  // }
 
   @override
   void dispose() {
