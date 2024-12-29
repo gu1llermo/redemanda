@@ -6,10 +6,10 @@ import '../../../shared/shared.dart';
 import '../../domain/domain.dart';
 import '../providers/providers.dart';
 
-class DocumentCardView extends StatelessWidget {
+class DocumentCard extends StatelessWidget {
   final Document document;
 
-  const DocumentCardView({
+  const DocumentCard({
     super.key,
     required this.document,
   });

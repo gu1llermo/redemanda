@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -483,7 +483,7 @@ class _GenerateButton extends ConsumerWidget {
                       'Documento generado correctamente!',
                       Row(
                         children: [
-                          if (!kIsWeb)
+                          
                             TextButton(
                               onPressed: () {
                                 NotificationService()

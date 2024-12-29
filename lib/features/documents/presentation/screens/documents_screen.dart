@@ -112,7 +112,7 @@ class _DocumentsView extends ConsumerWidget {
                 ),
                 itemBuilder: (context, index) {
                   final document = documentsState.documents[index];
-                  return DocumentCardView(
+                  return DocumentCard(
                     document: document,
                   );
                 },
