@@ -1,13 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter/foundation.dart';
 
 import 'config/config.dart';
 import 'features/shared/shared.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  print('Flutter Version: ${defaultTargetPlatform.toString()}');
+  // O más específicamente para versión y motor:
+  print('Version: ${Platform.version}');
+
   await EnvironmentConfig.initialize();
 
   await Supabase.initialize(
