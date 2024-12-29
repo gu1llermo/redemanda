@@ -78,7 +78,12 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Nuevo Documento')),
+        appBar: AppBar(
+          title: const Text('Nuevo Documento'),
+          actions: [
+            _SubmitButton(),
+          ],
+        ),
         body: Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 40),
           child: PageView(
@@ -98,7 +103,13 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
           //   children: widgetOptions,
           // ),
         ),
-        floatingActionButton: _GenerateButton(),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _PreviusButton(widgetOptions.length),
+            _NextButton(widgetOptions.length),
+          ],
+        ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
@@ -535,17 +546,65 @@ class _GenerateButton extends ConsumerWidget {
   }
 }
 
+class _NextButton extends ConsumerWidget {
+  const _NextButton(this.nroPaginas);
+  final int nroPaginas;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final newDocumentState = ref.watch(documentFormProvider);
+    final indiceActual = newDocumentState.selectedIndex;
+
+    return indiceActual < nroPaginas - 1
+        ? FloatingActionButton(
+            tooltip: 'Siguiente',
+            heroTag: 'next',
+            onPressed: () {
+              ref.read(documentFormProvider.notifier).incrementarIndex();
+            },
+            child: Icon(Icons.arrow_forward_rounded),
+          )
+        : SizedBox(width: 10);
+  }
+}
+
+class _PreviusButton extends ConsumerWidget {
+  const _PreviusButton(this.nroPaginas);
+  final int nroPaginas;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final newDocumentState = ref.watch(documentFormProvider);
+    final indiceActual = newDocumentState.selectedIndex;
+
+    return indiceActual > 0
+        ? Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: FloatingActionButton(
+              tooltip: 'Anterior',
+              heroTag: 'previus',
+              onPressed: () {
+                ref.read(documentFormProvider.notifier).decrementarIndex();
+              },
+              child: Icon(Icons.arrow_back_rounded),
+            ),
+          )
+        : SizedBox(width: 10);
+  }
+}
+
 class _SubmitButton extends ConsumerWidget {
   const _SubmitButton();
 
   @override
   Widget build(BuildContext context, ref) {
     final newDocumentState = ref.watch(documentFormProvider);
-    return ElevatedButton(
+    return IconButton(
+      tooltip: 'Generar Documento',
       onPressed: newDocumentState.isPosting
           ? null
           : ref.read(documentFormProvider.notifier).onFormSubmit,
-      child: newDocumentState.isPosting
+      icon: newDocumentState.isPosting
           ? SizedBox(
               height: 20,
               width: 20,
@@ -553,7 +612,7 @@ class _SubmitButton extends ConsumerWidget {
                 strokeWidth: 2,
               ),
             )
-          : Text('Submit'),
+          : Icon(Icons.create_rounded),
     );
   }
 }
