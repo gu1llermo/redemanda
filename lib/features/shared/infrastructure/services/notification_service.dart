@@ -24,7 +24,7 @@ class NotificationService {
     required String message,
     String? title,
     FlushbarType type = FlushbarType.info,
-    Duration? duration,
+    Duration duration = const Duration(seconds: 9),
     Widget? customButton, // Añadimos este parámetro
   }) {
     Color backgroundColor;
