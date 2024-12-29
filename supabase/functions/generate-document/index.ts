@@ -3,14 +3,26 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.47.10"
 import PizZip from 'npm:pizzip@3.1.7'
 import Docxtemplater from 'npm:docxtemplater@3.55.5'
 import { encode as encodeBase64 } from "https://deno.land/std@0.168.0/encoding/base64.ts";
+import { corsHeaders } from '../_shared/cors.ts'
 
 serve(async (req) => {
+  // Manejo de las solicitudes OPTIONS para CORS
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
   try {
     const { name_template, data } = await req.json()
     
     const authHeader = req.headers.get('Authorization')?.split(' ')[1]
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'No authorization header' }), { status: 401 })
+      return new Response(
+        JSON.stringify({ error: 'No authorization header' }), 
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 401 
+        }
+      )
     }
 
     const supabaseClient = createClient(
@@ -20,7 +32,13 @@ serve(async (req) => {
     
     const { data: { user }, error: userError } = await supabaseClient.auth.getUser(authHeader)
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: 'Invalid token' }), { status: 401 })
+      return new Response(
+        JSON.stringify({ error: 'Invalid token' }), 
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 401 
+        }
+      )
     }
 
     const { data: userData, error: creditsError } = await supabaseClient
@@ -30,7 +48,13 @@ serve(async (req) => {
       .single()
 
     if (creditsError || !userData || userData.current_credits < 1) {
-      return new Response(JSON.stringify({ error: 'Insufficient credits' }), { status: 403 })
+      return new Response(
+        JSON.stringify({ error: 'Insufficient credits' }), 
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 403 
+        }
+      )
     }
 
     const { data: templateData, error: templateError } = await supabaseClient
@@ -39,7 +63,13 @@ serve(async (req) => {
       .download(name_template)
 
     if (templateError) {
-      return new Response(JSON.stringify({ error: 'Template not found' }), { status: 404 })
+      return new Response(
+        JSON.stringify({ error: 'Template not found' }), 
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 404 
+        }
+      )
     }
 
     const content = await templateData.arrayBuffer()
@@ -65,15 +95,30 @@ serve(async (req) => {
     })
 
     if (transactionError) {
-      return new Response(JSON.stringify({ error: 'Transaction failed' }), { status: 500 })
+      return new Response(
+        JSON.stringify({ error: 'Transaction failed' }), 
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500 
+        }
+      )
     }
 
     return new Response(
       JSON.stringify({ docxBase64: base64Doc }),
-      { headers: { 'Content-Type': 'application/json' }, status: 200 }
+      { 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
+        status: 200 
+      }
     )
 
   } catch (error) {
-    return new Response(JSON.stringify({ error: (error as Error).message }), { status: 500 })
+    return new Response(
+      JSON.stringify({ error: (error as Error).message }), 
+      { 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500 
+      }
+    )
   }
 })
