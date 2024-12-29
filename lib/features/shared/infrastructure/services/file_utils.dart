@@ -20,6 +20,7 @@ class FileUtils {
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
+        //
         SnackBar(content: Text('Error al compartir el archivo: $e')),
       );
     }
