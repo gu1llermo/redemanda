@@ -38,14 +38,6 @@ class _CustomDocumentoAdicionalTextFieldState
   }
 
   @override
-  void didUpdateWidget(CustomDocumentoAdicionalTextField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.initialValue != oldWidget.initialValue) {
-      _textController.text = widget.initialValue;
-    }
-  }
-
-  @override
   void dispose() {
     _debounce?.cancel();
     _textController.dispose();
