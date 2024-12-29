@@ -297,6 +297,18 @@ class DocumentForm extends _$DocumentForm {
     );
   }
 
+  //* Botón incrementar página
+  void incrementarIndex() {
+    final newIndex = state.selectedIndex + 1;
+    state = state.copyWith(selectedIndex: newIndex);
+  }
+
+  //* Botón decrementar página
+  void decrementarIndex() {
+    final newIndex = state.selectedIndex - 1;
+    state = state.copyWith(selectedIndex: newIndex);
+  }
+
   //* Botón de posteo
   Future<Document?> onFormSubmit() async {
     try {
