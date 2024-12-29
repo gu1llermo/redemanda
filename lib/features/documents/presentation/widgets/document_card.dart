@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -54,11 +55,21 @@ class DocumentCard extends StatelessWidget {
             // Contenido de la tarjeta
 
             GestureDetector(
-              onTap: () => FileUtils.openWithDefaultApp(
-                context: context,
-                fileBytes: document.docxFile,
-                fileExtension: 'docx', // sin el punto
-              ),
+              onTap: () {
+                if (!kIsWeb) {
+                  FileUtils.openWithDefaultApp(
+                    context: context,
+                    fileBytes: document.docxFile,
+                    fileExtension: 'docx', // sin el punto
+                  );
+                } else {
+                  NotificationService().showNotification(
+                    context: context,
+                    message: 'No se puede abrir el archivo en la web',
+                    type: FlushbarType.error,
+                  );
+                }
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
