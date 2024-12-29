@@ -65,7 +65,8 @@ class DocumentCard extends StatelessWidget {
                 } else {
                   NotificationService().showNotification(
                     context: context,
-                    message: 'No se puede abrir el archivo en la web',
+                    message:
+                        'No se puede abrir éste archivo en el navegador web, por favor descárgalo y ábrelo en tu computadora.',
                     type: FlushbarType.error,
                   );
                 }
