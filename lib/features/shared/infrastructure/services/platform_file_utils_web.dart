@@ -1,12 +1,10 @@
-// platform_file_utils_web.dart
+// lib/features/shared/infrastructure/services/platform_file_utils_web.dart
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'platform_file_utils.dart';
-// Import universal_html instead of dart:html
 import 'package:universal_html/html.dart' as html;
 
-class PlatformFileUtilsWeb implements PlatformFileUtils {
+class PlatformFileUtils {
   static Future<void> share({
     required BuildContext context,
     required Uint8List file,
