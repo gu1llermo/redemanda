@@ -50,9 +50,18 @@ class _AdvancedAutocompleteTextFieldState
 
     // Inicializar el estado con el valor inicial
     if (widget.initialValue.isNotEmpty) {
-      ref
-          .read(autocompleteNotifierProvider(widget.preferencesKey).notifier)
-          .updateText(widget.initialValue, shouldGenerateSuggestions: false);
+      Future.microtask(
+        () {
+          ref
+              .read(
+                  autocompleteNotifierProvider(widget.preferencesKey).notifier)
+              .updateText(widget.initialValue,
+                  shouldGenerateSuggestions: false);
+        },
+      );
+      // ref
+      //     .read(autocompleteNotifierProvider(widget.preferencesKey).notifier)
+      //     .updateText(widget.initialValue, shouldGenerateSuggestions: false);
     }
   }
 
