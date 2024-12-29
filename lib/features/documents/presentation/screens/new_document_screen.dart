@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -482,21 +483,22 @@ class _GenerateButton extends ConsumerWidget {
                       'Documento generado correctamente!',
                       Row(
                         children: [
-                          TextButton(
-                            onPressed: () {
-                              NotificationService()
-                                  .dismissCurrentNotification();
-                              FileUtils.openWithDefaultApp(
-                                context: context,
-                                fileBytes: document.docxFile,
-                                fileExtension: 'docx', // sin el punto
-                              );
-                            },
-                            child: const Text(
-                              'Ver',
-                              style: TextStyle(color: Colors.white),
+                          if (!kIsWeb)
+                            TextButton(
+                              onPressed: () {
+                                NotificationService()
+                                    .dismissCurrentNotification();
+                                FileUtils.openWithDefaultApp(
+                                  context: context,
+                                  fileBytes: document.docxFile,
+                                  fileExtension: 'docx', // sin el punto
+                                );
+                              },
+                              child: const Text(
+                                'Ver',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                          ),
                           const SizedBox(width: 10),
                           TextButton(
                             onPressed: () {
