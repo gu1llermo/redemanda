@@ -1,13 +1,12 @@
-// platform_file_utils_mobile.dart
+// lib/features/shared/infrastructure/services/platform_file_utils_mobile.dart
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'platform_file_utils.dart';
 
-class PlatformFileUtilsMobile implements PlatformFileUtils {
+class PlatformFileUtils {
   static Future<void> share({
     required BuildContext context,
     required Uint8List file,

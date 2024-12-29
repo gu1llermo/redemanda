@@ -1,4 +1,4 @@
-// file_utils.dart
+// lib/features/shared/infrastructure/services/file_utils.dart
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'platform_file_utils.dart'
@@ -20,7 +20,6 @@ class FileUtils {
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        //
         SnackBar(content: Text('Error al compartir el archivo: $e')),
       );
     }
