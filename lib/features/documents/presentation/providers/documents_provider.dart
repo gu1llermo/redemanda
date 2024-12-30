@@ -168,35 +168,52 @@ class DocumentsPagination extends _$DocumentsPagination {
   }
 
   // Método para buscar documentos
-  Future<void> searchDocumentsByTerm(String term) async {
+  Future<List<Document>> searchDocumentsByTerm(String term) async {
     try {
-      // state = state.copyWith(status: const AsyncValue.loading());
-      state = state.copyWith(
-        isLoading: true,
-      );
-
       final documentsRepository = ref.read(documentsRepositoryProvider);
+
       final searchResults =
           await documentsRepository.searchDocumentByTerm(term);
-
       state = state.copyWith(
-        documents: searchResults,
-        isLoading: false,
-        hasMoreDocuments: false,
         errorMessage: '',
       );
-    } on CustomError catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: e.errorMessage,
-      );
+      return searchResults;
     } catch (error) {
       state = state.copyWith(
-        isLoading: false,
         errorMessage: error.toString(),
       );
+      return [];
     }
   }
+  // Future<void> searchDocumentsByTerm(String term) async {
+  //   try {
+
+  //     state = state.copyWith(
+  //       isLoading: true,
+  //     );
+
+  //     final documentsRepository = ref.read(documentsRepositoryProvider);
+  //     final searchResults =
+  //         await documentsRepository.searchDocumentByTerm(term);
+
+  //     state = state.copyWith(
+  //       documents: searchResults,
+  //       isLoading: false,
+  //       hasMoreDocuments: false,
+  //       errorMessage: '',
+  //     );
+  //   } on CustomError catch (e) {
+  //     state = state.copyWith(
+  //       isLoading: false,
+  //       errorMessage: e.errorMessage,
+  //     );
+  //   } catch (error) {
+  //     state = state.copyWith(
+  //       isLoading: false,
+  //       errorMessage: error.toString(),
+  //     );
+  //   }
+  // }
 
   Future<void> searchDocumentsByRange(
       {required DateTime startDate, required DateTime endDate}) async {
@@ -227,4 +244,33 @@ class DocumentsPagination extends _$DocumentsPagination {
       );
     }
   }
+  // Future<void> searchDocumentsByRange(
+  //     {required DateTime startDate, required DateTime endDate}) async {
+  //   try {
+  //     state = state.copyWith(
+  //       isLoading: true,
+  //     );
+
+  //     final documentsRepository = ref.read(documentsRepositoryProvider);
+  //     final searchResults = await documentsRepository.searchDocumentByRange(
+  //         startDate: startDate, endDate: endDate);
+
+  //     state = state.copyWith(
+  //       documents: searchResults,
+  //       isLoading: false,
+  //       hasMoreDocuments: false,
+  //       errorMessage: '',
+  //     );
+  //   } on CustomError catch (e) {
+  //     state = state.copyWith(
+  //       isLoading: false,
+  //       errorMessage: e.errorMessage,
+  //     );
+  //   } catch (error) {
+  //     state = state.copyWith(
+  //       isLoading: false,
+  //       errorMessage: error.toString(),
+  //     );
+  //   }
+  // }
 }

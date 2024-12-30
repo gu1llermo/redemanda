@@ -26,6 +26,7 @@ class DocumentsScreen extends ConsumerWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            //const Text('Redemanda'),
             const UserCreditsWidget(),
           ],
         ),
@@ -99,7 +100,21 @@ class _DocumentsView extends ConsumerWidget {
         return false;
       },
       child: RefreshIndicator(
-        onRefresh: documentsNotifier.refreshDocuments,
+        onRefresh: () async {
+          await documentsNotifier.refreshDocuments();
+          Future.delayed(
+            Duration(milliseconds: 300),
+            () {
+              if (documentsState.documents.isEmpty) {
+                if (!context.mounted) return;
+                AppUtils.showSnackbar(
+                  context,
+                  'No hay documentos aún, crea uno',
+                );
+              }
+            },
+          );
+        },
         child: documentsState.isLoading
             ? Center(child: CircularProgressIndicator())
             : MasonryGridView.builder(

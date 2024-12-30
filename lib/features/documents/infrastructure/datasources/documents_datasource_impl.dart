@@ -208,10 +208,12 @@ Demandado: ${data['nombre_demandado']}
         filter: Filter.or([
           Filter.custom((record) {
             final title = record['title'] as String? ?? '';
+            final description = record['description'] as String? ?? '';
 
             final searchTerm = term;
 
-            return StringUtils.searchFlexible(title, searchTerm);
+            return StringUtils.searchFlexible(
+                '$title $description', searchTerm);
           }),
         ]),
         sortOrders: [SortOrder('createdAt', false)],
