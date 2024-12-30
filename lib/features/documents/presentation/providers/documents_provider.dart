@@ -131,15 +131,17 @@ class DocumentsPagination extends _$DocumentsPagination {
       );
       return newDocument;
     } on NetworkException catch (e) {
-      state = state.copyWith(
-        errorMessage: e.message,
-      );
-      return null;
+      // state = state.copyWith(
+      //   errorMessage: e.message,
+      // );
+      // return null;
+      rethrow;
     } catch (e) {
-      state = state.copyWith(
-        errorMessage: e.toString(),
-      );
-      return null;
+      // state = state.copyWith(
+      //   errorMessage: e.toString(),
+      // );
+      // return null;
+      rethrow;
     }
   }
 

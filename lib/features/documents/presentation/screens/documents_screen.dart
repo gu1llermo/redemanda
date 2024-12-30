@@ -25,9 +25,7 @@ class DocumentsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            //const Text('Documentos'),
             const UserCreditsWidget(),
           ],
         ),
