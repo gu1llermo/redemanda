@@ -29,7 +29,7 @@ class FechaAccidenteInput
       case FechaAccidenteInputError.invalid:
         return 'La fecha no es válida';
       case FechaAccidenteInputError.fechasNoAsignadas:
-        return 'Fechas previas no asignadas';
+        return 'Fechas inicio/término no asignadas';
       case FechaAccidenteInputError.outRange:
         return 'Fuera de rango';
       case null:

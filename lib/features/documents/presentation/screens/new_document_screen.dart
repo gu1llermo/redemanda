@@ -53,10 +53,10 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
     //   },
     // );
     ref.listen(
-      documentFormProvider.select((state) => state.errorMessage),
+      documentFormProvider,
       (previous, next) {
-        if (next.isEmpty) return;
-        AppErrorsUtils.onError(context, next);
+        if (next.errorMessage.isEmpty) return;
+        AppErrorsUtils.onError(context, next.errorMessage);
       },
     );
 
@@ -530,8 +530,6 @@ class _GenerateButton extends ConsumerWidget {
                   }
                 },
               );
-              // si el documento se genera correctamente entonces
-              // tengo que pensar qué hacer
             },
       child: newDocumentState.isPosting
           ? SizedBox(
@@ -603,7 +601,55 @@ class _SubmitButton extends ConsumerWidget {
       tooltip: 'Generar Documento',
       onPressed: newDocumentState.isPosting
           ? null
-          : ref.read(documentFormProvider.notifier).onFormSubmit,
+          : () {
+              ref.read(documentFormProvider.notifier).onFormSubmit().then(
+                (document) {
+                  if (document != null) {
+                    // aquí tengo que pensar qué hacer
+                    if (!context.mounted) return;
+
+                    AppErrorsUtils.onSucces(
+                      context,
+                      'Documento generado correctamente!',
+                      Row(
+                        children: [
+                          if (!kIsWeb)
+                            TextButton(
+                              onPressed: () {
+                                NotificationService()
+                                    .dismissCurrentNotification();
+                                FileUtils.openWithDefaultApp(
+                                  context: context,
+                                  fileBytes: document.docxFile,
+                                  fileExtension: 'docx', // sin el punto
+                                );
+                              },
+                              child: const Text(
+                                'Ver',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          const SizedBox(width: 10),
+                          TextButton(
+                            onPressed: () {
+                              NotificationService()
+                                  .dismissCurrentNotification();
+                              context.pop();
+                            },
+                            child: const Text(
+                              'Salir',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    //   context.pop();
+                  }
+                },
+              );
+            },
       icon: newDocumentState.isPosting
           ? SizedBox(
               height: 20,
@@ -917,7 +963,7 @@ class _DaniosState extends ConsumerState<_Danios>
                     labelText: 'Daño que tiene el actor',
                     hintText:
                         'En virtud de lo anterior, es menester hacer presente S.S., que hasta el día de hoy ${newDocumentState.demandanteGender.donCortesia()} ${newDocumentState.demandanteFullName.value} tiene una (daño que tiene el actor)',
-                    height: altura * 0.15,
+                    height: altura * 0.2,
                     initialValue: newDocumentState.danioActor.value,
                     onChanged: ref
                         .read(documentFormProvider.notifier)
