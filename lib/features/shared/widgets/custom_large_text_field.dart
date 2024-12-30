@@ -85,6 +85,10 @@ class _CustomLargeTextFieldState extends State<CustomLargeTextField> {
         decoration: InputDecoration(
           labelText: widget.labelText,
           hintText: widget.hintText,
+          hintStyle: TextStyle(
+            color: colors.onSurface.withAlpha(127),
+            // color: colors.onSurface.withOpacity(0.5),
+          ),
           errorText: widget.errorMessage,
           helperText: widget.helperText,
           // Configuración del borde
