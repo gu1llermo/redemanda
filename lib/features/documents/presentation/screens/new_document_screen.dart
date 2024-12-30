@@ -7,6 +7,7 @@ import 'package:redemanda/features/shared/shared.dart';
 
 import '../../../../config/config.dart';
 import '../../../../core/core.dart';
+import '../../../credits/presentation/widgets/widgets.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
@@ -79,7 +80,12 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Nuevo Documento'),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const UserCreditsWidget(),
+            ],
+          ),
           actions: [
             _SubmitButton(),
           ],
