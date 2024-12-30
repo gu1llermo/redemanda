@@ -37,6 +37,12 @@ class DocumentForm extends _$DocumentForm {
   }
 
   void onDemandanteFullNameChanged(String value) {
+    // me gustaría poder comparar el valor del anterior estado
+    // con éste nuevo valor y si son iguales que no haga nada
+    // final demandanteFullNameOld = state.demandanteFullName.value;
+    // if (demandanteFullNameOld == value) {
+    //   return;
+    // }
     final demandanteFullName = SimpleStringInput.dirty(value);
     final newState = state.copyWith(demandanteFullName: demandanteFullName);
     _touchEveryThing(newState);
@@ -333,7 +339,8 @@ class DocumentForm extends _$DocumentForm {
           state = state.copyWith(selectedIndex: index);
         }
 
-        throw Exception('Por favor, complete todos los campos');
+        return null;
+        // throw Exception('Por favor, complete todos los campos');
       }
       // deshabilitar el botón de posteo
       state = state.copyWith(isPosting: true);
@@ -421,37 +428,6 @@ class DocumentForm extends _$DocumentForm {
     }
   }
 
-  // bool _isValidInfoPage(DocumentFormState newState) {
-  //   return Formz.validate([
-  //     ..._getInfoPageFields(newState),
-  //   ]);
-  // }
-
-  // List<FormzInput<dynamic, dynamic>> _getInfoPageFields(
-  //     DocumentFormState newState) {
-  //   return [
-  //     // Demandante
-  //     SimpleStringInput.dirty(newState.demandanteFullName.value),
-  //     SimpleStringInput.dirty(newState.demandanteRut.value),
-  //     SimpleStringInput.dirty(newState.demandanteNacionalidad.value),
-  //     // Abogado 1
-  //     SimpleStringInput.dirty(newState.abogado1FullName.value),
-  //     SimpleStringInput.dirty(newState.abogado1Rut.value),
-  //     Email.dirty(newState.abogado1Email.value),
-  //     // Abogado 2
-  //     SimpleStringInput.dirty(newState.abogado2FullName.value),
-  //     SimpleStringInput.dirty(newState.abogado2Rut.value),
-  //     Email.dirty(newState.abogado2Email.value),
-  //     // Demandado
-  //     SimpleStringInput.dirty(newState.demandadoFullName.value),
-  //     SimpleStringInput.dirty(newState.demandadoRut.value),
-  //     // Representante Legal
-  //     SimpleStringInput.dirty(newState.representanteLegalFullName.value),
-  //     SimpleStringInput.dirty(newState.representanteLegalRut.value),
-  //     SimpleStringInput.dirty(newState.representanteLegalDomicilio.value),
-  //   ];
-  // }
-
   bool _isValidInfoPage(DocumentFormState newState) {
     return Formz.validate([
       // Demandante
@@ -477,27 +453,35 @@ class DocumentForm extends _$DocumentForm {
   }
 
   bool _isValidDetailsPage(DocumentFormState newState) {
+    final fechaTerminoRelacionLaboral = FechaTerminoInput.dirty(
+      newState.fechaTerminoRelacionLaboral.value,
+      fechaInicio: newState.fechaInicioRelacionLaboral.value,
+    );
+    final fechaAccidenteLaboral = FechaAccidenteInput.dirty(
+      newState.fechaAccidenteLaboral.value,
+      fechaInicio: newState.fechaInicioRelacionLaboral.value,
+      fechaTermino: newState.fechaTerminoRelacionLaboral.value,
+    );
+
+    // newState = newState.copyWith(
+    //   fechaTerminoRelacionLaboral: fechaTerminoRelacionLaboral,
+    //   fechaAccidenteLaboral: fechaAccidenteLaboral,
+    // );
+
     return Formz.validate([
       // Detalles adicionales del caso
       SimpleStringInput.dirty(newState.tribunal.value),
       FechaInput.dirty(newState.fechaInicioRelacionLaboral.value),
-      FechaTerminoInput.dirty(
-        newState.fechaTerminoRelacionLaboral.value,
-        fechaInicio: newState.fechaInicioRelacionLaboral.value,
-      ),
+      fechaTerminoRelacionLaboral,
       SimpleStringInput.dirty(newState.cargoTrabajador.value),
       SimpleStringInput.dirty(newState.tipoContrato.value),
       PositiveIntegerInput.dirty(newState.horasSemanales.value),
       PositiveNumInput.dirty(newState.remuneracion.value),
       // Detalles del Accidente
-      FechaAccidenteInput.dirty(
-        newState.fechaAccidenteLaboral.value,
-        fechaInicio: state.fechaInicioRelacionLaboral.value,
-        fechaTermino: state.fechaTerminoRelacionLaboral.value,
-      ),
-      HoraInput.dirty(state.horaAccidente.value),
-      SimpleStringInput.dirty(state.relatoAccidenteExtenso.value),
-      SimpleStringInput.dirty(state.relatoHechosPosteriores.value),
+      fechaAccidenteLaboral,
+      HoraInput.dirty(newState.horaAccidente.value),
+      SimpleStringInput.dirty(newState.relatoAccidenteExtenso.value),
+      SimpleStringInput.dirty(newState.relatoHechosPosteriores.value),
     ]);
   }
 
@@ -520,15 +504,28 @@ class DocumentForm extends _$DocumentForm {
       PositiveNumInput.dirty(newState.montoRemuneracionArt172.value),
     ]);
   }
-  // bool _isValidDetailsPage(DocumentFormState newState) {
-  //   return Formz.validate([
-  //     ..._getDetailsPageFields(newState),
-  //   ]);
-  // }
 
-  // List<FormzInput<dynamic, dynamic>> _getDetailsPageFields(
-  //     DocumentFormState newState) {
-  //   return [
+  // bool _isValidAllPages(DocumentFormState newState) {
+  //   return Formz.validate([
+  //     // Demandante
+  //     SimpleStringInput.dirty(newState.demandanteFullName.value),
+  //     SimpleStringInput.dirty(newState.demandanteRut.value),
+  //     SimpleStringInput.dirty(newState.demandanteNacionalidad.value),
+  //     // Abogado 1
+  //     SimpleStringInput.dirty(newState.abogado1FullName.value),
+  //     SimpleStringInput.dirty(newState.abogado1Rut.value),
+  //     Email.dirty(newState.abogado1Email.value),
+  //     // Abogado 2
+  //     SimpleStringInput.dirty(newState.abogado2FullName.value),
+  //     SimpleStringInput.dirty(newState.abogado2Rut.value),
+  //     Email.dirty(newState.abogado2Email.value),
+  //     // Demandado
+  //     SimpleStringInput.dirty(newState.demandadoFullName.value),
+  //     SimpleStringInput.dirty(newState.demandadoRut.value),
+  //     // Representante Legal
+  //     SimpleStringInput.dirty(newState.representanteLegalFullName.value),
+  //     SimpleStringInput.dirty(newState.representanteLegalRut.value),
+  //     SimpleStringInput.dirty(newState.representanteLegalDomicilio.value),
   //     // Detalles adicionales del caso
   //     SimpleStringInput.dirty(newState.tribunal.value),
   //     FechaInput.dirty(newState.fechaInicioRelacionLaboral.value),
@@ -549,30 +546,47 @@ class DocumentForm extends _$DocumentForm {
   //     HoraInput.dirty(state.horaAccidente.value),
   //     SimpleStringInput.dirty(state.relatoAccidenteExtenso.value),
   //     SimpleStringInput.dirty(state.relatoHechosPosteriores.value),
-  //   ];
-  // }
-
-  // bool _isValidAllPages(DocumentFormState newState) {
-  //   // tuve que hacerlo así para que se validaran todos los campos
-  //   // ya que si uso el operador && apenas la primera condición es falsa
-  //   // deja de evaluar las demás
-  //   // tampoco funcionó así, genera el mismo comportamiento
-  //   return Formz.validate([
-  //     ..._getDetailsPageFields(newState),
-  //     ..._getInfoPageFields(newState),
+  //     // Daños y perjuicios
+  //     PositiveIntegerInput.dirty(newState.porcentajeIncapacidad.value),
+  //     PositiveNumInput.dirty(newState.montoADemandar.value),
+  //     SimpleStringInput.dirty(newState.relatoDaniosEsteticos.value),
+  //     SimpleStringInput.dirty(newState.danioActor.value),
+  //     SimpleStringInput.dirty(newState.danioTrabajador.value),
+  //     SimpleStringInput.dirty(newState.medidasNecesariasEmpresaDemandada.value),
+  //     // Compensaciones
+  //     PositiveNumInput.dirty(newState.montoRemuneracionSegunEmpleador.value),
+  //     PositiveNumInput.dirty(newState.montoRemuneracionArt172.value),
   //   ]);
   // }
 
+  // void _touchEveryThing(DocumentFormState newState) {
+  //   state = newState.copyWith(
+  //     isFormValid: _isValidAllPages(newState),
+  //   );
+  // }
   void _touchEveryThing(DocumentFormState newState) {
+    final fechaTerminoRelacionLaboral = FechaTerminoInput.dirty(
+      newState.fechaTerminoRelacionLaboral.value,
+      fechaInicio: newState.fechaInicioRelacionLaboral.value,
+    );
+    final fechaAccidenteLaboral = FechaAccidenteInput.dirty(
+      newState.fechaAccidenteLaboral.value,
+      fechaInicio: newState.fechaInicioRelacionLaboral.value,
+      fechaTermino: newState.fechaTerminoRelacionLaboral.value,
+    );
+
+    newState = newState.copyWith(
+      fechaTerminoRelacionLaboral: fechaTerminoRelacionLaboral,
+      fechaAccidenteLaboral: fechaAccidenteLaboral,
+    );
+
     state = newState.copyWith(
-      // aquí utilizar operador && para
-      // que se cumplan todas las condiciones
-      // isFormValid: _isValidAllPages(newState),
       isFormValid: _isValidInfoPage(newState) &&
           _isValidDetailsPage(newState) &&
           _isValidDaniosPage(newState) &&
           _isValidCompensacionesPage(newState),
     );
+    //debugPrint('Hola');
   }
 }
 

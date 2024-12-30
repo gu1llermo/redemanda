@@ -17,23 +17,41 @@ class UserCreditsWidget extends ConsumerWidget {
     final creditsAsync = ref.watch(userCreditsProvider(userId));
 
     return creditsAsync.when(
-      data: (credits) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.stars,
-              color: credits <= 0 ? Colors.red.shade700 : Colors.amber.shade600,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              '$credits créditos',
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      ),
+      data: (credits) {
+        final creditsTxt = '$credits créditos';
+        return Tooltip(
+          message: creditsTxt,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.stars,
+                color:
+                    credits <= 0 ? Colors.red.shade700 : Colors.amber.shade600,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                '$credits créditos',
+                style: const TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        );
+        // Tooltip(
+        //   message: creditsTxt,
+        //   child: TextButton.icon(
+        //     onPressed: () {},
+        //     label: Text(
+        //       creditsTxt,
+        //       style: const TextStyle(fontSize: 16),
+        //     ),
+        //     icon: Icon(
+        //       Icons.stars,
+        //       color: credits <= 0 ? Colors.red.shade700 : Colors.amber.shade600,
+        //     ),
+        //   ),
+        // );
+      },
       loading: () => const CircularProgressIndicator(),
       error: (error, stack) => const Icon(Icons.error),
     );
