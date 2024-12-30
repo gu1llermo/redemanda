@@ -18,7 +18,7 @@ class UserCreditsWidget extends ConsumerWidget {
 
     return creditsAsync.when(
       data: (credits) {
-        final creditsTxt = '$credits créditos';
+        final creditsTxt = '$credits crédito${credits != 1 ? 's' : ''}';
         return Tooltip(
           message: creditsTxt,
           child: Row(
@@ -31,7 +31,7 @@ class UserCreditsWidget extends ConsumerWidget {
               ),
               const SizedBox(width: 4),
               Text(
-                '$credits créditos',
+                creditsTxt,
                 style: const TextStyle(fontSize: 16),
               ),
             ],
