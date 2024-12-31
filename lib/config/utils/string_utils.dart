@@ -32,7 +32,7 @@ class StringUtils {
     String searchTerm, {
     double matchThreshold = 0.7, // Umbral de coincidencia
     bool partialMatch = true, // Permitir coincidencia parcial
-    int minWordLength = 2, // Longitud mínima de palabra para coincidir
+    int minWordLength = 1, // Longitud mínima de palabra para coincidir
   }) {
     // Normalizar texto y término de búsqueda
     final normalizedText = removeDiacritics(text.toLowerCase());
@@ -92,15 +92,55 @@ class StringUtils {
     return formatter.parse(value);
   }
 
-  static String formatToNumber(String value) {
-    value = value.trim();
-    if (value.isEmpty || value.length == 1) return value;
-    double number = double.parse(value.replaceAll(',', '.'));
+  // static String formatToNumber(String value) {
+  //   value = value.trim();
+  //   if (value.isEmpty || value.length == 1) return value;
+  //   double number = double.parse(value.replaceAll(',', '.'));
 
-    // Creamos el formateador con el patrón deseado
-    final formatter = NumberFormat('#,##0.00', 'es');
-    // Formateamos el número
-    String formatted = formatter.format(number);
-    return formatted;
+  //   // Creamos el formateador con el patrón deseado
+  //   final formatter = NumberFormat('#,##0.00', 'es');
+  //   // Formateamos el número
+  //   String formatted = formatter.format(number);
+  //   return formatted;
+  // }
+
+  static String formatToNumber(String value) {
+    value = value.replaceAll('\$', '').trim();
+    if (value.isEmpty) return value;
+
+    // Manejar el caso cuando hay una coma decimal
+    if (value.contains(',')) {
+      List<String> parts = value.split(',');
+      String integerPart = parts[0];
+      String decimalPart = parts.length > 1 ? parts[1] : '';
+
+      // Limitar decimales a 2 dígitos
+      if (decimalPart.length > 2) {
+        decimalPart = decimalPart.substring(0, 2);
+      }
+
+      // Formatear la parte entera
+      String formattedInt = _formatInteger(integerPart);
+
+      return '$formattedInt,$decimalPart';
+      // return decimalPart.isEmpty ? formattedInt : '$formattedInt,$decimalPart';
+    }
+
+    // Si no hay decimales, solo formatear la parte entera
+    return _formatInteger(value);
+  }
+
+  static String _formatInteger(String value) {
+    String reversedInt = value.split('').reversed.join();
+    String formattedInt = '';
+
+    for (int i = 0; i < reversedInt.length; i++) {
+      if (i > 0 && i % 3 == 0) {
+        formattedInt = '.$formattedInt';
+      }
+      formattedInt = reversedInt[i] + formattedInt;
+    }
+
+    return formattedInt;
   }
 }

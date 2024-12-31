@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -685,8 +686,8 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
     final newDocumentState = ref.watch(documentFormProvider);
     // final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final remuneracion =
-        "\$${StringUtils.formatToNumber(newDocumentState.remuneracion.value)}";
+    // final remuneracion =
+    //     "\$${StringUtils.formatToNumber(newDocumentState.remuneracion.value)}";
     final size = MediaQuery.sizeOf(context);
     final altura = size.height;
     final ancho = size.width;
@@ -726,6 +727,10 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                       ),
                       DateTimeEntryCustom(
                         title: 'Fecha Inicio relación laboral',
+                        selectableDayPredicate: (day) {
+                          // Retorna true solo para días que no sean posteriores a hoy
+                          return !day.isAfter(DateTime.now());
+                        },
                         onFechaChanged: ref
                             .read(documentFormProvider.notifier)
                             .onFechaInicioRelacionLaboralChanged,
@@ -738,6 +743,15 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                       ),
                       DateTimeEntryCustom(
                         title: 'Fecha Termino relación laboral',
+                        selectableDayPredicate: (day) {
+                          // Retorna true solo para días que no sean posteriores a hoy
+
+                          final bool isBefore = day.isBefore(newDocumentState
+                                  .fechaInicioRelacionLaboral.value ??
+                              DateTime.now());
+
+                          return !day.isAfter(DateTime.now()) && !isBefore;
+                        },
                         onFechaChanged: ref
                             .read(documentFormProvider.notifier)
                             .onFechaTerminoRelacionLaboralChanged,
@@ -784,9 +798,10 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                             .onHorasSemanalesChanged,
                       ),
                       CustomNumericTextField(
-                        labelText: 'REMUNERACIÓN $remuneracion',
+                        labelText: 'REMUNERACIÓN',
                         isNumeric: true,
                         allowDecimals: true,
+                        isCurrency: true, // Enable currency formatting
                         initialValue: newDocumentState.remuneracion.value,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState.remuneracion.errorMessage
@@ -815,6 +830,17 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                   children: [
                     DateTimeEntryCustom(
                       title: 'Fecha del accidente laboral',
+                      selectableDayPredicate: (day) {
+                        final bool isBefore = day.isBefore(
+                            newDocumentState.fechaInicioRelacionLaboral.value ??
+                                DateTime.now());
+                        final bool isAfter = day.isAfter(newDocumentState
+                                .fechaTerminoRelacionLaboral.value ??
+                            newDocumentState.fechaInicioRelacionLaboral.value ??
+                            DateTime.now());
+
+                        return !isBefore && !isAfter;
+                      },
                       onFechaChanged: ref
                           .read(documentFormProvider.notifier)
                           .onFechaAccidenteLaboralChanged,
@@ -888,15 +914,13 @@ class _DaniosState extends ConsumerState<_Danios>
   Widget build(BuildContext context) {
     super.build(context);
     final newDocumentState = ref.watch(documentFormProvider);
-    // final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final montoADemandar =
-        "\$${StringUtils.formatToNumber(newDocumentState.montoADemandar.value)}";
-    final porcentajeIncapacidad =
-        "${newDocumentState.porcentajeIncapacidad.value}%";
+    // final montoADemandar =
+    //     "\$${StringUtils.formatToNumber(newDocumentState.montoADemandar.value)}";
+    // final porcentajeIncapacidad =
+    //     "${newDocumentState.porcentajeIncapacidad.value}%";
     final altura = MediaQuery.sizeOf(context).height;
-    // final ancho = MediaQuery.sizeOf(context).width;
-    // final factorAltura = ancho > 600 ? 0.15 : 0.2;
+
     return ListView(
       children: [
         Padding(
@@ -920,9 +944,9 @@ class _DaniosState extends ConsumerState<_Danios>
                     children: [
                       CustomNumericTextField(
                         width: 250,
-                        labelText:
-                            'Porcentaje de incapacidad $porcentajeIncapacidad',
+                        labelText: 'Porcentaje de incapacidad',
                         isNumeric: true,
+                        isPercentage: true, // Enable percentage formatting
                         initialValue:
                             newDocumentState.porcentajeIncapacidad.value,
                         errorMessage: newDocumentState.isFormPosted
@@ -934,10 +958,11 @@ class _DaniosState extends ConsumerState<_Danios>
                             .onPorcentajeIncapacidadChanged,
                       ),
                       CustomNumericTextField(
-                        labelText: 'Monto a demandar $montoADemandar',
+                        labelText: 'Monto a demandar',
                         width: 250,
                         isNumeric: true,
                         allowDecimals: true,
+                        isCurrency: true, // Enable currency formatting
                         initialValue: newDocumentState.montoADemandar.value,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState.montoADemandar.errorMessage
@@ -1032,14 +1057,14 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
     final newDocumentState = ref.watch(documentFormProvider);
     // final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final montoRemuneracionSegunEmpleador =
-        "\$${StringUtils.formatToNumber(newDocumentState.montoRemuneracionSegunEmpleador.value)}";
-    final montoRemuneracionArt172 =
-        "\$${StringUtils.formatToNumber(newDocumentState.montoRemuneracionArt172.value)}";
+    // final montoRemuneracionSegunEmpleador =
+    //     "\$${StringUtils.formatToNumber(newDocumentState.montoRemuneracionSegunEmpleador.value)}";
+    // final montoRemuneracionArt172 =
+    //     "\$${StringUtils.formatToNumber(newDocumentState.montoRemuneracionArt172.value)}";
 
-    // final altura = MediaQuery.sizeOf(context).height;
-    // final ancho = MediaQuery.sizeOf(context).width;
-    // final factorAltura = ancho > 600 ? 0.15 : 0.2;
+    final bool showAddIconItem = newDocumentState.documentosAdicionalesAIngresar
+        .every((element) => element.isNotEmpty);
+
     return ListView(
       physics: ScrollPhysics(),
       children: [
@@ -1064,11 +1089,11 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                     children: [
                       CustomNumericTextField(
                         width: 400,
-                        labelText:
-                            'Monto remuneración empleador $montoRemuneracionSegunEmpleador',
+                        labelText: 'Monto remuneración empleador',
                         hintText: 'Monto de remuneración según empleador',
                         isNumeric: true,
                         allowDecimals: true,
+                        isCurrency: true,
                         initialValue: newDocumentState
                             .montoRemuneracionSegunEmpleador.value,
                         errorMessage: newDocumentState.isFormPosted
@@ -1080,12 +1105,12 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                             .onMontoRemuneracionSegunEmpleadorChanged,
                       ),
                       CustomNumericTextField(
-                        labelText:
-                            'Monto remuneración art. 172 $montoRemuneracionArt172',
+                        labelText: 'Monto remuneración art. 172',
                         hintText: 'Monto de remuneración según el artículo 172',
                         width: 400,
                         isNumeric: true,
                         allowDecimals: true,
+                        isCurrency: true,
                         initialValue:
                             newDocumentState.montoRemuneracionArt172.value,
                         errorMessage: newDocumentState.isFormPosted
@@ -1142,15 +1167,18 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                       },
                     ),
                     const SizedBox(height: 5),
-                    IconButton(
-                      tooltip: 'Agregar item',
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        ref
-                            .read(documentFormProvider.notifier)
-                            .onAddDocumentosAdicionalesAIngresar();
-                      },
-                    ),
+                    if (showAddIconItem)
+                      JelloIn(
+                        child: IconButton(
+                          tooltip: 'Agregar item',
+                          icon: const Icon(Icons.add),
+                          onPressed: () {
+                            ref
+                                .read(documentFormProvider.notifier)
+                                .onAddDocumentosAdicionalesAIngresar();
+                          },
+                        ),
+                      ),
                   ],
                 ),
               ),

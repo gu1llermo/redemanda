@@ -89,11 +89,6 @@ class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
   }
 
   void _updateText(String newValue, {bool isBackspace = false}) {
-    // Determinar si el usuario está intentando agregar una coma al final
-    bool addingCommaAtEnd = !newValue.contains(',') &&
-        _textController.selection.baseOffset == _textController.text.length &&
-        newValue.endsWith(',');
-
     String cleanValue = _cleanNumber(newValue);
 
     if (cleanValue.isEmpty) {
@@ -115,18 +110,11 @@ class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
         String formatted = StringUtils.formatToNumber(cleanValue);
         formattedText = '\$$formatted';
 
-        if (addingCommaAtEnd) {
-          formattedText = '$formattedText,';
-        }
-
         if (isBackspace) {
           newCursorPosition = oldOffset - 1;
         } else {
           newCursorPosition =
               oldOffset + (formattedText.length - oldText.length);
-          if (addingCommaAtEnd) {
-            newCursorPosition = formattedText.length;
-          }
         }
       } else if (widget.isPercentage) {
         formattedText = '$cleanValue%';
@@ -173,17 +161,18 @@ class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
             TextInputType.numberWithOptions(decimal: widget.allowDecimals),
         inputFormatters: [
           if (widget.isNumeric) ...[
-            FilteringTextInputFormatter.allow(
-                widget.allowDecimals ? RegExp(r'[0-9,]') : RegExp(r'[0-9]')),
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
             TextInputFormatter.withFunction((oldValue, newValue) {
               String text = newValue.text;
               if (text.isEmpty) return newValue;
 
+              // Permitir solo una coma
               if (text.contains(',')) {
                 List<String> parts = text.split(',');
                 if (parts.length > 2) {
                   return oldValue;
                 }
+                // Limitar decimales a 2 dígitos
                 if (parts.length == 2 && parts[1].length > 2) {
                   return oldValue;
                 }
