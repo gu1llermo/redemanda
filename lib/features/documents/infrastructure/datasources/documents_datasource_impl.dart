@@ -238,27 +238,27 @@ Demandado: ${data['nombre_demandado']}
       {required DateTime startDate, required DateTime endDate}) async {
     try {
       final db = await database;
-      final finder = Finder(
-          filter: Filter.and([
-        Filter.greaterThanOrEquals('createdAt', startDate),
-        Filter.lessThanOrEquals('createdAt', endDate)
-      ]));
-
       // final finder = Finder(
-      //   filter: Filter.or([
-      //     Filter.custom((record) {
-      //       final createdAt = DateTime.parse(record['createdAt'] as String);
+      //     filter: Filter.and([
+      //   Filter.greaterThanOrEquals('createdAt', startDate),
+      //   Filter.lessThanOrEquals('createdAt', endDate)
+      // ]));
 
-      //       final compareWithStartDate = createdAt.compareTo(startDate);
-      //       final compareWithEndDate = createdAt.compareTo(endDate);
-      //       final isAfterOrAtSameMomentAs = compareWithStartDate >= 0;
-      //       final isBeforeOrAtSameMomentAs = compareWithEndDate <= 0;
+      final finder = Finder(
+        filter: Filter.or([
+          Filter.custom((record) {
+            final createdAt = DateTime.parse(record['createdAt'] as String);
 
-      //       return isAfterOrAtSameMomentAs && isBeforeOrAtSameMomentAs;
-      //     }),
-      //   ]),
-      //   sortOrders: [SortOrder('createdAt', false)],
-      // );
+            final compareWithStartDate = createdAt.compareTo(startDate);
+            final compareWithEndDate = createdAt.compareTo(endDate);
+            final isAfterOrAtSameMomentAs = compareWithStartDate >= 0;
+            final isBeforeOrAtSameMomentAs = compareWithEndDate <= 0;
+
+            return isAfterOrAtSameMomentAs && isBeforeOrAtSameMomentAs;
+          }),
+        ]),
+        sortOrders: [SortOrder('createdAt', false)],
+      );
 
       final recordSnapshots = await _store.find(
         db,

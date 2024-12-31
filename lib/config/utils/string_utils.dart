@@ -32,7 +32,7 @@ class StringUtils {
     String searchTerm, {
     double matchThreshold = 0.7, // Umbral de coincidencia
     bool partialMatch = true, // Permitir coincidencia parcial
-    int minWordLength = 2, // Longitud mínima de palabra para coincidir
+    int minWordLength = 1, // Longitud mínima de palabra para coincidir
   }) {
     // Normalizar texto y término de búsqueda
     final normalizedText = removeDiacritics(text.toLowerCase());

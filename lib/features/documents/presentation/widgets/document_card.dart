@@ -54,63 +54,69 @@ class DocumentCard extends StatelessWidget {
 
             // Contenido de la tarjeta
 
-            GestureDetector(
-              onTap: () {
-                if (!kIsWeb) {
-                  FileUtils.openWithDefaultApp(
-                    context: context,
-                    fileBytes: document.docxFile,
-                    fileExtension: 'docx', // sin el punto
-                  );
-                } else {
-                  NotificationService().showNotification(
-                    context: context,
-                    message:
-                        'No se puede abrir éste archivo en el navegador web, por favor descárgalo y ábrelo en tu computadora.',
-                    type: FlushbarType.error,
-                  );
-                }
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _CircleCard(
-                    document: document,
-                  ),
-                  Expanded(
-                    child: Column(
-                      //mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //const SizedBox(height: 8),
-                        Text(
-                          description,
-                          maxLines: 3,
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+            Tooltip(
+              message: 'Abrir Documento',
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    if (!kIsWeb) {
+                      FileUtils.openWithDefaultApp(
+                        context: context,
+                        fileBytes: document.docxFile,
+                        fileExtension: 'docx', // sin el punto
+                      );
+                    } else {
+                      NotificationService().showNotification(
+                        context: context,
+                        message:
+                            'No se puede abrir éste archivo en el navegador web, por favor descárgalo y ábrelo en tu computadora.',
+                        type: FlushbarType.error,
+                      );
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _CircleCard(
+                        document: document,
+                      ),
+                      Expanded(
+                        child: Column(
+                          //mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Flexible(
-                              child: Text(
-                                '${creationDate.day}/${creationDate.month}/${creationDate.year}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize: 12,
-                                ),
+                            //const SizedBox(height: 8),
+                            Text(
+                              description,
+                              maxLines: 3,
+                              style: TextStyle(
+                                color: Colors.grey[600],
                               ),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    '${creationDate.day}/${creationDate.month}/${creationDate.year}',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
 

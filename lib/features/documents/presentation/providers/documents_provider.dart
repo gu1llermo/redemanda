@@ -215,33 +215,27 @@ class DocumentsPagination extends _$DocumentsPagination {
   //   }
   // }
 
-  Future<void> searchDocumentsByRange(
+  Future<List<Document>> searchDocumentsByRange(
       {required DateTime startDate, required DateTime endDate}) async {
     try {
-      state = state.copyWith(
-        isLoading: true,
-      );
-
       final documentsRepository = ref.read(documentsRepositoryProvider);
       final searchResults = await documentsRepository.searchDocumentByRange(
           startDate: startDate, endDate: endDate);
 
       state = state.copyWith(
-        documents: searchResults,
-        isLoading: false,
-        hasMoreDocuments: false,
         errorMessage: '',
       );
+      return searchResults;
     } on CustomError catch (e) {
       state = state.copyWith(
-        isLoading: false,
         errorMessage: e.errorMessage,
       );
+      return [];
     } catch (error) {
       state = state.copyWith(
-        isLoading: false,
         errorMessage: error.toString(),
       );
+      return [];
     }
   }
   // Future<void> searchDocumentsByRange(
