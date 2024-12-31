@@ -609,6 +609,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 5),
               Text(
                 'Detalles adicionales del caso',
                 style: textTheme.titleLarge,
@@ -838,6 +839,7 @@ class _DaniosState extends ConsumerState<_Danios>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 5),
               Text(
                 'Daños y perjuicios',
                 style: textTheme.titleLarge,
@@ -983,6 +985,7 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 5),
               Text(
                 'Cálculo de remuneración',
                 style: textTheme.titleLarge,
