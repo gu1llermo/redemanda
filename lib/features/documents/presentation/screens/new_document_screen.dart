@@ -141,57 +141,6 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
   }
 }
 
-// Botones de navegación actualizados para recibir el TabController
-class _NextButton extends ConsumerWidget {
-  const _NextButton({
-    required this.tabController,
-  });
-
-  final TabController tabController;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return tabController.index < tabController.length - 1
-        ? Padding(
-            padding: const EdgeInsets.only(right: 30),
-            child: FloatingActionButton(
-              tooltip: 'Siguiente',
-              heroTag: 'next',
-              onPressed: () {
-                ref.read(documentFormProvider.notifier).incrementarIndex();
-              },
-              child: Icon(Icons.arrow_forward_rounded),
-            ),
-          )
-        : SizedBox(width: 10);
-  }
-}
-
-class _PreviusButton extends ConsumerWidget {
-  const _PreviusButton({
-    required this.tabController,
-  });
-
-  final TabController tabController;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return tabController.index > 0
-        ? Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: FloatingActionButton(
-              tooltip: 'Anterior',
-              heroTag: 'previus',
-              onPressed: () {
-                ref.read(documentFormProvider.notifier).decrementarIndex();
-              },
-              child: Icon(Icons.arrow_back_rounded),
-            ),
-          )
-        : SizedBox(width: 10);
-  }
-}
-
 // El resto de las clases (_Information, _DetallesAdicionales, _Danios, _Compensaciones)
 // permanecen sin cambios
 
@@ -630,78 +579,6 @@ class _GenerateButton extends ConsumerWidget {
 //         : SizedBox(width: 10);
 //   }
 // }
-
-class _SubmitButton extends ConsumerWidget {
-  const _SubmitButton();
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final newDocumentState = ref.watch(documentFormProvider);
-    return IconButton(
-      tooltip: 'Generar Documento',
-      onPressed: newDocumentState.isPosting
-          ? null
-          : () {
-              ref.read(documentFormProvider.notifier).onFormSubmit().then(
-                (document) {
-                  if (document != null) {
-                    // aquí tengo que pensar qué hacer
-                    if (!context.mounted) return;
-
-                    AppErrorsUtils.onSucces(
-                      context,
-                      'Documento generado correctamente!',
-                      Row(
-                        children: [
-                          if (!kIsWeb)
-                            TextButton(
-                              onPressed: () {
-                                NotificationService()
-                                    .dismissCurrentNotification();
-                                FileUtils.openWithDefaultApp(
-                                  context: context,
-                                  fileBytes: document.docxFile,
-                                  fileExtension: 'docx', // sin el punto
-                                );
-                              },
-                              child: const Text(
-                                'Ver',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          const SizedBox(width: 10),
-                          TextButton(
-                            onPressed: () {
-                              NotificationService()
-                                  .dismissCurrentNotification();
-                              context.pop();
-                            },
-                            child: const Text(
-                              'Salir',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-
-                    //   context.pop();
-                  }
-                },
-              );
-            },
-      icon: newDocumentState.isPosting
-          ? SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-              ),
-            )
-          : Icon(Icons.create_rounded),
-    );
-  }
-}
 
 class _DetallesAdicionales extends ConsumerStatefulWidget {
   const _DetallesAdicionales();
