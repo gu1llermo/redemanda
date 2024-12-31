@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,6 +18,7 @@ class CustomNumericTextField extends StatefulWidget {
   final bool isNumeric;
   final bool allowDecimals;
   final String initialValue;
+  // final String preferencesKey;
 
   const CustomNumericTextField({
     super.key,
@@ -33,6 +35,7 @@ class CustomNumericTextField extends StatefulWidget {
     this.isNumeric = false,
     this.allowDecimals = false,
     this.initialValue = '',
+    // required this.preferencesKey,
   });
 
   @override
@@ -45,7 +48,10 @@ class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
 
   void _onSearchChanged(String value) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 300), () {
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      // ref
+      //     .read(autocompleteNotifierProvider(widget.preferencesKey).notifier)
+      //     .updateText(value, shouldGenerateSuggestions: false);
       widget.onChanged?.call(value);
     });
   }
@@ -54,14 +60,18 @@ class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
   void initState() {
     super.initState();
     _textController = TextEditingController(text: widget.initialValue);
-  }
-
-  @override
-  void didUpdateWidget(CustomNumericTextField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.initialValue != oldWidget.initialValue) {
-      _textController.text = widget.initialValue;
-    }
+    // Inicializar el estado con el valor inicial
+    // if (widget.initialValue.isNotEmpty) {
+    //   Future.microtask(
+    //     () {
+    //       ref
+    //           .read(
+    //               autocompleteNotifierProvider(widget.preferencesKey).notifier)
+    //           .updateText(widget.initialValue,
+    //               shouldGenerateSuggestions: false);
+    //     },
+    //   );
+    // }
   }
 
   @override
@@ -127,7 +137,14 @@ class _CustomNumericTextFieldState extends State<CustomNumericTextField> {
         ),
         onChanged: _onSearchChanged,
         // onChanged: widget.onChanged?.call,
-        onSubmitted: widget.onSubmitted?.call,
+        onSubmitted: (value) {
+          // ref
+          //     .read(
+          //         autocompleteNotifierProvider(widget.preferencesKey).notifier)
+          //     .updateText(value, shouldGenerateSuggestions: false);
+
+          widget.onSubmitted?.call(value);
+        },
       ),
     );
   }
