@@ -726,6 +726,10 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                       ),
                       DateTimeEntryCustom(
                         title: 'Fecha Inicio relación laboral',
+                        selectableDayPredicate: (day) {
+                          // Retorna true solo para días que no sean posteriores a hoy
+                          return !day.isAfter(DateTime.now());
+                        },
                         onFechaChanged: ref
                             .read(documentFormProvider.notifier)
                             .onFechaInicioRelacionLaboralChanged,
@@ -738,6 +742,15 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                       ),
                       DateTimeEntryCustom(
                         title: 'Fecha Termino relación laboral',
+                        selectableDayPredicate: (day) {
+                          // Retorna true solo para días que no sean posteriores a hoy
+
+                          final bool isBefore = day.isBefore(newDocumentState
+                                  .fechaInicioRelacionLaboral.value ??
+                              DateTime.now());
+
+                          return !day.isAfter(DateTime.now()) && !isBefore;
+                        },
                         onFechaChanged: ref
                             .read(documentFormProvider.notifier)
                             .onFechaTerminoRelacionLaboralChanged,
@@ -815,6 +828,16 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                   children: [
                     DateTimeEntryCustom(
                       title: 'Fecha del accidente laboral',
+                      selectableDayPredicate: (day) {
+                        final bool isBefore = day.isBefore(
+                            newDocumentState.fechaInicioRelacionLaboral.value ??
+                                DateTime.now());
+                        final bool isAfter = day.isAfter(newDocumentState
+                                .fechaTerminoRelacionLaboral.value ??
+                            DateTime.now());
+
+                        return !isBefore && !isAfter;
+                      },
                       onFechaChanged: ref
                           .read(documentFormProvider.notifier)
                           .onFechaAccidenteLaboralChanged,

@@ -4,16 +4,19 @@ import 'package:flutter/material.dart';
 import '../../../../config/config.dart';
 
 class DateTimeEntryCustom extends StatelessWidget {
-  const DateTimeEntryCustom(
-      {super.key,
-      this.fecha,
-      required this.onFechaChanged,
-      this.errorMessage,
-      required this.title});
+  const DateTimeEntryCustom({
+    super.key,
+    this.fecha,
+    required this.onFechaChanged,
+    this.errorMessage,
+    required this.title,
+    this.selectableDayPredicate,
+  });
   final DateTime? fecha;
   final void Function(DateTime) onFechaChanged;
   final String? errorMessage;
   final String title;
+  final bool Function(DateTime)? selectableDayPredicate;
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +35,14 @@ class DateTimeEntryCustom extends StatelessWidget {
                 calendarType: CalendarDatePicker2Type.single,
                 allowSameValueSelection: true,
                 buttonPadding: const EdgeInsets.symmetric(horizontal: 20),
-                selectableDayPredicate: (day) {
-                  // Retorna true solo para días que no sean posteriores a hoy
-                  return !day.isAfter(DateTime.now());
-                },
+                selectableDayPredicate: selectableDayPredicate,
               ),
               dialogSize: const Size(355, 370),
               borderRadius: BorderRadius.circular(15),
-              value: [DateTime.now()],
             );
-            final value = values?.first;
+            if (values == null) return;
+            if (values.isEmpty) return;
+            final value = values.first;
             if (value != null) {
               onFechaChanged(value);
             }
