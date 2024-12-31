@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,9 +8,14 @@ import 'package:go_router/go_router.dart';
 import '../../../../config/config.dart';
 import '../../../auth/presentation/providers/providers.dart';
 import '../../../credits/credits.dart';
-import '../../../shared/widgets/widgets.dart';
+import '../../../shared/shared.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
+
+// Provider para el servicio de plataforma
+final platformServiceProvider = Provider<PlatformService>((ref) {
+  return getPlatformService();
+});
 
 class DocumentsScreen extends ConsumerWidget {
   const DocumentsScreen({super.key});
@@ -71,6 +78,30 @@ class DocumentsScreen extends ConsumerWidget {
 class _DocumentsView extends ConsumerWidget {
   const _DocumentsView();
 
+  Future<void> _handleRefresh(BuildContext context, WidgetRef ref,
+      DocumentsState documentsState) async {
+    if (kIsWeb) {
+      final platformService = ref.read(platformServiceProvider);
+      await platformService.reloadPage();
+    } else {
+      await ref.read(documentsPaginationProvider.notifier).refreshDocuments();
+      if (!context.mounted) return;
+
+      Future.delayed(
+        Duration(milliseconds: 300),
+        () {
+          if (documentsState.documents.isEmpty) {
+            if (!context.mounted) return;
+            AppUtils.showSnackbar(
+              context,
+              'No hay documentos aún, crea uno',
+            );
+          }
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final documentsState = ref.watch(documentsPaginationProvider);
@@ -101,20 +132,23 @@ class _DocumentsView extends ConsumerWidget {
       },
       child: RefreshIndicator(
         onRefresh: () async {
-          await documentsNotifier.refreshDocuments();
-          Future.delayed(
-            Duration(milliseconds: 300),
-            () {
-              if (documentsState.documents.isEmpty) {
-                if (!context.mounted) return;
-                AppUtils.showSnackbar(
-                  context,
-                  'No hay documentos aún, crea uno',
-                );
-              }
-            },
-          );
+          _handleRefresh(context, ref, documentsState);
         },
+        // onRefresh: () async {
+        //   await documentsNotifier.refreshDocuments();
+        //   Future.delayed(
+        //     Duration(milliseconds: 300),
+        //     () {
+        //       if (documentsState.documents.isEmpty) {
+        //         if (!context.mounted) return;
+        //         AppUtils.showSnackbar(
+        //           context,
+        //           'No hay documentos aún, crea uno',
+        //         );
+        //       }
+        //     },
+        //   );
+        // },
         child: documentsState.isLoading
             ? Center(child: CircularProgressIndicator())
             : MasonryGridView.builder(
