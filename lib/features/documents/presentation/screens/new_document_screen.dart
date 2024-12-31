@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -917,6 +918,7 @@ class _DaniosState extends ConsumerState<_Danios>
         "\$${StringUtils.formatToNumber(newDocumentState.montoADemandar.value)}";
     final porcentajeIncapacidad =
         "${newDocumentState.porcentajeIncapacidad.value}%";
+
     final altura = MediaQuery.sizeOf(context).height;
     // final ancho = MediaQuery.sizeOf(context).width;
     // final factorAltura = ancho > 600 ? 0.15 : 0.2;
@@ -1060,9 +1062,9 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
     final montoRemuneracionArt172 =
         "\$${StringUtils.formatToNumber(newDocumentState.montoRemuneracionArt172.value)}";
 
-    // final altura = MediaQuery.sizeOf(context).height;
-    // final ancho = MediaQuery.sizeOf(context).width;
-    // final factorAltura = ancho > 600 ? 0.15 : 0.2;
+    final bool showAddIconItem = newDocumentState.documentosAdicionalesAIngresar
+        .every((element) => element.isNotEmpty);
+
     return ListView(
       physics: ScrollPhysics(),
       children: [
@@ -1165,15 +1167,18 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                       },
                     ),
                     const SizedBox(height: 5),
-                    IconButton(
-                      tooltip: 'Agregar item',
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        ref
-                            .read(documentFormProvider.notifier)
-                            .onAddDocumentosAdicionalesAIngresar();
-                      },
-                    ),
+                    if (showAddIconItem)
+                      JelloIn(
+                        child: IconButton(
+                          tooltip: 'Agregar item',
+                          icon: const Icon(Icons.add),
+                          onPressed: () {
+                            ref
+                                .read(documentFormProvider.notifier)
+                                .onAddDocumentosAdicionalesAIngresar();
+                          },
+                        ),
+                      ),
                   ],
                 ),
               ),
