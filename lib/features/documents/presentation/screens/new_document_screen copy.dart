@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:redemanda/features/shared/shared.dart';
+
 import '../../../../config/config.dart';
 import '../../../../core/core.dart';
 import '../../../credits/presentation/widgets/widgets.dart';
@@ -18,50 +19,61 @@ class NewDocumentScreen extends ConsumerStatefulWidget {
   ConsumerState<NewDocumentScreen> createState() => _NewDocumentScreenState();
 }
 
-class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen> {
+  late final PageController pageController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-
-    // Sincronizar TabController con el estado
-    _tabController.addListener(() {
-      if (!_tabController.indexIsChanging) {
-        ref
-            .read(documentFormProvider.notifier)
-            .onSelectedIndexChanged(_tabController.index);
-      }
-    });
+    pageController = PageController();
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    //final newDocumentState = ref.watch(documentFormProvider);
+    // final colors = Theme.of(context).colorScheme;
 
-    // Sincronizar el estado con TabController
-    ref.listen(
-      documentFormProvider.select((state) => state.selectedIndex),
-      (previous, next) {
-        if (_tabController.index != next) {
-          _tabController.animateTo(next);
-        }
-      },
-    );
+    final newDocumentState = ref.watch(documentFormProvider);
 
+    final widgetOptions = [
+      _Information(),
+      _DetallesAdicionales(),
+      _Danios(),
+      _Compensaciones(),
+    ];
+
+    // ref.listen(
+    //   documentFormProvider,
+    //   (previous, next) {
+    //     if (next.errorMessage.isEmpty) return;
+    //     AppErrorsUtils.onError(context, next.errorMessage);
+    //   },
+    // );
     ref.listen(
       documentFormProvider,
       (previous, next) {
         if (next.errorMessage.isEmpty) return;
         AppErrorsUtils.onError(context, next.errorMessage);
+      },
+    );
+
+    ref.listen(
+      documentFormProvider.select((state) => state.selectedIndex),
+      (previous, next) {
+        // Lógica cuando cambia specificAttribute
+        if (next != newDocumentState.selectedIndex) {
+          pageController.animateToPage(
+            next,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            // curve: Curves.linear,
+          );
+        }
       },
     );
 
@@ -75,125 +87,81 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
               const UserCreditsWidget(),
             ],
           ),
-          bottom: TabBar(
-            controller: _tabController,
-            isScrollable: true,
-            tabs: const [
-              Tab(
-                // icon: Icon(Icons.info_outline_rounded),
-                // text: 'Información',
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline_rounded),
-                    SizedBox(width: 4),
-                    Text('Información'),
-                  ],
-                ),
-              ),
-              Tab(
-                // icon: Icon(Icons.details_rounded),
-                // text: 'Detalles',
-                child: Row(
-                  children: [
-                    Icon(Icons.details_rounded),
-                    SizedBox(width: 4),
-                    Text('Detalles'),
-                  ],
-                ),
-              ),
-              Tab(
-                // icon: Icon(Icons.broken_image),
-                // text: 'Daños',
-                child: Row(
-                  children: [
-                    Icon(Icons.broken_image),
-                    SizedBox(width: 4),
-                    Text('Daños'),
-                  ],
-                ),
-              ),
-              Tab(
-                // icon: Icon(Icons.request_page_outlined),
-                // text: 'Compensaciones',
-                child: Row(
-                  children: [
-                    Icon(Icons.request_page_outlined),
-                    SizedBox(width: 4),
-                    Text('Compensaciones'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          controller: _tabController,
-          children: const [
-            _Information(),
-            _DetallesAdicionales(),
-            _Danios(),
-            _Compensaciones(),
+          actions: [
+            _SubmitButton(),
           ],
         ),
-        floatingActionButton: _GenerateButton(),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 40),
+          child: PageView(
+            controller: pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            // physics: const ClampingScrollPhysics(),
+            // physics: const BouncingScrollPhysics(),
+            // onPageChanged: (index) {
+            //   ref
+            //       .read(documentFormProvider.notifier)
+            //       .onSelectedIndexChanged(index);
+            // },
+            children: widgetOptions,
+          ),
+          // child: IndexedStack(
+          //   index: newDocumentState.selectedIndex,
+          //   children: widgetOptions,
+          // ),
+        ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _PreviusButton(widgetOptions.length),
+            _NextButton(widgetOptions.length),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.info_outline_rounded),
+              label: 'Información',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.details_rounded),
+              label: 'Detalles',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.broken_image),
+              label: 'Daños',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.request_page_outlined),
+              label: 'Compensaciones',
+            ),
+          ],
+          currentIndex: newDocumentState.selectedIndex,
+          onTap: (index) {
+            // pageController
+            //     .animateToPage(
+            //   index,
+            //   duration: const Duration(milliseconds: 300),
+            //   curve: Curves.linear,
+            // )
+            //     .then(
+            //   (value) {
+            //     ref
+            //         .read(documentFormProvider.notifier)
+            //         .onSelectedIndexChanged(index);
+            //   },
+            // );
+
+            ref
+                .read(documentFormProvider.notifier)
+                .onSelectedIndexChanged(index);
+          },
+        ),
       ),
     );
   }
 }
-
-// Botones de navegación actualizados para recibir el TabController
-class _NextButton extends ConsumerWidget {
-  const _NextButton({
-    required this.tabController,
-  });
-
-  final TabController tabController;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return tabController.index < tabController.length - 1
-        ? Padding(
-            padding: const EdgeInsets.only(right: 30),
-            child: FloatingActionButton(
-              tooltip: 'Siguiente',
-              heroTag: 'next',
-              onPressed: () {
-                ref.read(documentFormProvider.notifier).incrementarIndex();
-              },
-              child: Icon(Icons.arrow_forward_rounded),
-            ),
-          )
-        : SizedBox(width: 10);
-  }
-}
-
-class _PreviusButton extends ConsumerWidget {
-  const _PreviusButton({
-    required this.tabController,
-  });
-
-  final TabController tabController;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return tabController.index > 0
-        ? Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: FloatingActionButton(
-              tooltip: 'Anterior',
-              heroTag: 'previus',
-              onPressed: () {
-                ref.read(documentFormProvider.notifier).decrementarIndex();
-              },
-              child: Icon(Icons.arrow_back_rounded),
-            ),
-          )
-        : SizedBox(width: 10);
-  }
-}
-
-// El resto de las clases (_Information, _DetallesAdicionales, _Danios, _Compensaciones)
-// permanecen sin cambios
 
 class _Information extends ConsumerStatefulWidget {
   const _Information();
@@ -212,7 +180,6 @@ class _InformationState extends ConsumerState<_Information>
     return ListView(
       padding: const EdgeInsets.only(bottom: 40),
       children: [
-        SizedBox(height: 5),
         // _InformacionDemandante(),
         _InformacionDemandante(ref: ref, newDocumentState: newDocumentState),
         SizedBox(height: 5),
@@ -584,52 +551,52 @@ class _GenerateButton extends ConsumerWidget {
   }
 }
 
-// class _NextButton extends ConsumerWidget {
-//   const _NextButton(this.nroPaginas);
-//   final int nroPaginas;
+class _NextButton extends ConsumerWidget {
+  const _NextButton(this.nroPaginas);
+  final int nroPaginas;
 
-//   @override
-//   Widget build(BuildContext context, ref) {
-//     final newDocumentState = ref.watch(documentFormProvider);
-//     final indiceActual = newDocumentState.selectedIndex;
+  @override
+  Widget build(BuildContext context, ref) {
+    final newDocumentState = ref.watch(documentFormProvider);
+    final indiceActual = newDocumentState.selectedIndex;
 
-//     return indiceActual < nroPaginas - 1
-//         ? FloatingActionButton(
-//             tooltip: 'Siguiente',
-//             heroTag: 'next',
-//             onPressed: () {
-//               ref.read(documentFormProvider.notifier).incrementarIndex();
-//             },
-//             child: Icon(Icons.arrow_forward_rounded),
-//           )
-//         : SizedBox(width: 10);
-//   }
-// }
+    return indiceActual < nroPaginas - 1
+        ? FloatingActionButton(
+            tooltip: 'Siguiente',
+            heroTag: 'next',
+            onPressed: () {
+              ref.read(documentFormProvider.notifier).incrementarIndex();
+            },
+            child: Icon(Icons.arrow_forward_rounded),
+          )
+        : SizedBox(width: 10);
+  }
+}
 
-// class _PreviusButton extends ConsumerWidget {
-//   const _PreviusButton(this.nroPaginas);
-//   final int nroPaginas;
+class _PreviusButton extends ConsumerWidget {
+  const _PreviusButton(this.nroPaginas);
+  final int nroPaginas;
 
-//   @override
-//   Widget build(BuildContext context, ref) {
-//     final newDocumentState = ref.watch(documentFormProvider);
-//     final indiceActual = newDocumentState.selectedIndex;
+  @override
+  Widget build(BuildContext context, ref) {
+    final newDocumentState = ref.watch(documentFormProvider);
+    final indiceActual = newDocumentState.selectedIndex;
 
-//     return indiceActual > 0
-//         ? Padding(
-//             padding: const EdgeInsets.only(left: 30),
-//             child: FloatingActionButton(
-//               tooltip: 'Anterior',
-//               heroTag: 'previus',
-//               onPressed: () {
-//                 ref.read(documentFormProvider.notifier).decrementarIndex();
-//               },
-//               child: Icon(Icons.arrow_back_rounded),
-//             ),
-//           )
-//         : SizedBox(width: 10);
-//   }
-// }
+    return indiceActual > 0
+        ? Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: FloatingActionButton(
+              tooltip: 'Anterior',
+              heroTag: 'previus',
+              onPressed: () {
+                ref.read(documentFormProvider.notifier).decrementarIndex();
+              },
+              child: Icon(Icons.arrow_back_rounded),
+            ),
+          )
+        : SizedBox(width: 10);
+  }
+}
 
 class _SubmitButton extends ConsumerWidget {
   const _SubmitButton();
