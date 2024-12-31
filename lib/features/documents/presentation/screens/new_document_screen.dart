@@ -835,6 +835,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                                 DateTime.now());
                         final bool isAfter = day.isAfter(newDocumentState
                                 .fechaTerminoRelacionLaboral.value ??
+                            newDocumentState.fechaInicioRelacionLaboral.value ??
                             DateTime.now());
 
                         return !isBefore && !isAfter;
