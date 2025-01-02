@@ -57,7 +57,7 @@ class ResetPasswordForm extends _$ResetPasswordForm {
 
       // En lugar de navegar directamente, actualizamos el estado
       Future.delayed(const Duration(seconds: 2), () {
-        state = state.copyWith(shouldNavigateToLogin: true);
+        state = state.copyWith(shouldNavigateToLogin: true, isPosting: false);
       });
     } catch (e) {
       state = state.copyWith(

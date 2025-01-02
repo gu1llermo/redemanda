@@ -125,8 +125,7 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     try {
       await supabase.auth.resetPasswordForEmail(
         email,
-        redirectTo:
-            '${BaseUrlApp.baseUrl}/reset-password', // Adjust based on your domain
+        redirectTo: '${BaseUrlApp.baseUrl}/reset-password',
       );
     } on AuthException catch (e) {
       throw CustomError(e.message);

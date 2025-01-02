@@ -60,7 +60,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/reset-password',
-        builder: (context, state) => const ResetPasswordScreen(),
+        builder: (context, state) {
+          //final code = state.uri.queryParameters['code'];
+          // Puedes pasar el código como parámetro si lo necesitas
+          return const ResetPasswordScreen();
+        },
       ),
     ],
     redirect: (context, state) {
