@@ -22,8 +22,13 @@ class AuthRepositoryImpl extends AuthRepository {
     return datasource.logout();
   }
 
-  // @override
-  // void dispose() {
-  //   datasource.dispose();
-  // }
+  @override
+  Future<void> sendPasswordResetEmail(String email) {
+    return datasource.sendPasswordResetEmail(email);
+  }
+
+  @override
+  Future<void> resetPassword(String newPassword) {
+    return datasource.resetPassword(newPassword);
+  }
 }

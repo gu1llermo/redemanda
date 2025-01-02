@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../config/config.dart';
 import '../../domain/domain.dart';
 import '../../presentation/providers/providers.dart';
 import '../errors/auth_errors.dart';
@@ -119,9 +120,33 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     }
   }
 
-  // @override
-  // void dispose() {
-  //   _cleanupResources();
-  //   _authStateController.close();
-  // }
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await supabase.auth.resetPasswordForEmail(
+        email,
+        redirectTo:
+            '${BaseUrlApp.baseUrl}/reset-password', // Adjust based on your domain
+      );
+    } on AuthException catch (e) {
+      throw CustomError(e.message);
+    } catch (e) {
+      throw CustomError(AuthConstants.errorMessages.defaultError);
+    }
+  }
+
+  @override
+  Future<void> resetPassword(String newPassword) async {
+    try {
+      await supabase.auth.updateUser(
+        UserAttributes(
+          password: newPassword,
+        ),
+      );
+    } on AuthException catch (e) {
+      throw CustomError(e.message);
+    } catch (e) {
+      throw CustomError(AuthConstants.errorMessages.defaultError);
+    }
+  }
 }
