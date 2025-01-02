@@ -6,7 +6,7 @@ part of 'auth_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$supabaseClientHash() => r'def8687e2ab4f3326b4362209d619e9abab27b65';
+String _$supabaseClientHash() => r'b814ff1e5fc2d1caa21d34648449e1ec0b36adde';
 
 /// See also [supabaseClient].
 @ProviderFor(supabaseClient)
@@ -43,27 +43,22 @@ final authRepositoryProvider = Provider<AuthRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AuthRepositoryRef = ProviderRef<AuthRepository>;
-String _$authHash() => r'51d0b8b460dc0f1b3542d2d846fb0231866ce5b2';
+String _$authHash() => r'b94270176df01fcee4cf653352dec522f9f50545';
 
 /// See also [Auth].
 @ProviderFor(Auth)
-final authProvider = NotifierProvider<Auth, AuthState>.internal(
+final authProvider = NotifierProvider<Auth, AuthStateApp>.internal(
   Auth.new,
   name: r'authProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$authHash,
-  dependencies: <ProviderOrFamily>[
-    authRepositoryProvider,
-    supabaseClientProvider
-  ],
+  dependencies: <ProviderOrFamily>[authRepositoryProvider],
   allTransitiveDependencies: <ProviderOrFamily>{
     authRepositoryProvider,
-    ...?authRepositoryProvider.allTransitiveDependencies,
-    supabaseClientProvider,
-    ...?supabaseClientProvider.allTransitiveDependencies
+    ...?authRepositoryProvider.allTransitiveDependencies
   },
 );
 
-typedef _$Auth = Notifier<AuthState>;
+typedef _$Auth = Notifier<AuthStateApp>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

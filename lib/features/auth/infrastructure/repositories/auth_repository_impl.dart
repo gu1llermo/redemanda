@@ -21,4 +21,9 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<void> logout() {
     return datasource.logout();
   }
+
+  @override
+  void dispose() {
+    datasource.dispose();
+  }
 }
