@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../config/config.dart';
 import '../../../shared/shared.dart';
@@ -177,9 +178,7 @@ class _LoginForm extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                    onPressed: () {
-                      //todo: implementar
-                    },
+                    onPressed: () => context.push('/recuperar-password'),
                     child: Text(
                       '¿Olvidó su contraseña?',
                       style: TextStyle(color: colors.primary),
