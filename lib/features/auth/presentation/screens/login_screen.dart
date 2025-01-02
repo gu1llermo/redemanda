@@ -177,10 +177,11 @@ class _LoginForm extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      //todo: implementar
+                    },
                     child: Text(
-                      ' ',
-                      // '¿Olvidó su contraseña?',
+                      '¿Olvidó su contraseña?',
                       style: TextStyle(color: colors.primary),
                     )),
                 SizedBox(height: 30),

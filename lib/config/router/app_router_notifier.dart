@@ -12,9 +12,9 @@ final goRouterNotifierProvider =
 
 class GoRouterNotifier extends ChangeNotifier {
   final Ref _ref;
-  late final ProviderSubscription<AuthState> _subscription;
+  late final ProviderSubscription<AuthStateApp> _subscription;
   // AuthStatus _authStatus = AuthStatus.checking;
-  AuthState _authState = AuthState(authStatus: AuthStatus.checking);
+  AuthStateApp _authState = AuthStateApp(authStatus: AuthStatus.checking);
 
   GoRouterNotifier(this._ref) {
     _subscription = _ref.listen(
@@ -31,7 +31,7 @@ class GoRouterNotifier extends ChangeNotifier {
     );
   }
 
-  AuthState get authState => _authState;
+  AuthStateApp get authState => _authState;
   // AuthStatus get authStatus => _authStatus;
 
   // set authStatus(AuthStatus value) {
@@ -39,7 +39,7 @@ class GoRouterNotifier extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  set authState(AuthState value) {
+  set authState(AuthStateApp value) {
     _authState = value;
     notifyListeners();
   }
