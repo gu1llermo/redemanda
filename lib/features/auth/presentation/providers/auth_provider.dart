@@ -28,9 +28,9 @@ class Auth extends _$Auth {
   AuthStateApp build() {
     _authRepository = ref.read(authRepositoryProvider);
 
-    ref.onDispose(() {
-      _authRepository.dispose();
-    });
+    // ref.onDispose(() {
+    //   _authRepository.dispose();
+    // });// no hace falta
 
     _initializeAuth();
     return AuthStateApp();

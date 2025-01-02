@@ -26,9 +26,9 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     );
   }
 
-  void _handleAuthStateChange(AuthState event) {
-    final authEvent = event.event;
-    final session = event.session;
+  void _handleAuthStateChange(AuthState authState) {
+    final authEvent = authState.event;
+    final session = authState.session;
 
     switch (authEvent) {
       case AuthChangeEvent.signedIn:
@@ -119,9 +119,9 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     }
   }
 
-  @override
-  void dispose() {
-    _cleanupResources();
-    _authStateController.close();
-  }
+  // @override
+  // void dispose() {
+  //   _cleanupResources();
+  //   _authStateController.close();
+  // }
 }

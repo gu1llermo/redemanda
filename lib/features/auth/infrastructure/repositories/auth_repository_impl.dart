@@ -22,8 +22,8 @@ class AuthRepositoryImpl extends AuthRepository {
     return datasource.logout();
   }
 
-  @override
-  void dispose() {
-    datasource.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   datasource.dispose();
+  // }
 }
