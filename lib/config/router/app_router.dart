@@ -30,9 +30,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       ///* Documents Routes
       GoRoute(
-        path: '/',
-        builder: (context, state) => const DocumentsScreen(),
-      ),
+          path: '/',
+          builder: (context, state) => const DocumentsScreen(),
+          routes: [
+            GoRoute(
+              path: '/new-document',
+              builder: (context, state) => NewDocumentScreen(),
+            ),
+          ]),
       GoRoute(
         path: '/settings',
         builder: (context, state) => const UnderConstructionScreen(),
@@ -41,15 +46,21 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/admin-settings',
         builder: (context, state) => const UnderConstructionScreen(),
       ),
-      GoRoute(
-        path: '/new-document',
-        builder: (context, state) => NewDocumentScreen(),
-      ),
 
       ///* Admin Routes
       GoRoute(
         path: '/home-admin',
         builder: (context, state) => const HomeAdminScreen(),
+      ),
+
+      ///*
+      GoRoute(
+        path: '/recuperar-password',
+        builder: (context, state) => const PasswordRecoveryScreen(),
+      ),
+      GoRoute(
+        path: '/reset-password',
+        builder: (context, state) => const ResetPasswordScreen(),
       ),
     ],
     redirect: (context, state) {
@@ -62,7 +73,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         return null; // lo deja tranquilo que vaya a splash
       }
       if (authStatus == AuthStatus.notAuthenticated) {
-        if (isGoingTo == '/login' || isGoingTo == '/register') {
+        if (isGoingTo == '/login' ||
+            isGoingTo == '/register' ||
+            isGoingTo == '/recuperar-password' ||
+            isGoingTo == '/reset-password') {
           // cuando se coloca null, es para dejar que vaya a la pantalla que quiera
           return null;
         }

@@ -6,3 +6,4 @@ export 'utils/string_utils.dart';
 export 'utils/app_date_utils.dart';
 export 'utils/app_color_utils.dart';
 export 'utils/app_errors_utils.dart';
+export 'constants/base_url_app.dart';
