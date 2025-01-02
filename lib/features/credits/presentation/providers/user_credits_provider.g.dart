@@ -6,7 +6,7 @@ part of 'user_credits_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userCreditsHash() => r'f270794fa02c18f51a923a47303675412629107d';
+String _$userCreditsHash() => r'1aefec0145b8451725d83be072c8ad9cc66cb601';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -64,12 +64,18 @@ class UserCreditsFamily extends Family<AsyncValue<int>> {
     );
   }
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    supabaseClientProvider
+  ];
 
   @override
   Iterable<ProviderOrFamily>? get dependencies => _dependencies;
 
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    supabaseClientProvider,
+    ...?supabaseClientProvider.allTransitiveDependencies
+  };
 
   @override
   Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
