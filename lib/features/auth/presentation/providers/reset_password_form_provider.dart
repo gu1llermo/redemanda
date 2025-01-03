@@ -67,6 +67,7 @@ class ResetPasswordForm extends _$ResetPasswordForm {
         state = state.copyWith(shouldNavigateToLogin: true, isPosting: false);
       });
     } catch (e) {
+      print(e);
       state = state.copyWith(
         isPosting: false,
         errorMessage: e.toString(),
