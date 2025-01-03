@@ -72,6 +72,7 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
       await supabase.auth.refreshSession();
     } catch (e) {
       // Handle refresh error
+
       throw CustomError(AuthConstants.errorMessages.sessionRefreshError);
     }
   }
@@ -94,7 +95,8 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     } on AuthRetryableFetchException {
       throw CustomError(AuthConstants.errorMessages.networkError);
     } catch (e) {
-      throw CustomError(AuthConstants.errorMessages.defaultError);
+      throw CustomError(e.toString());
+      // throw CustomError(AuthConstants.errorMessages.defaultError);
     }
   }
 
@@ -106,7 +108,8 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     } on AuthException catch (e) {
       throw CustomError(e.message);
     } catch (e) {
-      throw CustomError(AuthConstants.errorMessages.defaultError);
+      throw CustomError(e.toString());
+      // throw CustomError(AuthConstants.errorMessages.defaultError);
     }
   }
 
@@ -130,7 +133,9 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     } on AuthException catch (e) {
       throw CustomError(e.message);
     } catch (e) {
-      throw CustomError(AuthConstants.errorMessages.defaultError);
+      //print(e);
+      throw CustomError(e.toString());
+      // throw CustomError(AuthConstants.errorMessages.defaultError);
     }
   }
 
@@ -145,7 +150,9 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     } on AuthException catch (e) {
       throw CustomError(e.message);
     } catch (e) {
-      throw CustomError(AuthConstants.errorMessages.defaultError);
+      //print(e);
+      throw CustomError(e.toString());
+      // throw CustomError(AuthConstants.errorMessages.defaultError);
     }
   }
 }
