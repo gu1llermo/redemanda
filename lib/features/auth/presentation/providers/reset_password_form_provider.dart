@@ -43,7 +43,7 @@ class ResetPasswordForm extends _$ResetPasswordForm {
   Future<void> onSubmit() async {
     if (!state.isValid) return;
 
-    state = state.copyWith(isPosting: true);
+    state = state.copyWith(isPosting: true, isFormPosted: true);
 
     try {
       await ref
@@ -76,6 +76,7 @@ class ResetPasswordFormState {
   final RepeatPassword confirmPassword;
   final String errorMessage;
   final bool shouldNavigateToLogin;
+  final bool isFormPosted;
 
   ResetPasswordFormState({
     this.isPosting = false,
@@ -85,6 +86,7 @@ class ResetPasswordFormState {
     this.confirmPassword = const RepeatPassword.pure(),
     this.errorMessage = '',
     this.shouldNavigateToLogin = false,
+    this.isFormPosted = false,
   });
 
   ResetPasswordFormState copyWith({
@@ -95,6 +97,7 @@ class ResetPasswordFormState {
     RepeatPassword? confirmPassword,
     String? errorMessage,
     bool? shouldNavigateToLogin,
+    bool? isFormPosted,
   }) =>
       ResetPasswordFormState(
         isPosting: isPosting ?? this.isPosting,
@@ -105,5 +108,6 @@ class ResetPasswordFormState {
         errorMessage: errorMessage ?? this.errorMessage,
         shouldNavigateToLogin:
             shouldNavigateToLogin ?? this.shouldNavigateToLogin,
+        isFormPosted: isFormPosted ?? this.isFormPosted,
       );
 }
