@@ -22,9 +22,10 @@ class PasswordRecoveryForm extends _$PasswordRecoveryForm {
   }
 
   Future<void> onSubmitEmail() async {
+    _touchEveryField();
     if (!state.isValid) return;
 
-    state = state.copyWith(isPosting: true, isFormPosted: true);
+    state = state.copyWith(isPosting: true);
 
     try {
       await ref
@@ -41,6 +42,15 @@ class PasswordRecoveryForm extends _$PasswordRecoveryForm {
         errorMessage: e.toString(),
       );
     }
+  }
+
+  void _touchEveryField() {
+    final email = Email.dirty(state.email.value);
+    state = state.copyWith(
+      isFormPosted: true,
+      email: email,
+      isValid: Formz.validate([email]),
+    );
   }
 }
 

@@ -51,6 +51,11 @@ class PasswordRecoveryScreen extends ConsumerWidget {
                     width: double.infinity,
                     child: CustomFilledButton(
                       text: 'Enviar instrucciones',
+                      textWidget: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child:
+                              const CircularProgressIndicator(strokeWidth: 4)),
                       onPressed: form.isPosting
                           ? null
                           : ref

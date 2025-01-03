@@ -41,9 +41,10 @@ class ResetPasswordForm extends _$ResetPasswordForm {
   }
 
   Future<void> onSubmit() async {
+    _touchEveryField();
     if (!state.isValid) return;
 
-    state = state.copyWith(isPosting: true, isFormPosted: true);
+    state = state.copyWith(isPosting: true);
 
     try {
       await ref
@@ -65,6 +66,21 @@ class ResetPasswordForm extends _$ResetPasswordForm {
         errorMessage: e.toString(),
       );
     }
+  }
+
+  void _touchEveryField() {
+    final password = Password.dirty(state.password.value);
+    final confirmPassword = RepeatPassword.dirty(
+      password: password.value,
+      value: state.confirmPassword.value,
+    );
+
+    state = state.copyWith(
+      isFormPosted: true,
+      password: password,
+      confirmPassword: confirmPassword,
+      isValid: Formz.validate([password, confirmPassword]),
+    );
   }
 }
 
