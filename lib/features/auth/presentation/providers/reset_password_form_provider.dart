@@ -40,6 +40,12 @@ class ResetPasswordForm extends _$ResetPasswordForm {
     );
   }
 
+  void onTapPasswordSuffixIcon() {
+    state = state.copyWith(
+      obscureText: !state.obscureText,
+    );
+  }
+
   Future<void> onSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
@@ -93,6 +99,7 @@ class ResetPasswordFormState {
   final String errorMessage;
   final bool shouldNavigateToLogin;
   final bool isFormPosted;
+  final bool obscureText;
 
   ResetPasswordFormState({
     this.isPosting = false,
@@ -103,6 +110,7 @@ class ResetPasswordFormState {
     this.errorMessage = '',
     this.shouldNavigateToLogin = false,
     this.isFormPosted = false,
+    this.obscureText = true,
   });
 
   ResetPasswordFormState copyWith({
@@ -114,6 +122,7 @@ class ResetPasswordFormState {
     String? errorMessage,
     bool? shouldNavigateToLogin,
     bool? isFormPosted,
+    bool? obscureText,
   }) =>
       ResetPasswordFormState(
         isPosting: isPosting ?? this.isPosting,
@@ -125,5 +134,6 @@ class ResetPasswordFormState {
         shouldNavigateToLogin:
             shouldNavigateToLogin ?? this.shouldNavigateToLogin,
         isFormPosted: isFormPosted ?? this.isFormPosted,
+        obscureText: obscureText ?? this.obscureText,
       );
 }

@@ -13,6 +13,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   //* ESTO SE LLAMA PROTECCIÓN DE RUTAS
   final goRouterNotifier = ref.read(goRouterNotifierProvider);
   return GoRouter(
+    // initialLocation: '/reset-password',
     initialLocation: '/splash',
     refreshListenable: goRouterNotifier,
     routes: [
