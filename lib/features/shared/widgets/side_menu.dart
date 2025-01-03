@@ -28,6 +28,7 @@ class _SideMenuState extends ConsumerState<SideMenu> {
     final hasNotch = MediaQuery.viewPaddingOf(context).top > 20;
     final textStyles = Theme.of(context).textTheme;
     final auth = ref.watch(authProvider);
+    final isAdmin = auth.user?.isAdmin ?? false;
     final name = auth.user?.email ?? 'Usuario';
     final colors = Theme.of(context).colorScheme;
     final themeMode = ref.watch(themeNotifierProvider);
@@ -94,14 +95,15 @@ class _SideMenuState extends ConsumerState<SideMenu> {
             style: textStyles.bodyMedium,
           ),
         ),
-        NavigationDrawerDestination(
-          icon: const Icon(Icons.settings_outlined),
-          selectedIcon: const Icon(Icons.settings),
-          label: Text(
-            'Configuración',
-            style: textStyles.bodyMedium,
+        if (isAdmin)
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.settings_outlined),
+            selectedIcon: const Icon(Icons.settings),
+            label: Text(
+              'Configuración',
+              style: textStyles.bodyMedium,
+            ),
           ),
-        ),
 
         const Divider(),
 
