@@ -41,6 +41,7 @@ class ResetPasswordForm extends _$ResetPasswordForm {
   }
 
   Future<void> onSubmit() async {
+    _touchEveryField();
     if (!state.isValid) return;
 
     state = state.copyWith(isPosting: true);
@@ -66,6 +67,21 @@ class ResetPasswordForm extends _$ResetPasswordForm {
       );
     }
   }
+
+  void _touchEveryField() {
+    final password = Password.dirty(state.password.value);
+    final confirmPassword = RepeatPassword.dirty(
+      password: password.value,
+      value: state.confirmPassword.value,
+    );
+
+    state = state.copyWith(
+      isFormPosted: true,
+      password: password,
+      confirmPassword: confirmPassword,
+      isValid: Formz.validate([password, confirmPassword]),
+    );
+  }
 }
 
 class ResetPasswordFormState {
@@ -76,6 +92,7 @@ class ResetPasswordFormState {
   final RepeatPassword confirmPassword;
   final String errorMessage;
   final bool shouldNavigateToLogin;
+  final bool isFormPosted;
 
   ResetPasswordFormState({
     this.isPosting = false,
@@ -85,6 +102,7 @@ class ResetPasswordFormState {
     this.confirmPassword = const RepeatPassword.pure(),
     this.errorMessage = '',
     this.shouldNavigateToLogin = false,
+    this.isFormPosted = false,
   });
 
   ResetPasswordFormState copyWith({
@@ -95,6 +113,7 @@ class ResetPasswordFormState {
     RepeatPassword? confirmPassword,
     String? errorMessage,
     bool? shouldNavigateToLogin,
+    bool? isFormPosted,
   }) =>
       ResetPasswordFormState(
         isPosting: isPosting ?? this.isPosting,
@@ -105,5 +124,6 @@ class ResetPasswordFormState {
         errorMessage: errorMessage ?? this.errorMessage,
         shouldNavigateToLogin:
             shouldNavigateToLogin ?? this.shouldNavigateToLogin,
+        isFormPosted: isFormPosted ?? this.isFormPosted,
       );
 }

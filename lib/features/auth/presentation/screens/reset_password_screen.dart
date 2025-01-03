@@ -28,57 +28,67 @@ class ResetPasswordScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Nueva Contraseña')),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (!form.success) ...[
-              CustomTextFormField(
-                label: 'Nueva contraseña',
-                onChanged: ref
-                    .read(resetPasswordFormProvider.notifier)
-                    .onPasswordChange,
-                errorMessage: form.password.errorMessage,
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
-              CustomTextFormField(
-                label: 'Confirmar contraseña',
-                onChanged: ref
-                    .read(resetPasswordFormProvider.notifier)
-                    .onConfirmPasswordChange,
-                errorMessage: form.confirmPassword.errorMessage,
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: CustomFilledButton(
-                  text: 'Cambiar contraseña',
-                  onPressed: !form.isValid || form.isPosting
-                      ? null
-                      : ref.read(resetPasswordFormProvider.notifier).onSubmit,
-                  buttonColor: colors.primary,
-                ),
-              ),
-            ] else ...[
-              const Icon(Icons.check_circle_outline,
-                  size: 100, color: Colors.green),
-              const SizedBox(height: 20),
-              Text(
-                'Contraseña actualizada exitosamente',
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Serás redirigido al login en unos segundos...',
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (!form.success) ...[
+                  CustomTextFormField(
+                    label: 'Nueva contraseña',
+                    onChanged: ref
+                        .read(resetPasswordFormProvider.notifier)
+                        .onPasswordChange,
+                    errorMessage:
+                        form.isFormPosted ? form.password.errorMessage : null,
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextFormField(
+                    label: 'Confirmar contraseña',
+                    onChanged: ref
+                        .read(resetPasswordFormProvider.notifier)
+                        .onConfirmPasswordChange,
+                    errorMessage: form.isFormPosted
+                        ? form.confirmPassword.errorMessage
+                        : null,
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomFilledButton(
+                      text: 'Cambiar contraseña',
+                      onPressed: !form.isValid || form.isPosting
+                          ? null
+                          : ref
+                              .read(resetPasswordFormProvider.notifier)
+                              .onSubmit,
+                      buttonColor: colors.primary,
+                    ),
+                  ),
+                ] else ...[
+                  const Icon(Icons.check_circle_outline,
+                      size: 100, color: Colors.green),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Contraseña actualizada exitosamente',
+                    style: Theme.of(context).textTheme.titleMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Serás redirigido al login en unos segundos...',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );

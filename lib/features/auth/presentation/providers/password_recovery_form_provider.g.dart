@@ -7,7 +7,7 @@ part of 'password_recovery_form_provider.dart';
 // **************************************************************************
 
 String _$passwordRecoveryFormHash() =>
-    r'6bd3306e2b4477dd6ce0e876a444156b124e348c';
+    r'f611c1bdb0aa40fadd58d0125ce18dce8e8e9cb5';
 
 /// See also [PasswordRecoveryForm].
 @ProviderFor(PasswordRecoveryForm)

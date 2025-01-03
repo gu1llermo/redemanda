@@ -22,6 +22,7 @@ class PasswordRecoveryForm extends _$PasswordRecoveryForm {
   }
 
   Future<void> onSubmitEmail() async {
+    _touchEveryField();
     if (!state.isValid) return;
 
     state = state.copyWith(isPosting: true);
@@ -42,6 +43,15 @@ class PasswordRecoveryForm extends _$PasswordRecoveryForm {
       );
     }
   }
+
+  void _touchEveryField() {
+    final email = Email.dirty(state.email.value);
+    state = state.copyWith(
+      isFormPosted: true,
+      email: email,
+      isValid: Formz.validate([email]),
+    );
+  }
 }
 
 class PasswordRecoveryFormState {
@@ -50,6 +60,7 @@ class PasswordRecoveryFormState {
   final bool isValid;
   final Email email;
   final String errorMessage;
+  final bool isFormPosted;
 
   PasswordRecoveryFormState({
     this.isPosting = false,
@@ -57,6 +68,7 @@ class PasswordRecoveryFormState {
     this.isValid = false,
     this.email = const Email.pure(),
     this.errorMessage = '',
+    this.isFormPosted = false,
   });
 
   PasswordRecoveryFormState copyWith({
@@ -65,6 +77,7 @@ class PasswordRecoveryFormState {
     bool? isValid,
     Email? email,
     String? errorMessage,
+    bool? isFormPosted,
   }) =>
       PasswordRecoveryFormState(
         isPosting: isPosting ?? this.isPosting,
@@ -72,5 +85,6 @@ class PasswordRecoveryFormState {
         isValid: isValid ?? this.isValid,
         email: email ?? this.email,
         errorMessage: errorMessage ?? this.errorMessage,
+        isFormPosted: isFormPosted ?? this.isFormPosted,
       );
 }
