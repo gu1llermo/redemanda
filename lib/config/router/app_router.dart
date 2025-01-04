@@ -25,20 +25,26 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       ///* Auth Routes
       GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+          path: '/login',
+          builder: (context, state) => const LoginScreen(),
+          routes: [
+            GoRoute(
+              path: '/recuperar-password',
+              builder: (context, state) => const PasswordRecoveryScreen(),
+            ),
+          ]),
 
       ///* Documents Routes
       GoRoute(
-          path: '/',
-          builder: (context, state) => const DocumentsScreen(),
-          routes: [
-            GoRoute(
-              path: '/new-document',
-              builder: (context, state) => NewDocumentScreen(),
-            ),
-          ]),
+        path: '/',
+        builder: (context, state) => const DocumentsScreen(),
+        routes: [
+          GoRoute(
+            path: '/new-document',
+            builder: (context, state) => NewDocumentScreen(),
+          ),
+        ],
+      ),
       GoRoute(
         path: '/settings',
         builder: (context, state) => const UnderConstructionScreen(),
@@ -55,10 +61,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
 
       ///*
-      GoRoute(
-        path: '/recuperar-password',
-        builder: (context, state) => const PasswordRecoveryScreen(),
-      ),
+
       GoRoute(
         path: '/reset-password',
         builder: (context, state) {
