@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,22 +26,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ///* Auth Routes
       GoRoute(
           path: '/login',
-          builder: (context, state) {
-            // Verificamos si venimos de un reset de contraseña
-            final shouldClearHistory = state.extra != null &&
-                (state.extra as Map?)?.containsKey('clearHistory') == true;
-
-            if (shouldClearHistory) {
-              // Limpiamos el historial después de construir la página
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                while (context.canPop()) {
-                  context.pop();
-                }
-              });
-            }
-
-            return const LoginScreen();
-          },
+          builder: (context, state) => const LoginScreen(),
           routes: [
             GoRoute(
               path: 'recuperar-password',
@@ -93,14 +77,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       final authState = goRouterNotifier.authState;
       final authStatus = authState.authStatus;
       final isAdmin = authState.user?.isAdmin ?? false;
-
-      // Si estamos navegando al login después de un reset de contraseña
-      final shouldClearHistory = state.extra != null &&
-          (state.extra as Map?)?.containsKey('clearHistory') == true;
-      if (shouldClearHistory && isGoingTo == '/login') {
-        return null; // Permitimos la navegación directa
-      }
-
       if (isGoingTo == '/splash' && authStatus == AuthStatus.checking) {
         return null; // lo deja tranquilo que vaya a splash
       }

@@ -24,7 +24,7 @@ class ResetPasswordScreen extends ConsumerWidget {
       // Agregamos esta nueva escucha para la navegación
       if (next.shouldNavigateToLogin) {
         // Limpiar el historial y navegar al login
-        context.go('/login', extra: {'clearHistory': true});
+        context.go('/login');
       }
     });
 
