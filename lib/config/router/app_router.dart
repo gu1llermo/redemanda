@@ -29,7 +29,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           builder: (context, state) => const LoginScreen(),
           routes: [
             GoRoute(
-              path: '/recuperar-password',
+              path: 'recuperar-password',
               builder: (context, state) => const PasswordRecoveryScreen(),
             ),
           ]),
@@ -40,7 +40,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const DocumentsScreen(),
         routes: [
           GoRoute(
-            path: '/new-document',
+            path: 'new-document',
             builder: (context, state) => NewDocumentScreen(),
           ),
         ],
@@ -83,7 +83,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       if (authStatus == AuthStatus.notAuthenticated) {
         if (isGoingTo == '/login' ||
             isGoingTo == '/register' ||
-            isGoingTo == '/recuperar-password' ||
+            isGoingTo == '/login/recuperar-password' ||
             isGoingTo == '/reset-password') {
           // cuando se coloca null, es para dejar que vaya a la pantalla que quiera
           return null;
