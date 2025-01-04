@@ -178,7 +178,7 @@ class _LoginForm extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                    onPressed: () => context.push('/recuperar-password'),
+                    onPressed: () => context.push('/login/recuperar-password'),
                     child: Text(
                       '¿Olvidó su contraseña?',
                       style: TextStyle(color: colors.primary),
