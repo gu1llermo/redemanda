@@ -105,8 +105,10 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
     try {
       final authResponse = await supabase.auth.refreshSession();
       return UserEntityMapper.authResponseToEntity(authResponse);
-    } on AuthException catch (e) {
+    } on AuthApiException catch (e) {
       throw CustomError(e.message);
+    } on AuthRetryableFetchException {
+      throw CustomError(AuthConstants.errorMessages.networkError);
     } catch (e) {
       throw CustomError(e.toString());
       // throw CustomError(AuthConstants.errorMessages.defaultError);
@@ -116,9 +118,9 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
   @override
   Future<void> logout() async {
     try {
-      await supabase.auth.signOut();
       _cleanupResources();
-    } catch (e) {
+      await supabase.auth.signOut();
+    } on Exception catch (e) {
       throw CustomError(e.toString());
     }
   }
@@ -130,7 +132,7 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
         email,
         redirectTo: '${BaseUrlApp.baseUrl}/reset-password',
       );
-    } on AuthException catch (e) {
+    } on AuthApiException catch (e) {
       throw CustomError(e.message);
     } catch (e) {
       //print(e);
@@ -147,7 +149,7 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
           password: newPassword,
         ),
       );
-    } on AuthException catch (e) {
+    } on AuthApiException catch (e) {
       throw CustomError(e.message);
     } catch (e) {
       //print(e);

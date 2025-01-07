@@ -25,7 +25,7 @@ class DocumentsDatasourceImpl extends DocumentsDatasource {
   final SupabaseClient supabase;
 
   DocumentsDatasourceImpl({required this.accesToken, required this.supabase}) {
-    dio = Dio(BaseOptions(baseUrl: EnvironmentConfig.supabaseUrl, headers: {
+    dio = Dio(BaseOptions(baseUrl: EnvironmentConfig().supabaseUrl, headers: {
       'Authorization': 'Bearer $accesToken',
     }))
       ..interceptors.add(_createAuthInterceptor());
