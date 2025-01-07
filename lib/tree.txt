@@ -1,73 +1,208 @@
-├── config
-│  ├── config.dart
-│  ├── constants
-│  │  └── environment_config.dart
-│  ├── router
-│  │  ├── app_router_notifier.dart
-│  │  └── app_router.dart
-│  ├── theme
-│  │  └── app_theme.dart
-│  └── utils
-│    └── app_utils.dart
-├── features
-│  ├── auth
-│  │  ├── domain
-│  │  │  ├── datasources
-│  │  │  │  └── auth_datasource.dart
-│  │  │  ├── domain.dart
-│  │  │  ├── entities
-│  │  │  │  └── user_entity.dart
-│  │  │  └── repositories
-│  │  │    └── auth_repository.dart
-│  │  ├── infrastructure
-│  │  │  ├── datasources
-│  │  │  │  └── supabase_auth_datasource_impl.dart
-│  │  │  ├── errors
-│  │  │  │  └── auth_errors.dart
-│  │  │  ├── infrastructure.dart
-│  │  │  ├── mappers
-│  │  │  │  ├── mappers.dart
-│  │  │  │  └── user_entity_mapper.dart
-│  │  │  └── repositories
-│  │  │    └── auth_repository_impl.dart
-│  │  └── presentation
-│  │    ├── providers
-│  │    │  ├── auth_provider.dart
-│  │    │  ├── login_form_provider.dart
-│  │    │  └── providers.dart
-│  │    ├── screens
-│  │    │  ├── check_out_status_screen.dart
-│  │    │  ├── home_admin_screen.dart
-│  │    │  ├── home_user_screen.dart
-│  │    │  ├── login_screen.dart
-│  │    │  ├── not_found_screen.dart
-│  │    │  └── screens.dart
-│  │    └── widgets
-│  │      └── widgets.dart
-│  └── shared
-│    ├── infrastructure
-│    │  ├── infrastructure.dart
-│    │  ├── inputs
-│    │  │  ├── email.dart
-│    │  │  ├── full_name.dart
-│    │  │  ├── inputs.dart
-│    │  │  ├── password.dart
-│    │  │  └── repeat_password.dart
-│    │  └── services
-│    │    ├── app_desktop_service_impl.dart
-│    │    ├── app_desktop_service.dart
-│    │    ├── camera_gallery_service_impl.dart
-│    │    ├── camera_gallery_service.dart
-│    │    ├── key_value_storage_service_impl.dart
-│    │    ├── key_value_storage_service.dart
-│    │    ├── notification_service.dart
-│    │    └── services.dart
-│    ├── shared.dart
-│    └── widgets
-│      ├── custom_filled_button.dart
-│      ├── custom_text_form_field.dart
-│      ├── full_screen_loader.dart
-│      ├── geometrical_background.dart
-│      ├── side_menu.dart
-│      └── widgets.dart
-└── main.dart
+lib
+ ┣ config
+ ┃ ┣ constants
+ ┃ ┃ ┣ base_url_app.dart
+ ┃ ┃ ┗ environment_config.dart
+ ┃ ┣ router
+ ┃ ┃ ┣ app_router.dart
+ ┃ ┃ ┗ app_router_notifier.dart
+ ┃ ┣ theme
+ ┃ ┃ ┣ theme_notifier.dart
+ ┃ ┃ ┗ theme_notifier.g.dart
+ ┃ ┣ utils
+ ┃ ┃ ┣ app_color_utils.dart
+ ┃ ┃ ┣ app_date_utils.dart
+ ┃ ┃ ┣ app_errors_utils.dart
+ ┃ ┃ ┣ app_utils.dart
+ ┃ ┃ ┗ string_utils.dart
+ ┃ ┗ config.dart
+ ┣ core
+ ┃ ┣ presentation
+ ┃ ┃ ┣ mixins
+ ┃ ┃ ┃ ┣ keep_page_alive_mixin.dart
+ ┃ ┃ ┃ ┗ mixins.dart
+ ┃ ┃ ┗ presentation.dart
+ ┃ ┗ core.dart
+ ┣ features
+ ┃ ┣ auth
+ ┃ ┃ ┣ domain
+ ┃ ┃ ┃ ┣ datasources
+ ┃ ┃ ┃ ┃ ┗ auth_datasource.dart
+ ┃ ┃ ┃ ┣ entities
+ ┃ ┃ ┃ ┃ ┗ user_entity.dart
+ ┃ ┃ ┃ ┣ repositories
+ ┃ ┃ ┃ ┃ ┗ auth_repository.dart
+ ┃ ┃ ┃ ┗ domain.dart
+ ┃ ┃ ┣ infrastructure
+ ┃ ┃ ┃ ┣ datasources
+ ┃ ┃ ┃ ┃ ┗ supabase_auth_datasource_impl.dart
+ ┃ ┃ ┃ ┣ errors
+ ┃ ┃ ┃ ┃ ┗ auth_errors.dart
+ ┃ ┃ ┃ ┣ mappers
+ ┃ ┃ ┃ ┃ ┣ mappers.dart
+ ┃ ┃ ┃ ┃ ┗ user_entity_mapper.dart
+ ┃ ┃ ┃ ┣ repositories
+ ┃ ┃ ┃ ┃ ┗ auth_repository_impl.dart
+ ┃ ┃ ┃ ┗ infrastructure.dart
+ ┃ ┃ ┗ presentation
+ ┃ ┃ ┃ ┣ providers
+ ┃ ┃ ┃ ┃ ┣ auth_provider.dart
+ ┃ ┃ ┃ ┃ ┣ auth_provider.g.dart
+ ┃ ┃ ┃ ┃ ┣ login_form_provider.dart
+ ┃ ┃ ┃ ┃ ┣ login_form_provider.g.dart
+ ┃ ┃ ┃ ┃ ┣ password_recovery_form_provider.dart
+ ┃ ┃ ┃ ┃ ┣ password_recovery_form_provider.g.dart
+ ┃ ┃ ┃ ┃ ┣ providers.dart
+ ┃ ┃ ┃ ┃ ┣ reset_password_form_provider.dart
+ ┃ ┃ ┃ ┃ ┗ reset_password_form_provider.g.dart
+ ┃ ┃ ┃ ┣ screens
+ ┃ ┃ ┃ ┃ ┣ check_out_status_screen.dart
+ ┃ ┃ ┃ ┃ ┣ home_admin_screen.dart
+ ┃ ┃ ┃ ┃ ┣ login_screen.dart
+ ┃ ┃ ┃ ┃ ┣ not_found_screen.dart
+ ┃ ┃ ┃ ┃ ┣ password_recovery_screen.dart
+ ┃ ┃ ┃ ┃ ┣ reset_password_screen.dart
+ ┃ ┃ ┃ ┃ ┣ screens.dart
+ ┃ ┃ ┃ ┃ ┗ under_construction_screen.dart
+ ┃ ┃ ┃ ┗ widgets
+ ┃ ┃ ┃ ┃ ┗ widgets.dart
+ ┃ ┣ credits
+ ┃ ┃ ┣ presentation
+ ┃ ┃ ┃ ┣ providers
+ ┃ ┃ ┃ ┃ ┣ providers.dart
+ ┃ ┃ ┃ ┃ ┣ user_credits_provider.dart
+ ┃ ┃ ┃ ┃ ┗ user_credits_provider.g.dart
+ ┃ ┃ ┃ ┣ screens
+ ┃ ┃ ┃ ┣ widgets
+ ┃ ┃ ┃ ┃ ┣ user_credits_widget.dart
+ ┃ ┃ ┃ ┃ ┗ widgets.dart
+ ┃ ┃ ┃ ┗ presentation.dart
+ ┃ ┃ ┗ credits.dart
+ ┃ ┣ documents
+ ┃ ┃ ┣ domain
+ ┃ ┃ ┃ ┣ datasources
+ ┃ ┃ ┃ ┃ ┗ documents_datasource.dart
+ ┃ ┃ ┃ ┣ entities
+ ┃ ┃ ┃ ┃ ┗ document.dart
+ ┃ ┃ ┃ ┣ repositories
+ ┃ ┃ ┃ ┃ ┗ documents_repository.dart
+ ┃ ┃ ┃ ┗ domain.dart
+ ┃ ┃ ┣ infrastructure
+ ┃ ┃ ┃ ┣ datasources
+ ┃ ┃ ┃ ┃ ┗ documents_datasource_impl.dart
+ ┃ ┃ ┃ ┣ mappers
+ ┃ ┃ ┃ ┃ ┗ document_mapper.dart
+ ┃ ┃ ┃ ┣ repositories
+ ┃ ┃ ┃ ┃ ┗ documents_repository_impl.dart
+ ┃ ┃ ┃ ┗ infrastructure.dart
+ ┃ ┃ ┣ presentation
+ ┃ ┃ ┃ ┣ delegates
+ ┃ ┃ ┃ ┃ ┣ delegates.dart
+ ┃ ┃ ┃ ┃ ┣ document_search_delegate copy.dart
+ ┃ ┃ ┃ ┃ ┗ document_search_delegate.dart
+ ┃ ┃ ┃ ┣ providers
+ ┃ ┃ ┃ ┃ ┣ forms
+ ┃ ┃ ┃ ┃ ┃ ┣ document_form_provider.dart
+ ┃ ┃ ┃ ┃ ┃ ┗ document_form_provider.g.dart
+ ┃ ┃ ┃ ┃ ┣ documents_provider.dart
+ ┃ ┃ ┃ ┃ ┣ documents_provider.g.dart
+ ┃ ┃ ┃ ┃ ┣ documents_repository_provider.dart
+ ┃ ┃ ┃ ┃ ┣ documents_repository_provider.g.dart
+ ┃ ┃ ┃ ┃ ┣ document_provider.dart
+ ┃ ┃ ┃ ┃ ┣ document_provider.g.dart
+ ┃ ┃ ┃ ┃ ┗ providers.dart
+ ┃ ┃ ┃ ┣ screens
+ ┃ ┃ ┃ ┃ ┣ documents_screen.dart
+ ┃ ┃ ┃ ┃ ┣ document_screen.dart
+ ┃ ┃ ┃ ┃ ┣ new_document_screen copy.dart
+ ┃ ┃ ┃ ┃ ┣ new_document_screen.dart
+ ┃ ┃ ┃ ┃ ┗ screens.dart
+ ┃ ┃ ┃ ┗ widgets
+ ┃ ┃ ┃ ┃ ┣ card_model_information.dart
+ ┃ ┃ ┃ ┃ ┣ date_time_entry_custom.dart
+ ┃ ┃ ┃ ┃ ┣ document_card.dart
+ ┃ ┃ ┃ ┃ ┣ estado_civil_dropdown.dart
+ ┃ ┃ ┃ ┃ ┣ gender_selector.dart
+ ┃ ┃ ┃ ┃ ┣ search_option_button.dart
+ ┃ ┃ ┃ ┃ ┣ search_option_button_copy_1.dart
+ ┃ ┃ ┃ ┃ ┣ search_option_button_copy_2.dart
+ ┃ ┃ ┃ ┃ ┣ select_time_entry_custom.dart
+ ┃ ┃ ┃ ┃ ┣ sex_selection_button.dart
+ ┃ ┃ ┃ ┃ ┗ widgets.dart
+ ┃ ┃ ┗ documents.dart
+ ┃ ┗ shared
+ ┃ ┃ ┣ infrastructure
+ ┃ ┃ ┃ ┣ inputs
+ ┃ ┃ ┃ ┃ ┣ document_form
+ ┃ ┃ ┃ ┃ ┃ ┣ abogado1_email copy.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ abogado1_email.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ abogado1_full_name copy.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ abogado1_full_name.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ abogado1_rut copy.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ abogado1_rut.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ abogado2_email.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ abogado2_full_name.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ abogado2_rut.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ base_string_input.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ demandado_full_name.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ demandado_rut.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ demandante_full_name.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ demandante_nacionalidad.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ demandante_rut.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ representante_legal_domicilio.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ representante_legal_full_name.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ representante_legal_rut.dart
+ ┃ ┃ ┃ ┃ ┃ ┗ tribunal.dart
+ ┃ ┃ ┃ ┃ ┣ email.dart
+ ┃ ┃ ┃ ┃ ┣ fecha_accidente_input.dart
+ ┃ ┃ ┃ ┃ ┣ fecha_input.dart
+ ┃ ┃ ┃ ┃ ┣ fecha_termino_input.dart
+ ┃ ┃ ┃ ┃ ┣ full_name.dart
+ ┃ ┃ ┃ ┃ ┣ hora_input.dart
+ ┃ ┃ ┃ ┃ ┣ inputs.dart
+ ┃ ┃ ┃ ┃ ┣ password.dart
+ ┃ ┃ ┃ ┃ ┣ positive_integer_input.dart
+ ┃ ┃ ┃ ┃ ┣ positive_num_input.dart
+ ┃ ┃ ┃ ┃ ┣ repeat_password.dart
+ ┃ ┃ ┃ ┃ ┗ simple_string_input.dart
+ ┃ ┃ ┃ ┣ services
+ ┃ ┃ ┃ ┃ ┣ app_desktop_service.dart
+ ┃ ┃ ┃ ┃ ┣ app_desktop_service_impl.dart
+ ┃ ┃ ┃ ┃ ┣ camera_gallery_service.dart
+ ┃ ┃ ┃ ┃ ┣ camera_gallery_service_impl.dart
+ ┃ ┃ ┃ ┃ ┣ file_utils copy.dart
+ ┃ ┃ ┃ ┃ ┣ file_utils.dart
+ ┃ ┃ ┃ ┃ ┣ key_value_storage_service.dart
+ ┃ ┃ ┃ ┃ ┣ key_value_storage_service_impl.dart
+ ┃ ┃ ┃ ┃ ┣ notification_service.dart
+ ┃ ┃ ┃ ┃ ┣ platform_file_utils.dart
+ ┃ ┃ ┃ ┃ ┣ platform_file_utils_mobile.dart
+ ┃ ┃ ┃ ┃ ┣ platform_file_utils_web.dart
+ ┃ ┃ ┃ ┃ ┣ platform_service.dart
+ ┃ ┃ ┃ ┃ ┗ services.dart
+ ┃ ┃ ┃ ┗ infrastructure.dart
+ ┃ ┃ ┣ providers
+ ┃ ┃ ┃ ┣ autocomplete_state.dart
+ ┃ ┃ ┃ ┣ autocomplete_state.freezed.dart
+ ┃ ┃ ┃ ┣ autocomplete_state.g.dart
+ ┃ ┃ ┃ ┗ providers.dart
+ ┃ ┃ ┣ widgets
+ ┃ ┃ ┃ ┣ advanced_autocomplete_text_field.dart
+ ┃ ┃ ┃ ┣ advanced_autocomplete_text_field_overlay copy.dart
+ ┃ ┃ ┃ ┣ advanced_autocomplete_text_field_overlay.dart
+ ┃ ┃ ┃ ┣ change_color_seed_button.dart
+ ┃ ┃ ┃ ┣ custom_documento_adicional_text_field.dart
+ ┃ ┃ ┃ ┣ custom_filled_button.dart
+ ┃ ┃ ┃ ┣ custom_large_text_field.dart
+ ┃ ┃ ┃ ┣ custom_numeric_text_field.dart
+ ┃ ┃ ┃ ┣ custom_numeric_text_field_copy_01.dart
+ ┃ ┃ ┃ ┣ custom_numeric_text_field_copy_02.dart
+ ┃ ┃ ┃ ┣ custom_text_form_field.dart
+ ┃ ┃ ┃ ┣ full_screen_loader.dart
+ ┃ ┃ ┃ ┣ geometrical_background.dart
+ ┃ ┃ ┃ ┣ password_suffix_icon.dart
+ ┃ ┃ ┃ ┣ side_menu.dart
+ ┃ ┃ ┃ ┗ widgets.dart
+ ┃ ┃ ┗ shared.dart
+ ┣ create_flutter_structure.ps1
+ ┣ main.dart

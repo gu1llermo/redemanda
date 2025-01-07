@@ -1,5 +1,18 @@
 import 'package:dio/dio.dart';
 
+abstract class AppException implements Exception {
+  final String message;
+  final String code;
+  final bool needsLogging;
+
+  AppException(this.message, this.code, {this.needsLogging = false});
+}
+
+class AuthException extends AppException {
+  AuthException(String message, {String code = 'AUTH_ERROR'})
+      : super(message, code);
+}
+
 class WrongCredentials implements Exception {}
 
 class InvalidToken implements Exception {}

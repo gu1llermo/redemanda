@@ -9,31 +9,37 @@ part 'theme_notifier.g.dart';
 // const scaffoldBackgroundColor = Color(0xFFF8F7F7);
 const colorSeed = Color(0xff424CB8);
 
+class ThemeConstants {
+  static const defaultColorSeed = Color(0xff424CB8);
+  static const themeStorageKey = 'theme_mode';
+  static const colorStorageKey = 'color_seed';
+}
+
 @Riverpod(dependencies: [keyValueStorageService])
 class ColorPreferences extends _$ColorPreferences {
   // static const _darkColorSeed = 'darkColorSeed';
   // static const _lightColorSeed = 'lightColorSeed';
-  static const _colorSeed = 'colorSeed';
+  //static const _colorSeed = 'colorSeed';
 
   @override
   Color build() {
     final keyValueStorageService = ref.watch(keyValueStorageServiceProvider);
     Future.microtask(() => _loadColorFromPrefs(keyValueStorageService));
 
-    return colorSeed;
+    return ThemeConstants.defaultColorSeed;
   }
 
   Future<void> _loadColorFromPrefs(
       KeyValueStorageService keyValueStorageService) async {
-    final color = Color(
-        await keyValueStorageService.getValue<int>(_colorSeed) ??
-            AppColorUtils.colorToInt(colorSeed));
+    final color = Color(await keyValueStorageService
+            .getValue<int>(ThemeConstants.colorStorageKey) ??
+        AppColorUtils.colorToInt(ThemeConstants.defaultColorSeed));
     // colorSeed.value);
     state = color;
   }
 
   void resetColor() {
-    changeColorSeed(colorSeed);
+    changeColorSeed(ThemeConstants.defaultColorSeed);
   }
 
   void changeColorSeed(Color newColor) {
@@ -49,13 +55,13 @@ class ColorPreferences extends _$ColorPreferences {
   Future<void> _saveColorToPrefs(
       KeyValueStorageService keyValueStorageService, Color newColor) async {
     await keyValueStorageService.setKeyValue<int>(
-        _colorSeed, AppColorUtils.colorToInt(newColor));
+        ThemeConstants.colorStorageKey, AppColorUtils.colorToInt(newColor));
   }
 }
 
 @Riverpod(dependencies: [keyValueStorageService])
 class ThemeNotifier extends _$ThemeNotifier {
-  static const String _isDarkMode = 'isDarkMode';
+  static const String _isDarkMode = ThemeConstants.themeStorageKey;
 
   @override
   ThemeMode build() {
