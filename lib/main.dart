@@ -12,8 +12,8 @@ Future<void> main() async {
   await EnvironmentConfig.initialize();
 
   await Supabase.initialize(
-    url: EnvironmentConfig.supabaseUrl,
-    anonKey: EnvironmentConfig.supabaseAnonKey,
+    url: EnvironmentConfig().supabaseUrl,
+    anonKey: EnvironmentConfig().supabaseAnonKey,
   );
 
   await AppDesktopServiceImpl().config();

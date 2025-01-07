@@ -59,8 +59,10 @@ class Auth extends _$Auth {
       _setLoggedUser(user);
     } on AuthSessionMissingException {
       _updateAuthState(authStatus: AuthStatus.notAuthenticated);
+    } on CustomError catch (e) {
+      logout(e.errorMessage);
     } catch (e) {
-      logout();
+      logout(e.toString());
     }
   }
 
@@ -84,11 +86,16 @@ class Auth extends _$Auth {
   }
 
   Future<void> logout([String? errorMessage]) async {
-    await _authRepository.logout();
-    _updateAuthState(
-      authStatus: AuthStatus.notAuthenticated,
-      errorMessage: errorMessage ?? '',
-    );
+    try {
+      await _authRepository.logout();
+    } catch (e) {
+      // no hace nada
+    } finally {
+      _updateAuthState(
+        authStatus: AuthStatus.notAuthenticated,
+        errorMessage: errorMessage ?? '',
+      );
+    }
   }
 }
 
