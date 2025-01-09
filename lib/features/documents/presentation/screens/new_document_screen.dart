@@ -62,6 +62,10 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
       (previous, next) {
         if (next.errorMessage.isEmpty) return;
         AppErrorsUtils.onError(context, next.errorMessage);
+        // quiero colocar el mensaje de error del state en ''
+        // otra vez, para que vuelva a mostrar el error
+        // solo cuando vuelva a pasar
+        ref.read(documentFormProvider.notifier).resetError();
       },
     );
 
@@ -159,7 +163,11 @@ class _InformationState extends ConsumerState<_Information>
     final newDocumentState = ref.watch(documentFormProvider);
 
     return ListView(
-      padding: const EdgeInsets.only(bottom: 40),
+      padding: const EdgeInsets.only(
+        bottom: 100,
+        left: 5,
+        right: 5,
+      ),
       children: [
         SizedBox(height: 5),
         // _InformacionDemandante(),
@@ -467,7 +475,7 @@ class _GenerateButton extends ConsumerWidget {
     //   onPressed: () {
 
     // },);
-    return FloatingActionButton(
+    return FloatingActionButton.small(
       tooltip: 'Generar Documento',
       onPressed: newDocumentState.isPosting
           ? null
@@ -603,6 +611,9 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
     final ancho = size.width;
     final factorAltura = ancho > 600 ? 0.2 : 0.3;
     return ListView(
+      padding: const EdgeInsets.only(
+        bottom: 60,
+      ),
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -833,6 +844,9 @@ class _DaniosState extends ConsumerState<_Danios>
     final altura = MediaQuery.sizeOf(context).height;
 
     return ListView(
+      padding: const EdgeInsets.only(
+        bottom: 60,
+      ),
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -978,6 +992,9 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
         .every((element) => element.isNotEmpty);
 
     return ListView(
+      padding: const EdgeInsets.only(
+        bottom: 60,
+      ),
       physics: ScrollPhysics(),
       children: [
         Padding(
