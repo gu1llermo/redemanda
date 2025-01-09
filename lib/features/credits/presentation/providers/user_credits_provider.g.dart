@@ -6,7 +6,7 @@ part of 'user_credits_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userCreditsHash() => r'1aefec0145b8451725d83be072c8ad9cc66cb601';
+String _$userCreditsHash() => r'7e27451e1a4acbdf368bd1c03e1c3327a84f1dce';
 
 /// Copied from Dart SDK
 class _SystemHash {
