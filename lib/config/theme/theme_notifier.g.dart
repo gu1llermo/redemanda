@@ -25,7 +25,7 @@ final keyValueStorageServiceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef KeyValueStorageServiceRef = ProviderRef<KeyValueStorageService>;
-String _$colorPreferencesHash() => r'284f7f688e07fc5d1246917b4da653796688ee11';
+String _$colorPreferencesHash() => r'0709adc3b7423954ba667abb5a404c37448e79a6';
 
 /// See also [ColorPreferences].
 @ProviderFor(ColorPreferences)
@@ -44,7 +44,7 @@ final colorPreferencesProvider =
 );
 
 typedef _$ColorPreferences = AutoDisposeNotifier<Color>;
-String _$themeNotifierHash() => r'20c5e723ff0dd96b9d7685ca80c88b54c7bbef2e';
+String _$themeNotifierHash() => r'e94434185bbdee85768f78a3df809b6fc97c4eab';
 
 /// See also [ThemeNotifier].
 @ProviderFor(ThemeNotifier)
