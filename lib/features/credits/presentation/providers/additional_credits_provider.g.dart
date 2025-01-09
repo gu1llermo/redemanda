@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_credits_provider.dart';
+part of 'additional_credits_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userCreditsHash() => r'692a0ecbafabee39947bd52ca5d489ac7c17f302';
+String _$additionalCreditsHash() => r'7cd937fc72a6fbb63d29d92ef8b6e08870c3a65e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,27 +29,36 @@ class _SystemHash {
   }
 }
 
-/// See also [userCredits].
-@ProviderFor(userCredits)
-const userCreditsProvider = UserCreditsFamily();
+abstract class _$AdditionalCredits
+    extends BuildlessAutoDisposeStreamNotifier<int> {
+  late final String userId;
 
-/// See also [userCredits].
-class UserCreditsFamily extends Family<AsyncValue<int>> {
-  /// See also [userCredits].
-  const UserCreditsFamily();
+  Stream<int> build(
+    String userId,
+  );
+}
 
-  /// See also [userCredits].
-  UserCreditsProvider call(
+/// See also [AdditionalCredits].
+@ProviderFor(AdditionalCredits)
+const additionalCreditsProvider = AdditionalCreditsFamily();
+
+/// See also [AdditionalCredits].
+class AdditionalCreditsFamily extends Family<AsyncValue<int>> {
+  /// See also [AdditionalCredits].
+  const AdditionalCreditsFamily();
+
+  /// See also [AdditionalCredits].
+  AdditionalCreditsProvider call(
     String userId,
   ) {
-    return UserCreditsProvider(
+    return AdditionalCreditsProvider(
       userId,
     );
   }
 
   @override
-  UserCreditsProvider getProviderOverride(
-    covariant UserCreditsProvider provider,
+  AdditionalCreditsProvider getProviderOverride(
+    covariant AdditionalCreditsProvider provider,
   ) {
     return call(
       provider.userId,
@@ -57,8 +66,7 @@ class UserCreditsFamily extends Family<AsyncValue<int>> {
   }
 
   static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    fixedCreditsProvider,
-    additionalCreditsProvider
+    supabaseClientProvider
   ];
 
   @override
@@ -66,10 +74,8 @@ class UserCreditsFamily extends Family<AsyncValue<int>> {
 
   static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
       <ProviderOrFamily>{
-    fixedCreditsProvider,
-    ...?fixedCreditsProvider.allTransitiveDependencies,
-    additionalCreditsProvider,
-    ...?additionalCreditsProvider.allTransitiveDependencies
+    supabaseClientProvider,
+    ...?supabaseClientProvider.allTransitiveDependencies
   };
 
   @override
@@ -77,32 +83,30 @@ class UserCreditsFamily extends Family<AsyncValue<int>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'userCreditsProvider';
+  String? get name => r'additionalCreditsProvider';
 }
 
-/// See also [userCredits].
-class UserCreditsProvider extends AutoDisposeStreamProvider<int> {
-  /// See also [userCredits].
-  UserCreditsProvider(
+/// See also [AdditionalCredits].
+class AdditionalCreditsProvider
+    extends AutoDisposeStreamNotifierProviderImpl<AdditionalCredits, int> {
+  /// See also [AdditionalCredits].
+  AdditionalCreditsProvider(
     String userId,
   ) : this._internal(
-          (ref) => userCredits(
-            ref as UserCreditsRef,
-            userId,
-          ),
-          from: userCreditsProvider,
-          name: r'userCreditsProvider',
+          () => AdditionalCredits()..userId = userId,
+          from: additionalCreditsProvider,
+          name: r'additionalCreditsProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$userCreditsHash,
-          dependencies: UserCreditsFamily._dependencies,
+                  : _$additionalCreditsHash,
+          dependencies: AdditionalCreditsFamily._dependencies,
           allTransitiveDependencies:
-              UserCreditsFamily._allTransitiveDependencies,
+              AdditionalCreditsFamily._allTransitiveDependencies,
           userId: userId,
         );
 
-  UserCreditsProvider._internal(
+  AdditionalCreditsProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -115,13 +119,20 @@ class UserCreditsProvider extends AutoDisposeStreamProvider<int> {
   final String userId;
 
   @override
-  Override overrideWith(
-    Stream<int> Function(UserCreditsRef provider) create,
+  Stream<int> runNotifierBuild(
+    covariant AdditionalCredits notifier,
   ) {
+    return notifier.build(
+      userId,
+    );
+  }
+
+  @override
+  Override overrideWith(AdditionalCredits Function() create) {
     return ProviderOverride(
       origin: this,
-      override: UserCreditsProvider._internal(
-        (ref) => create(ref as UserCreditsRef),
+      override: AdditionalCreditsProvider._internal(
+        () => create()..userId = userId,
         from: from,
         name: null,
         dependencies: null,
@@ -133,13 +144,14 @@ class UserCreditsProvider extends AutoDisposeStreamProvider<int> {
   }
 
   @override
-  AutoDisposeStreamProviderElement<int> createElement() {
-    return _UserCreditsProviderElement(this);
+  AutoDisposeStreamNotifierProviderElement<AdditionalCredits, int>
+      createElement() {
+    return _AdditionalCreditsProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UserCreditsProvider && other.userId == userId;
+    return other is AdditionalCreditsProvider && other.userId == userId;
   }
 
   @override
@@ -153,17 +165,18 @@ class UserCreditsProvider extends AutoDisposeStreamProvider<int> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin UserCreditsRef on AutoDisposeStreamProviderRef<int> {
+mixin AdditionalCreditsRef on AutoDisposeStreamNotifierProviderRef<int> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
-class _UserCreditsProviderElement extends AutoDisposeStreamProviderElement<int>
-    with UserCreditsRef {
-  _UserCreditsProviderElement(super.provider);
+class _AdditionalCreditsProviderElement
+    extends AutoDisposeStreamNotifierProviderElement<AdditionalCredits, int>
+    with AdditionalCreditsRef {
+  _AdditionalCreditsProviderElement(super.provider);
 
   @override
-  String get userId => (origin as UserCreditsProvider).userId;
+  String get userId => (origin as AdditionalCreditsProvider).userId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
