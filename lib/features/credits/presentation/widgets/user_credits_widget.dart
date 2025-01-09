@@ -17,6 +17,9 @@ class UserCreditsWidget extends ConsumerWidget {
             final fixedCredits = ref.watch(fixedCreditsProvider(userId));
             final additionalCredits =
                 ref.watch(additionalCreditsProvider(userId));
+            final fixedCreditsValue = fixedCredits.value ?? 0;
+            final additionalCreditsValue = additionalCredits.value ?? 0;
+            final total = fixedCreditsValue + additionalCreditsValue;
 
             return AlertDialog(
               shape: RoundedRectangleBorder(
@@ -32,7 +35,7 @@ class UserCreditsWidget extends ConsumerWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '${fixedCredits.value ?? 0 + (additionalCredits.value ?? 0)} Crédito${(fixedCredits.value ?? 0 + (additionalCredits.value ?? 0)) != 1 ? 's' : ''}',
+                    '$total Crédito${total != 1 ? 's' : ''}',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
