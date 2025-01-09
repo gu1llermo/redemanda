@@ -24,11 +24,14 @@
 //     // Emitir valor inicial
 //     final initialData = await supabase
 //         .from('users')
-//         .select('current_credits')
+//         .select('fixed_credits, additional_credits')
 //         .eq('id', userId)
 //         .single();
 
-//     yield initialData['current_credits'];
+//     final totalInitialCredits = (initialData['fixed_credits'] as int) +
+//         (initialData['additional_credits'] as int);
+
+//     yield totalInitialCredits;
 
 //     // Crear un StreamController para manejar las actualizaciones
 //     final controller = StreamController<int>.broadcast();
@@ -44,8 +47,11 @@
 //             value: userId,
 //           ),
 //           callback: (payload) {
-//             final newCredits = payload.newRecord['current_credits'] as int;
-//             controller.add(newCredits);
+//             final newFixedCredits = payload.newRecord['fixed_credits'] as int;
+//             final newAdditionalCredits =
+//                 payload.newRecord['additional_credits'] as int;
+//             final totalCredits = newFixedCredits + newAdditionalCredits;
+//             controller.add(totalCredits);
 //           },
 //         );
 
