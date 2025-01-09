@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'additional_credits_provider.dart';
-import 'fixed_credits_provider.dart';
+import 'providers.dart';
 
 part 'user_credits_provider.g.dart';
 
