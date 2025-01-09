@@ -152,6 +152,7 @@ class _DocumentsView extends ConsumerWidget {
         child: documentsState.isLoading
             ? Center(child: CircularProgressIndicator())
             : MasonryGridView.builder(
+                padding: const EdgeInsets.only(bottom: 100),
                 physics: const AlwaysScrollableScrollPhysics(),
                 gridDelegate:
                     const SliverSimpleGridDelegateWithMaxCrossAxisExtent(
