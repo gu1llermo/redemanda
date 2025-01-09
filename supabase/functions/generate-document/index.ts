@@ -43,11 +43,25 @@ serve(async (req) => {
 
     const { data: userData, error: creditsError } = await supabaseClient
       .from('users')
-      .select('current_credits')
+      .select('fixed_credits, additional_credits')
       .eq('id', user.id)
       .single()
 
-    if (creditsError || !userData || userData.current_credits < 1) {
+    if (creditsError || !userData) {
+      return new Response(
+        JSON.stringify({ error: 'Error fetching user credits' }), 
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500 
+        }
+      )
+    }
+
+    // Nueva lógica de validación de créditos
+    const creditType = userData.fixed_credits >= 1 ? 'fixed' : 
+                      userData.additional_credits >= 1 ? 'additional' : 'insufficient'
+
+    if (creditType === 'insufficient') {
       return new Response(
         JSON.stringify({ error: 'Insufficient credits' }), 
         { 
@@ -88,11 +102,17 @@ serve(async (req) => {
 
     const base64Doc = encodeBase64(buf)
 
-    const { error: transactionError } = await supabaseClient.rpc('handle_document_creation', {
+    const { error: transactionError } = await supabaseClient.rpc('handle_document_creation_v2', {
       user_id: user.id,
       doc_type: name_template,
-      credits_used: 1
+      credits_used: 1,
+      credit_type: creditType
     })
+    // const { error: transactionError } = await supabaseClient.rpc('handle_document_creation', {
+    //   user_id: user.id,
+    //   doc_type: name_template,
+    //   credits_used: 1
+    // })
 
     if (transactionError) {
       return new Response(

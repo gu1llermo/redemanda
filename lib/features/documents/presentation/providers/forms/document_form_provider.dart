@@ -428,6 +428,10 @@ class DocumentForm extends _$DocumentForm {
     }
   }
 
+  void resetError() {
+    state = state.copyWith(errorMessage: '');
+  }
+
   bool _isValidInfoPage(DocumentFormState newState) {
     return Formz.validate([
       // Demandante
