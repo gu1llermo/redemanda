@@ -33,7 +33,8 @@ class ColorPreferences extends _$ColorPreferences {
       KeyValueStorageService keyValueStorageService) async {
     final color = Color(await keyValueStorageService
             .getValue<int>(ThemeConstants.colorStorageKey) ??
-        AppColorUtils.colorToInt(ThemeConstants.defaultColorSeed));
+        ThemeConstants.defaultColorSeed.toInt());
+    // AppColorUtils.colorToInt(ThemeConstants.defaultColorSeed));
     // colorSeed.value);
     state = color;
   }
@@ -55,7 +56,8 @@ class ColorPreferences extends _$ColorPreferences {
   Future<void> _saveColorToPrefs(
       KeyValueStorageService keyValueStorageService, Color newColor) async {
     await keyValueStorageService.setKeyValue<int>(
-        ThemeConstants.colorStorageKey, AppColorUtils.colorToInt(newColor));
+        ThemeConstants.colorStorageKey, newColor.toInt());
+    // ThemeConstants.colorStorageKey, AppColorUtils.colorToInt(newColor));
   }
 }
 
