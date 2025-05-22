@@ -82,6 +82,7 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
           bottom: TabBar(
             controller: _tabController,
             isScrollable: true,
+            tabAlignment: TabAlignment.start,
             tabs: const [
               Tab(
                 // icon: Icon(Icons.info_outline_rounded),
