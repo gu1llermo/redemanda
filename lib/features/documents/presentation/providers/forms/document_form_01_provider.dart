@@ -7,7 +7,7 @@ import '../../../../../config/config.dart';
 import '../../../domain/domain.dart';
 import '../providers.dart';
 
-part 'document_form_provider.g.dart';
+part 'document_form_01_provider.g.dart';
 
 @Riverpod(dependencies: [DocumentsPagination])
 class DocumentForm extends _$DocumentForm {

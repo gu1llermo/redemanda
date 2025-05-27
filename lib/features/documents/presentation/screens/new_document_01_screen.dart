@@ -11,14 +11,18 @@ import '../../../credits/presentation/widgets/widgets.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
-class NewDocumentScreen extends ConsumerStatefulWidget {
-  const NewDocumentScreen({super.key});
+class NewDocument01Screen extends ConsumerStatefulWidget {
+  const NewDocument01Screen({super.key});
+  static const path = 'new-document-01';
+
+  static const title = 'Plantilla nro 1';
+  static const description = 'POR DEFINIR, ES LA PLANTILLA DE BENITO';
 
   @override
-  ConsumerState<NewDocumentScreen> createState() => _NewDocumentScreenState();
+  ConsumerState<NewDocument01Screen> createState() => _NewDocumentScreenState();
 }
 
-class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
+class _NewDocumentScreenState extends ConsumerState<NewDocument01Screen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 

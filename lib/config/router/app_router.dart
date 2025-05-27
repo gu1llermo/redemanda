@@ -40,8 +40,24 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const DocumentsScreen(),
         routes: [
           GoRoute(
-            path: 'new-document',
-            builder: (context, state) => NewDocumentScreen(),
+            path: NewDocument01Screen.path,
+            builder: (context, state) => NewDocument01Screen(),
+          ),
+          GoRoute(
+            path: NewDocument02Screen.path,
+            builder: (context, state) => NewDocument02Screen(),
+          ),
+          GoRoute(
+            path: NewDocument03Screen.path,
+            builder: (context, state) => NewDocument03Screen(),
+          ),
+          GoRoute(
+            path: NewDocument04Screen.path,
+            builder: (context, state) => NewDocument04Screen(),
+          ),
+          GoRoute(
+            path: NewDocument05Screen.path,
+            builder: (context, state) => NewDocument05Screen(),
           ),
         ],
       ),
