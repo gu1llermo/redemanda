@@ -6,14 +6,15 @@ class NewDocument03Screen extends ConsumerStatefulWidget {
   static const path = 'new-document-03';
   static const title = 'Plantilla nro 3';
   static const description =
-      'Reconocimiento de relación laboral con nulidad (sin pago de imposiciones), con daño moral y DOS empresas demandadas solidaridad';
+      'DDA_recon Rla Lab Autodespido nulidad SIN solidaria Daño moral.docx';
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _NewDocument03ScreenState();
 }
 
-class _NewDocument03ScreenState extends ConsumerState<NewDocument03Screen> {
+class _NewDocument03ScreenState extends ConsumerState<NewDocument03Screen>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

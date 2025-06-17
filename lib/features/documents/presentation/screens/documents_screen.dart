@@ -182,6 +182,11 @@ class _CreateDocuments extends ConsumerWidget {
 
   static const _plantillas = [
     Plantilla(
+      title: NewDocument01Screen.title,
+      description: NewDocument01Screen.description,
+      path: NewDocument01Screen.path,
+    ),
+    Plantilla(
       title: NewDocument02Screen.title,
       description: NewDocument02Screen.description,
       path: NewDocument02Screen.path,
@@ -201,6 +206,7 @@ class _CreateDocuments extends ConsumerWidget {
       description: NewDocument05Screen.description,
       path: NewDocument05Screen.path,
     ),
+    // AQUI VAS AGREGANDO LAS PLANTILLAS
   ];
 
   @override
@@ -219,10 +225,9 @@ class _CreateDocuments extends ConsumerWidget {
                         child: ListTile(
                           title: Text(_plantillas[index].title),
                           subtitle: Text(_plantillas[index].description),
-                          trailing: IconButton(
-                              onPressed: () =>
-                                  context.push('/${_plantillas[index].path}'),
-                              icon: Icon(Icons.navigate_next_rounded)),
+                          onTap: () =>
+                              context.push('/${_plantillas[index].path}'),
+                          trailing: Icon(Icons.navigate_next_rounded),
                         ),
                       ),
                     ),
