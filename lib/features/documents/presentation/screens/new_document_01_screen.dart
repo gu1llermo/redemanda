@@ -8,7 +8,7 @@ import 'package:redemanda/features/shared/shared.dart';
 import '../../../../config/config.dart';
 import '../../../../core/core.dart';
 import '../../../credits/presentation/widgets/widgets.dart';
-import '../providers/providers.dart';
+import '../providers/forms/document_form_01_provider.dart';
 import '../widgets/widgets.dart';
 
 final _tabsView = const [
@@ -141,6 +141,82 @@ class _NewDocumentScreenState extends ConsumerState<NewDocument01Screen>
         ),
         floatingActionButton: _GenerateButton(),
       ),
+    );
+  }
+}
+
+class _GenerateButton extends ConsumerWidget {
+  const _GenerateButton();
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final newDocumentState = ref.watch(documentForm01Provider);
+    // return FloatingActionButton(
+    //   onPressed: () {
+
+    // },);
+    return FloatingActionButton.small(
+      tooltip: 'Generar Documento',
+      onPressed: newDocumentState.isPosting
+          ? null
+          : () {
+              ref.read(documentForm01Provider.notifier).onFormSubmit().then(
+                (document) {
+                  if (document != null) {
+                    // aquí tengo que pensar qué hacer
+                    if (!context.mounted) return;
+
+                    AppErrorsUtils.onSucces(
+                      context,
+                      'Documento generado correctamente!',
+                      Row(
+                        children: [
+                          if (!kIsWeb)
+                            TextButton(
+                              onPressed: () {
+                                NotificationService()
+                                    .dismissCurrentNotification();
+                                FileUtils.openWithDefaultApp(
+                                  context: context,
+                                  fileBytes: document.docxFile,
+                                  fileExtension: 'docx', // sin el punto
+                                );
+                              },
+                              child: const Text(
+                                'Ver',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          const SizedBox(width: 10),
+                          TextButton(
+                            onPressed: () {
+                              NotificationService()
+                                  .dismissCurrentNotification();
+                              context.pop();
+                            },
+                            child: const Text(
+                              'Salir',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    //   context.pop();
+                  }
+                },
+              );
+            },
+      child: newDocumentState.isPosting
+          ? SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ),
+            )
+          : Icon(Icons.create_rounded),
     );
   }
 }
@@ -468,81 +544,7 @@ class _InformacionDemandante extends StatelessWidget {
   }
 }
 
-class _GenerateButton extends ConsumerWidget {
-  const _GenerateButton();
 
-  @override
-  Widget build(BuildContext context, ref) {
-    final newDocumentState = ref.watch(documentForm01Provider);
-    // return FloatingActionButton(
-    //   onPressed: () {
-
-    // },);
-    return FloatingActionButton.small(
-      tooltip: 'Generar Documento',
-      onPressed: newDocumentState.isPosting
-          ? null
-          : () {
-              ref.read(documentForm01Provider.notifier).onFormSubmit().then(
-                (document) {
-                  if (document != null) {
-                    // aquí tengo que pensar qué hacer
-                    if (!context.mounted) return;
-
-                    AppErrorsUtils.onSucces(
-                      context,
-                      'Documento generado correctamente!',
-                      Row(
-                        children: [
-                          if (!kIsWeb)
-                            TextButton(
-                              onPressed: () {
-                                NotificationService()
-                                    .dismissCurrentNotification();
-                                FileUtils.openWithDefaultApp(
-                                  context: context,
-                                  fileBytes: document.docxFile,
-                                  fileExtension: 'docx', // sin el punto
-                                );
-                              },
-                              child: const Text(
-                                'Ver',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          const SizedBox(width: 10),
-                          TextButton(
-                            onPressed: () {
-                              NotificationService()
-                                  .dismissCurrentNotification();
-                              context.pop();
-                            },
-                            child: const Text(
-                              'Salir',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-
-                    //   context.pop();
-                  }
-                },
-              );
-            },
-      child: newDocumentState.isPosting
-          ? SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-              ),
-            )
-          : Icon(Icons.create_rounded),
-    );
-  }
-}
 
 // class _NextButton extends ConsumerWidget {
 //   const _NextButton(this.nroPaginas);

@@ -18,4 +18,10 @@ enum Gender {
   String donCortesia() {
     return this == Gender.hombre ? 'don' : 'doña';
   }
+  String colocaAO() {
+    return this == Gender.hombre ? 'o' : 'a';
+  }
+  String actorAO() {
+    return this == Gender.hombre ? 'el actor' : 'la actora';
+  }
 }

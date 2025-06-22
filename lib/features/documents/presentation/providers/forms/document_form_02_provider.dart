@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../../config/config.dart';
@@ -24,7 +22,7 @@ class DocumentForm02 extends _$DocumentForm02 {
     );
   }
 
-///* Demandante
+///* DEMANDANTE
   void onDemandanteGenderChanged(Gender value) {
     state = state.copyWith(
       demandanteGender: value,
@@ -71,7 +69,7 @@ class DocumentForm02 extends _$DocumentForm02 {
     state = state.copyWith(demandanteDireccion: demandanteDireccionValidated);
   }
 
-///* Abogado 1
+///* ABOGADO 1
   void onAbogado1FullNameChanged(String value) {
     final abogado1FullNameChanged = state.abogado1FullName.onChanged(value);
     state = state.copyWith(abogado1FullName: abogado1FullNameChanged);
@@ -102,7 +100,7 @@ class DocumentForm02 extends _$DocumentForm02 {
     state = state.copyWith(abogado1Email: abogado1EmailValidated);
   }
 
-  //* Abogado 2
+  //* ABOGADO 2
   void onAbogado2FullNameChanged(String value) {
     final abogado2FullNameChanged = state.abogado2FullName.onChanged(value);
     state = state.copyWith(abogado2FullName: abogado2FullNameChanged);
@@ -203,10 +201,6 @@ class DocumentForm02 extends _$DocumentForm02 {
     state = state.copyWith(representanteLegalPrincipalDomicilio: representanteLegalPrincipalDomicilioValidated);
   }
   //* Representante Legal solidario
-  void onRepresentanteLegalSolidarioGenderChanged(Gender value) {
-    state = state.copyWith(representanteLegalSolidarioGender: value);
-  }
-
   void onRepresentanteLegalSolidarioFullNameChanged(String value) {
     final representanteLegalSolidarioFullNameChanged = state.representanteLegalSolidarioFullName.onChanged(value);
     state = state.copyWith(representanteLegalSolidarioFullName: representanteLegalSolidarioFullNameChanged);
@@ -248,7 +242,10 @@ class DocumentForm02 extends _$DocumentForm02 {
   void onFechaInicioRelacionLaboralChanged(DateTime value) {
     final fechaInicioRelacionLaboralChanged = state.fechaInicioRelacionLaboral.onChanged(value);
     state = state.copyWith( fechaInicioRelacionLaboral: fechaInicioRelacionLaboralChanged);
-    
+  }
+  void onFechaInicioRelacionLaboralValidate() {
+    final fechaInicioRelacionLaboralValidated = state.fechaInicioRelacionLaboral.validate();
+    state = state.copyWith( fechaInicioRelacionLaboral: fechaInicioRelacionLaboralValidated);
   }
 
   void onFechaTerminoRelacionLaboralChanged(DateTime value) {
@@ -257,119 +254,183 @@ class DocumentForm02 extends _$DocumentForm02 {
     .onChanged(value);
     state = state.copyWith(fechaTerminoRelacionLaboral: fechaTerminoRelacionLaboralChanged);
   }
+  void onFechaTerminoRelacionLaboralValidate() {
+    final fechaTerminoRelacionLaboralValidated = state.fechaTerminoRelacionLaboral.validate();
+    state = state.copyWith( fechaTerminoRelacionLaboral: fechaTerminoRelacionLaboralValidated);
+  }
 
-  void onCargoTrabajadorChanged(String value) {
-    final cargoTrabajador = SimpleStringInput.dirty(value);
-    final newState = state.copyWith(cargoTrabajador: cargoTrabajador);
-    _touchEveryThing(newState);
+  void onFechaAutodespidoChanged(DateTime value) {
+    final fechaAutodespidoChanged = state.fechaAutodespido.onChanged(value);
+    state = state.copyWith( fechaAutodespido: fechaAutodespidoChanged);
+  }
+  void onFechaAutodespidoValidate() {
+    final fechaAutodespidoValidated = state.fechaAutodespido.validate();
+    state = state.copyWith( fechaAutodespido: fechaAutodespidoValidated);
+  }
+
+  void onFechaReclamoDtChanged(DateTime value) {
+    final fechaReclamoDtChanged = state.fechaReclamoDt.onChanged(value);
+    state = state.copyWith( fechaReclamoDt: fechaReclamoDtChanged);
+  }
+  void onFechaReclamoDtValidate() {
+    final fechaReclamoDtValidated = state.fechaReclamoDt.validate();
+    state = state.copyWith( fechaReclamoDt: fechaReclamoDtValidated);
+  }
+
+  void onFechaComparendoDtChanged(DateTime value) {
+    final fechaComparendoDtChanged = state.fechaComparendoDt.onChanged(value);
+    state = state.copyWith( fechaComparendoDt: fechaComparendoDtChanged);
+  }
+  void onFechaComparendoDtValidate() {
+    final fechaComparendoDtValidated = state.fechaComparendoDt.validate();
+    state = state.copyWith( fechaComparendoDt: fechaComparendoDtValidated);
+  }
+
+  void onCargoDemandanteChanged(String value) {
+    final cargoDemandanteChanged = state.cargoDemandante.onChanged(value);
+    state = state.copyWith(cargoDemandante: cargoDemandanteChanged);
+  }
+  void onCargoDemandanteValidate() {
+    final cargoDemandanteValidated = state.cargoDemandante.validate();
+    state = state.copyWith(cargoDemandante: cargoDemandanteValidated);
+  }
+
+  void onComunaChanged(String value) {
+    final comunaChanged = state.comuna.onChanged(value);
+    state = state.copyWith(comuna: comunaChanged);
+  }
+  void onComunaValidate() {
+    final comunaValidated = state.comuna.validate();
+    state = state.copyWith(comuna: comunaValidated);
   }
 
   void onTipoContratoChanged(String value) {
-    final tipoContrato = SimpleStringInput.dirty(value);
-    final newState = state.copyWith(tipoContrato: tipoContrato);
-    _touchEveryThing(newState);
+    final tipoContratoChanged = state.tipoContrato.onChanged(value);
+    state = state.copyWith(tipoContrato: tipoContratoChanged);
+  }
+  void onTipoContratoValidate() {
+    final tipoContratoValidated = state.tipoContrato.validate();
+    state = state.copyWith(tipoContrato: tipoContratoValidated);
   }
 
   void onHorasSemanalesChanged(String value) {
-    final horasSemanales = PositiveIntegerInput.dirty(value);
-    final newState = state.copyWith(horasSemanales: horasSemanales);
-    _touchEveryThing(newState);
+    final horasSemanalesChanged = state.horasSemanales.onChanged(value);
+    state = state.copyWith(horasSemanales: horasSemanalesChanged);
+  }
+  void onHorasSemanalesValidate() {
+    final horasSemanalesValidated = state.horasSemanales.validate();
+    state = state.copyWith(horasSemanales: horasSemanalesValidated);
   }
 
   void onRemuneracionChanged(String value) {
-    final remuneracion = PositiveNumInput.dirty(value);
-    final newState = state.copyWith(remuneracion: remuneracion);
-    _touchEveryThing(newState);
+    final remuneracionChanged = state.remuneracion.onChanged(value);
+    state = state.copyWith(remuneracion: remuneracionChanged);
+  }
+  void onRemuneracionValidate() {
+    final remuneracionValidated = state.remuneracion.validate();
+    state = state.copyWith(remuneracion: remuneracionValidated);
+  }
+  void onRemuneracionPor50Changed(String value) {
+    final remuneracionPor50Changed = state.remuneracionPor50.onChanged(value);
+    state = state.copyWith(remuneracionPor50: remuneracionPor50Changed);
+  }
+  void onRemuneracionPor50Validate() {
+    final remuneracionPor50Validated = state.remuneracionPor50.validate();
+    state = state.copyWith(remuneracionPor50: remuneracionPor50Validated);
   }
 
-  //* Detalles del Accidente
-  void onFechaAccidenteLaboralChanged(DateTime value) {
-    final fechaAccidenteLaboral = FechaAccidenteInput.dirty(
-      value,
-      fechaInicio: state.fechaInicioRelacionLaboral.value,
-      fechaTermino: state.fechaTerminoRelacionLaboral.value,
-    );
-    final newState =
-        state.copyWith(fechaAccidenteLaboral: fechaAccidenteLaboral);
-    _touchEveryThing(newState);
+  void onHorarioJornadaTrabajoChanged(String value) {
+    final horarioJornadaTrabajoChanged = state.horarioJornadaTrabajo.onChanged(value);
+    state = state.copyWith(horarioJornadaTrabajo: horarioJornadaTrabajoChanged);
+  }
+  void onHorarioJornadaTrabajoValidate() {
+    final horarioJornadaTrabajoValidated = state.horarioJornadaTrabajo.validate();
+    state = state.copyWith(horarioJornadaTrabajo: horarioJornadaTrabajoValidated);
   }
 
-  void onHoraAccidenteChanged(TimeOfDay value) {
-    final horaAccidente = HoraInput.dirty(value);
-    final newState = state.copyWith(horaAccidente: horaAccidente);
-    _touchEveryThing(newState);
+  void onLaboresTrabajadorChanged(String value) {
+    final laboresTrabajadorChanged = state.laboresTrabajador.onChanged(value);
+    state = state.copyWith(laboresTrabajador: laboresTrabajadorChanged);
+  }
+  void onLaboresTrabajadorValidate() {
+    final laboresTrabajadorValidated = state.laboresTrabajador.validate();
+    state = state.copyWith(laboresTrabajador: laboresTrabajadorValidated);
+  }
+  void onServiciosPrestadosChanged(String value) {
+    final serviciosPrestadosChanged = state.serviciosPrestados.onChanged(value);
+    state = state.copyWith(serviciosPrestados: serviciosPrestadosChanged);
+  }
+  void onServiciosPrestadosValidate() {
+    final serviciosPrestadosValidated = state.serviciosPrestados.validate();
+    state = state.copyWith(serviciosPrestados: serviciosPrestadosValidated);
   }
 
-  void onRelatoAccidenteExtensoChanged(String value) {
-    final relatoAccidenteExtenso = SimpleStringInput.dirty(value);
-    final newState =
-        state.copyWith(relatoAccidenteExtenso: relatoAccidenteExtenso);
-    _touchEveryThing(newState);
+  void onTipoAFPChanged(String value) {
+    final tipoAFPChanged = state.tipoAFP.onChanged(value);
+    state = state.copyWith(tipoAFP: tipoAFPChanged);
+  }
+  void onTipoAFPValidate() {
+    final tipoAFPValidated = state.tipoAFP.validate();
+    state = state.copyWith(tipoAFP: tipoAFPValidated);
   }
 
-  void onRelatoHechosPosterioresChanged(String value) {
-    final relatoHechosPosteriores = SimpleStringInput.dirty(value);
-    final newState =
-        state.copyWith(relatoHechosPosteriores: relatoHechosPosteriores);
-    _touchEveryThing(newState);
+  void onRegionChanged(String value) {
+    final regionChanged = state.region.onChanged(value);
+    state = state.copyWith(region: regionChanged);
+  }
+  void onRegionValidate() {
+    final regionValidated = state.region.validate();
+    state = state.copyWith(region: regionValidated);
+  }
+
+  void onCausalTerminoChanged(String value) {
+    final causalTerminoChanged = state.causalTermino.onChanged(value);
+    state = state.copyWith(causalTermino: causalTerminoChanged);
+  }
+  void onCausalTerminoValidate() {
+    final causalTerminoValidated = state.causalTermino.validate();
+    state = state.copyWith(causalTermino: causalTerminoValidated);
+  }
+
+  void onPeriodoImposicionesChanged(String value) {
+    final periodoImposicionesChanged = state.periodoImposiciones.onChanged(value);
+    state = state.copyWith(periodoImposiciones: periodoImposicionesChanged);
+  }
+  void onPeriodoImposicionesValidate() {
+    final periodoImposicionesValidated = state.periodoImposiciones.validate();
+    state = state.copyWith(periodoImposiciones: periodoImposicionesValidated);
   }
 
   //* Daños y perjuicios
-  void onPorcentajeIncapacidadChanged(String value) {
-    final porcentajeIncapacidad = PositiveIntegerInput.dirty(value);
-    final newState =
-        state.copyWith(porcentajeIncapacidad: porcentajeIncapacidad);
-    _touchEveryThing(newState);
+  
+  void onFeriadoLegalDiasChanged(String value) {
+    final feriadoLegalDiasChanged = state.feriadoLegalDias.onChanged(value);
+    state = state.copyWith(feriadoLegalDias: feriadoLegalDiasChanged);
+  }
+  void onFeriadoLegalDiasValidate() {
+    final feriadoLegalDiasValidated = state.feriadoLegalDias.validate();
+    state = state.copyWith(feriadoLegalDias: feriadoLegalDiasValidated);
   }
 
-  void onMontoADemandarChanged(String value) {
-    final montoADemandar = PositiveNumInput.dirty(value);
-    final newState = state.copyWith(montoADemandar: montoADemandar);
-    _touchEveryThing(newState);
+  void onMontoFeriadoLegalChanged(String value) {
+    final montoFeriadoLegalChanged = state.montoFeriadoLegal.onChanged(value);
+    state = state.copyWith(montoFeriadoLegal: montoFeriadoLegalChanged);
+  }
+  void onMontoFeriadoLegalValidate() {
+    final montoFeriadoLegalValidated = state.montoFeriadoLegal.validate();
+    state = state.copyWith(montoFeriadoLegal: montoFeriadoLegalValidated);
   }
 
-  void onRelatoDaniosEsteticosChanged(String value) {
-    final relatoDaniosEsteticos = SimpleStringInput.dirty(value);
-    final newState =
-        state.copyWith(relatoDaniosEsteticos: relatoDaniosEsteticos);
-    _touchEveryThing(newState);
-  }
-
-  void onDanioActorChanged(String value) {
-    final danioActor = SimpleStringInput.dirty(value);
-    final newState = state.copyWith(danioActor: danioActor);
-    _touchEveryThing(newState);
-  }
-
-  void onDanioTrabajadorChanged(String value) {
-    final danioTrabajador = SimpleStringInput.dirty(value);
-    final newState = state.copyWith(danioTrabajador: danioTrabajador);
-    _touchEveryThing(newState);
-  }
-
-  void onMedidasNecesariasEmpresaDemandadaChanged(String value) {
-    final medidasNecesariasEmpresaDemandada = SimpleStringInput.dirty(value);
-    final newState = state.copyWith(
-      medidasNecesariasEmpresaDemandada: medidasNecesariasEmpresaDemandada,
-    );
-    _touchEveryThing(newState);
-  }
 
   // Compensaciones
-  void onMontoRemuneracionSegunEmpleadorChanged(String value) {
-    final montoRemuneracionSegunEmpleador = PositiveNumInput.dirty(value);
-    final newState = state.copyWith(
-      montoRemuneracionSegunEmpleador: montoRemuneracionSegunEmpleador,
-    );
-    _touchEveryThing(newState);
-  }
 
-  void onMontoRemuneracionArt172Changed(String value) {
-    final montoRemuneracionArt172 = PositiveNumInput.dirty(value);
-    final newState = state.copyWith(
-      montoRemuneracionArt172: montoRemuneracionArt172,
-    );
-    _touchEveryThing(newState);
+  void onMontoDanioMoralChanged(String value) {
+    final montoDanioMoralChanged = state.montoDanioMoral.onChanged(value);
+    state = state.copyWith(montoDanioMoral: montoDanioMoralChanged);
+  }
+  void onMontoDanioMoralValidate() {
+    final montoDanioMoralValidated = state.montoDanioMoral.validate();
+    state = state.copyWith(montoDanioMoral: montoDanioMoralValidated);
   }
 
   void onRemoveDocumentosAdicionalesAIngresar(int index) {
@@ -415,93 +476,91 @@ class DocumentForm02 extends _$DocumentForm02 {
       if (!state.isValidForm) {
         // entonces me gustaría determinar la página que tiene el error
         // 0 - InfoPage
-        int index = -1;
-        if (!state.isValidInfoPage) {
-          index = 0;
-        }
-        // else if (!_isValidDetailsPage(newState)) {
-        //   index = 1;
-        // } else if (!_isValidDaniosPage(newState)) {
-        //   index = 2;
-        // } else if (!_isValidCompensacionesPage(newState)) {
-        //   index = 3;
-        // }
+        final errorPageIndex = _getErrorPageIndex();
         // aquí sería else if para las demás condiciones
-        if (index != -1) {
+        if (errorPageIndex != -1) {
           // quiere decir que encontró la página
-          state = state.copyWith(selectedIndex: index);
+          // debería encontrar la página con el error
+          // en caso de no encontrala seguramente una entrada
+          // faltó agregar en la verificación de la página
+          state = state.copyWith(selectedIndex: errorPageIndex);
         }
 
         return null;
-        // throw Exception('Por favor, complete todos los campos');
+        
       }
 
       state = state.copyWith(isPosting: true);
       //
-      final fechaInicioRelacionLaboral = AppDateUtils.getCustomFormattedDate(
-          state.fechaInicioRelacionLaboral.value!);
-      final fechaTerminoRelacionLaboral = AppDateUtils.getCustomFormattedDate(
-          state.fechaTerminoRelacionLaboral.value!);
-      final nameTemplate = 'template_02.docx';
+      final fechaInicioRelacionLaboral = AppDateUtils.getCustomFormattedDate(state.fechaInicioRelacionLaboral.value!);
+      final fechaTerminoRelacionLaboral = AppDateUtils.getCustomFormattedDate(state.fechaTerminoRelacionLaboral.value!);
+
+      final fechaAutodespido = AppDateUtils.getCustomFormattedDate(state.fechaAutodespido.value!);
+      final fechaReclamoDt = AppDateUtils.getCustomFormattedDate(state.fechaReclamoDt.value!);
+      final fechaComparendoDt = AppDateUtils.getCustomFormattedDate(state.fechaComparendoDt.value!);
+
+      final nameTemplate = 'DDA_recon Rla Lab Autodespido nulidad con solidaria - template_02.docx';
       final data = {
         //*Demandante
-        'nombre_demandante': state.demandanteFullName.value,
-        'rut_demandante': state.demandanteRut.value,
-        'nacionalidad': state.demandanteNacionalidad.value,
-        // 'estado_civil':
-        //     state.demandanteEstadoCivil.texto(state.demandanteGender),
-        'don_cortesia_demandante': state.demandanteGender.donCortesia(),
+        'NOMBRE_DEMANDANTE': state.demandanteFullName.value,
+        'RUT_DEMANDANTE': state.demandanteRut.value,
+        'NACIONALIDAD': state.demandanteNacionalidad.value,
+        'DIRECCION_DEMANDANTE': state.demandanteDireccion.value,
+        'DON_CORTESIA_DEMANDANTE': state.demandanteGender.donCortesia(),
+        'DEMANDANTE_A_O': state.demandanteGender.colocaAO(),
+        'LA_ACTORA_EL_ACTOR': state.demandanteGender.actorAO(),
         //* Abogado 1
-        'nombre_abogado_1': state.abogado1FullName.value,
-        'rut_abogado_1': state.abogado1Rut.value,
-        'correo_abogado_1': state.abogado1Email.value,
+        'NOMBRE_ABOGADO_1': state.abogado1FullName.value,
+        'RUT_ABOGADO_1': state.abogado1Rut.value,
+        'CORREO_ABOGADO_1': state.abogado1Email.value,
         //* Abogado 2
-        'nombre_abogado_2': state.abogado2FullName.value,
-        'rut_abogado_2': state.abogado2Rut.value,
-        'correo_abogado_2': state.abogado2Email.value,
-        //* Demandado
-        'nombre_demandado': state.demandadoPrincipalFullName.value,
-        'rut_demandado': state.demandadoPrincipalRut.value,
-        //* Representante Legal
-        'nombre_representante_legal': state.representanteLegalPrincipalFullName.value,
-        'rut_representante_legal': state.representanteLegalPrincipalRut.value,
-        'domicilio_empresa': state.representanteLegalPrincipalDomicilio.value,
-        'don_cortesia_representante_legal':
-            state.representanteLegalPrincipalGender.donCortesia(),
+        'NOMBRE_ABOGADO_2': state.abogado2FullName.value,
+        'RUT_ABOGADO_2': state.abogado2Rut.value,
+        'CORREO_ABOGADO_2': state.abogado2Email.value,
+        //* Demandado principal
+        'NOMBRE_DEMANDADO_PRINCIPAL': state.demandadoPrincipalFullName.value,
+        'RUT_DEMANDADO_PRINCIPAL': state.demandadoPrincipalRut.value,
+        //* Demandado solidario
+        'DEMANDADO_SOLIDARIO': state.demandadoSolidarioFullName.value,
+        'RUT_DEMANDADO_SOLIDARIO': state.demandadoSolidarioRut.value,
+        //* Representante Legal principal
+        'REPRESENTANTE_LEGAL_DEMANDADO_PRINCIPAL': state.representanteLegalPrincipalFullName.value,
+        'RUT_REPRESENTANTE_LEGAL_DEMANDADO_PRINCIPAL': state.representanteLegalPrincipalRut.value,
+        'DIRECCION_DEMANDADO_PRINCIPAL': state.representanteLegalPrincipalDomicilio.value,
+        'DON_CORTESIA_REPRESENTANTE_LEGAL_DEMANDADO_PRINCIPAL': state.representanteLegalPrincipalGender.donCortesia(),
+        // 'DON_DONIA_REPRESENTANTE_LEGAL_DEMANDADO_PRINCIPAL': state.representanteLegalPrincipalGender.donCortesia(),
+        //* Representante Legal solidario
+        'REPRESENTANTE_LEGAL_DEMANDADO_SOLIDARIO': state.representanteLegalSolidarioFullName.value,
+        'RUT_REPRESENTANTE_LEGAL_DEMANDADO_SOLIDARIO': state.representanteLegalSolidarioRut.value,
+        'DIRECCION_DEMANDADO_SOLIDARIO': state.representanteLegalSolidarioDomicilio.value,
+        
         //* Detalles adicionales del caso
-        'tribunal': state.tribunal.value,
-        'fecha_inicio_relacion_laboral': fechaInicioRelacionLaboral,
-        'fecha_termino_relacion_laboral': fechaTerminoRelacionLaboral,
-        'cargo_trabajador': state.cargoTrabajador.value,
-        'tipo_de_contrato': state.tipoContrato.value,
-        'horas_semanales_jornada_laboral': state.horasSemanales.value,
-        'remuneracion': StringUtils.formatToNumber(state.remuneracion.value),
-        //* Detalles del Accidente
-        // 'fecha_accidente_laboral': AppDateUtils.getCustomFormattedDate(
-        //   state.fechaAccidenteLaboral.value!,
-        // ),
-        'hora_accidente':
-            AppDateUtils.getFormattedHora(state.horaAccidente.value!),
-        'relato_del_accidente_extenso': state.relatoAccidenteExtenso.value,
-        'relato_hechos_posteriores_al_accidente_extenso':
-            state.relatoHechosPosteriores.value,
-        //* Daños y perjuicios
-        'porcentaje_incapacidad': state.porcentajeIncapacidad.value,
-        'monto_a_demandar':
-            StringUtils.formatToNumber(state.montoADemandar.value),
-        'relato_danios_esteticos': state.relatoDaniosEsteticos.value,
-        'danio_que_tiene_el_actor': state.danioActor.value,
-        'danio_del_trabajador': state.danioTrabajador.value,
-        'medidas_necesarias_empresa_demandada':
-            state.medidasNecesariasEmpresaDemandada.value,
+        'NOMBRE_TRIBUNAL': state.tribunal.value,
+        'FECHA_INICIO_RELACION_LABORAL': fechaInicioRelacionLaboral,
+        'FECHA_TERMINO_RELACION_LABORAL': fechaTerminoRelacionLaboral,
+        'FECHA_DE_AUTODESPIDO': fechaAutodespido,
+        'FECHA_DE_RECLAMO_DT': fechaReclamoDt,
+        'FECHA_DE_COMPARENDO_DT': fechaComparendoDt,
+        'CARGO_DEMANDANTE': state.cargoDemandante.value,
+        'COMUNA': state.comuna.value,
+        'TIPO_DE_CONTRATO': state.tipoContrato.value,
+        // 'HORAS_SEMANALES': state.horasSemanales.value,//no lo estoy usando en ésta plantilla
+        'HORARIO_JORNADA_DE_TRABAJO': state.horarioJornadaTrabajo.value,
+        'TIPO_DE_AFP_TRABAJADOR': state.tipoAFP.value,
+        'CAUSAL_DE_TERMINO': state.causalTermino.value,
+        'PERIODO_IMPAGO_IMPOSICIONES': state.periodoImposiciones.value,
+        'FERIADO_LEGAL_DIAS': state.feriadoLegalDias.value,
+        'INGRESAR_REGION': state.region.value,
+
+        'LABORES_DESARROLLADAS_POR_EL_TRABAJADOR': state.laboresTrabajador.value,
+        'SERVICIOS_PRESTADOS_POR_LA_PRINCIPAL_A_LA_SOLIDARIA': state.serviciosPrestados.value,
+
         //* Compensaciones
-        'monto_de_remuneracion_segun_empleador': StringUtils.formatToNumber(
-            state.montoRemuneracionSegunEmpleador.value),
-        'monto_remuneracion_segun_articulo_172': StringUtils.formatToNumber(
-          state.montoRemuneracionArt172.value,
-        ),
-        'lista_documentos_ingresar_demanda':
-            state.documentosAdicionalesAIngresar,
+        'MONTO_DAÑO_MORAL': StringUtils.formatToNumber( state.montoDanioMoral.value),
+        'REMUNERACION': StringUtils.formatToNumber(state.remuneracion.value),
+        'REMUNERACION_POR_50%': StringUtils.formatToNumber(state.remuneracionPor50.value),
+        'MONTO_POR_FERIADO_LEGAL': StringUtils.formatToNumber(state.montoFeriadoLegal.value),
+        'DOCUMENTOS': state.documentosAdicionalesAIngresar,
       };
 
       final documentRequest = {
@@ -521,25 +580,77 @@ class DocumentForm02 extends _$DocumentForm02 {
     }
   }
 
+  int _getErrorPageIndex() {
+    if (!state.isValidInfoPage) return 0;
+    if (!state.isValidDetailsPage) return 1;
+    if (!state.isValidCompensacionesPage) return 2;
+    return -1;
+  }
+
   void resetError() {
     state = state.copyWith(errorMessage: '');
   }
 
   Future<void> validateInputs() async {
-    // Demandante
+   _validateInfoPage();
+   _isValidDetailsPage();
+   _isValidCompensacionesPage();
+  }
+
+  void _validateInfoPage(){
+     // Demandante
     onDemandanteFullNameValidate();
     onDemandanteRutValidate();
-    onDemandanteDireccionValidate();
     onDemandanteNacionalidadValidate();
+    onDemandanteDireccionValidate();
     // Abogado 1
     onAbogado1FullNameValidate();
-    onAbogado1EmailValidate();
     onAbogado1RutValidate();
+    onAbogado1EmailValidate();
     // Abogado 2
     onAbogado2FullNameValidate();
-    onAbogado2EmailValidate();
     onAbogado2RutValidate();
+    onAbogado2EmailValidate();
+    // DEMANDADO PRINCIPAL
+    onDemandadoPrincipalFullNameValidate();
+    onDemandadoPrincipalRutValidate();
+    // DEMANDADO SOLIDARIO
+    onDemandadoSolidarioFullNameValidate();
+    onDemandadoSolidarioRutValidate();
+    //* Representante Legal principal
+    onRepresentanteLegalPrincipalFullNameValidate();
+    onRepresentanteLegalPrincipalRutValidate();
+    onRepresentanteLegalPrincipalDomicilioValidate();
+    //* Representante Legal solidario
+    onRepresentanteLegalSolidarioFullNameValidate();
+    onRepresentanteLegalSolidarioRutValidate();
+    onRepresentanteLegalSolidarioDomicilioValidate();
+  }
+  void _isValidDetailsPage(){
+    onTribunalValidate();
+    onFechaInicioRelacionLaboralValidate();
+    onFechaTerminoRelacionLaboralValidate();
+    onFechaAutodespidoValidate();
+    onFechaReclamoDtValidate();
+    onFechaComparendoDtValidate();
+    onCargoDemandanteValidate();
+    onComunaValidate();
+    onTipoContratoValidate();
+    onHorarioJornadaTrabajoValidate();
+    onTipoAFPValidate();
+    onCausalTerminoValidate();
+    onPeriodoImposicionesValidate();
+    onRegionValidate();
+    onLaboresTrabajadorValidate();
+    onServiciosPrestadosValidate();
 
+  }
+
+  void _isValidCompensacionesPage(){
+    onMontoDanioMoralValidate();
+    onRemuneracionValidate();
+    onRemuneracionPor50Validate();
+    onMontoFeriadoLegalValidate();
 
   }
 }
@@ -579,7 +690,6 @@ class DocumentForm02State {
   final SimpleString representanteLegalPrincipalRut;
   final SimpleString representanteLegalPrincipalDomicilio;
   // Representante Legal Demandado solidario
-  final Gender representanteLegalSolidarioGender;
   final SimpleString representanteLegalSolidarioFullName;
   final SimpleString representanteLegalSolidarioRut;
   final SimpleString representanteLegalSolidarioDomicilio;
@@ -587,25 +697,40 @@ class DocumentForm02State {
   final SimpleString tribunal;
   final FechaInput fechaInicioRelacionLaboral;
   final FechaTerminoInput fechaTerminoRelacionLaboral;
-  final SimpleString cargoTrabajador;
+  final FechaInput fechaAutodespido;
+  final FechaInput fechaReclamoDt;
+  final FechaInput fechaComparendoDt;
+  final SimpleString cargoDemandante;
+  final SimpleString comuna;
+  final SimpleString serviciosPrestados;
+
   final SimpleString tipoContrato;
+  final SimpleString horarioJornadaTrabajo;
+  final SimpleString laboresTrabajador;
+  final SimpleString tipoAFP;
+  final SimpleString causalTermino;
+  final SimpleString region;
+  final SimpleString periodoImposiciones;
   final PositiveIntegerInput horasSemanales;
   final PositiveNumInput remuneracion;
+  final PositiveNumInput remuneracionPor50;
+  final PositiveNumInput montoFeriadoLegal;
   // Detalles del Accidente
 
-  final HoraInput horaAccidente;
-  final SimpleString relatoAccidenteExtenso;
-  final SimpleString relatoHechosPosteriores;
+  // final HoraInput horaAccidente;
+  // final SimpleString relatoAccidenteExtenso;
+  // final SimpleString relatoHechosPosteriores;
   // Daños y perjuicios
-  final PositiveIntegerInput porcentajeIncapacidad;
-  final PositiveNumInput montoADemandar;
-  final SimpleString relatoDaniosEsteticos;
-  final SimpleString danioActor;
-  final SimpleString danioTrabajador;
-  final SimpleString medidasNecesariasEmpresaDemandada;
+  final PositiveIntegerInput feriadoLegalDias;
+  // final PositiveNumInput montoADemandar;
+  final PositiveNumInput montoDanioMoral;
+  // final SimpleString relatoDaniosEsteticos;
+  // final SimpleString danioActor;
+  // final SimpleString danioTrabajador;
+  // final SimpleString medidasNecesariasEmpresaDemandada;
   // Compensaciones
-  final PositiveNumInput montoRemuneracionSegunEmpleador;
-  final PositiveNumInput montoRemuneracionArt172;
+  // final PositiveNumInput montoRemuneracionSegunEmpleador;
+  // final PositiveNumInput montoRemuneracionArt172;
   // Lista de documentos adicionales
   final List<String> documentosAdicionalesAIngresar;
 
@@ -642,33 +767,49 @@ class DocumentForm02State {
     this.representanteLegalPrincipalRut = const SimpleString(value: ''),
     this.representanteLegalPrincipalDomicilio = const SimpleString(value: ''),
     // Representante Legal solidario
-    this.representanteLegalSolidarioGender = Gender.hombre,
     this.representanteLegalSolidarioFullName = const SimpleString(value: ''),
     this.representanteLegalSolidarioRut = const SimpleString(value: ''),
     this.representanteLegalSolidarioDomicilio = const SimpleString(value: ''),
     // Detalles adicionales del caso
     this.tribunal = const SimpleString(value: ''),
     this.fechaInicioRelacionLaboral = const FechaInput(value: null),
-    this.fechaTerminoRelacionLaboral =
-        const FechaTerminoInput(value: null, fechaInicio: null),
-    this.cargoTrabajador = const SimpleString(value: ''),
+    this.fechaTerminoRelacionLaboral = const FechaTerminoInput(value: null, fechaInicio: null),
+    this.fechaAutodespido = const FechaInput(value: null),
+    this.fechaReclamoDt = const FechaInput(value: null),
+    this.fechaComparendoDt = const FechaInput(value: null),
+    this.cargoDemandante = const SimpleString(value: ''),
+    this.comuna = const SimpleString(value: ''),
     this.tipoContrato = const SimpleString(value: ''),
+    this.laboresTrabajador = const SimpleString(value: ''),
+    this.serviciosPrestados = const SimpleString(value: ''),
+    this.tipoAFP = const SimpleString(value: ''),
+    this.causalTermino = const SimpleString(value: ''),
+    this.periodoImposiciones = const SimpleString(value: ''),
+    this.region = const SimpleString(value: ''),
+
     this.horasSemanales = const PositiveIntegerInput(value: ''),
+
+    this.feriadoLegalDias = const PositiveIntegerInput(value: ''),
     this.remuneracion = const PositiveNumInput(value: ''),
+    this.remuneracionPor50 = const PositiveNumInput(value: ''),
+    
+    this.horarioJornadaTrabajo = const SimpleString(value: ''),
     // Detalles del Accidente
-    this.horaAccidente = const HoraInput(value: null),
-    this.relatoAccidenteExtenso = const SimpleString(value: ''),
-    this.relatoHechosPosteriores = const SimpleString(value: ''),
+    // this.horaAccidente = const HoraInput(value: null),
+    // this.relatoAccidenteExtenso = const SimpleString(value: ''),
+    // this.relatoHechosPosteriores = const SimpleString(value: ''),
     // Daños y perjuicios
-    this.porcentajeIncapacidad = const PositiveIntegerInput(value: ''),
-    this.montoADemandar = const PositiveNumInput(value: ''),
-    this.relatoDaniosEsteticos = const SimpleString(value: ''),
-    this.danioActor = const SimpleString(value: ''),
-    this.danioTrabajador = const SimpleString(value: ''),
-    this.medidasNecesariasEmpresaDemandada = const SimpleString(value: ''),
+    // this.porcentajeIncapacidad = const PositiveIntegerInput(value: ''),
+    // this.montoADemandar = const PositiveNumInput(value: ''),
+    this.montoDanioMoral = const PositiveNumInput(value: ''),
+    this.montoFeriadoLegal = const PositiveNumInput(value: ''),
+    // this.relatoDaniosEsteticos = const SimpleString(value: ''),
+    // this.danioActor = const SimpleString(value: ''),
+    // this.danioTrabajador = const SimpleString(value: ''),
+    // this.medidasNecesariasEmpresaDemandada = const SimpleString(value: ''),
     // Compensaciones
-    this.montoRemuneracionSegunEmpleador = const PositiveNumInput(value: ''),
-    this.montoRemuneracionArt172 = const PositiveNumInput(value: ''),
+    // this.montoRemuneracionSegunEmpleador = const PositiveNumInput(value: ''),
+    // this.montoRemuneracionArt172 = const PositiveNumInput(value: ''),
     // Lista de documentos adicionales
     this.documentosAdicionalesAIngresar = const [],
   });
@@ -676,10 +817,68 @@ class DocumentForm02State {
   // si alguna entrada tiene error, entonces no es válido el formulario
   bool get isValidForm => ![
         isValidInfoPage,
+        isValidDetailsPage,
+        isValidCompensacionesPage,
       ].any((input) => !input);
 
   bool get isValidInfoPage => ![
+        // Demandante
+        demandanteFullName.hasError,
+        demandanteRut.hasError,
+        demandanteNacionalidad.hasError,
+        demandanteDireccion.hasError,
+        // Abogado 1
+        abogado1FullName.hasError,
+        abogado1Rut.hasError,
+        abogado1Email.hasError,
+        // Abogado 2
+        abogado2FullName.hasError,
+        abogado2Rut.hasError,
+        abogado2Email.hasError,
+        // Demandado Principal
         demandadoPrincipalFullName.hasError,
+        demandadoPrincipalRut.hasError,
+        // Demandado Solidario
+        demandadoSolidarioFullName.hasError,
+        demandadoSolidarioRut.hasError,
+        // Representante legal principal
+        representanteLegalPrincipalFullName.hasError,
+        representanteLegalPrincipalRut.hasError,
+        representanteLegalPrincipalDomicilio.hasError,
+        // Representante legal solidario
+        representanteLegalSolidarioFullName.hasError,
+        representanteLegalSolidarioRut.hasError,
+        representanteLegalSolidarioDomicilio.hasError,
+      ].any((input) => input);
+
+      bool get isValidDetailsPage => ![
+        tribunal.hasError,
+        fechaInicioRelacionLaboral.hasError,
+        fechaTerminoRelacionLaboral.hasError,
+        fechaAutodespido.hasError,
+        fechaReclamoDt.hasError,
+        fechaComparendoDt.hasError,
+        cargoDemandante.hasError,
+        comuna.hasError,
+        tipoContrato.hasError,
+        horarioJornadaTrabajo.hasError,
+        laboresTrabajador.hasError,
+        serviciosPrestados.hasError,
+        tipoAFP.hasError,
+        causalTermino.hasError,
+        periodoImposiciones.hasError,
+        feriadoLegalDias.hasError,
+        region.hasError,
+        laboresTrabajador.hasError,
+        serviciosPrestados.hasError,
+
+      ].any((input) => input);
+
+      bool get isValidCompensacionesPage => ![
+        montoDanioMoral.hasError,
+        remuneracion.hasError,
+        remuneracionPor50.hasError,
+        montoFeriadoLegal.hasError,
       ].any((input) => input);
 
   DocumentForm02State copyWith({
@@ -715,7 +914,6 @@ class DocumentForm02State {
     SimpleString? representanteLegalPrincipalRut,
     SimpleString? representanteLegalPrincipalDomicilio,
     // Representante Legal solidario
-    Gender? representanteLegalSolidarioGender,
     SimpleString? representanteLegalSolidarioFullName,
     SimpleString? representanteLegalSolidarioRut,
     SimpleString? representanteLegalSolidarioDomicilio,
@@ -723,25 +921,40 @@ class DocumentForm02State {
     SimpleString? tribunal,
     FechaInput? fechaInicioRelacionLaboral,
     FechaTerminoInput? fechaTerminoRelacionLaboral,
-    SimpleString? cargoTrabajador,
+    FechaInput? fechaAutodespido,
+    FechaInput? fechaReclamoDt,
+    FechaInput? fechaComparendoDt,
+    SimpleString? cargoDemandante,
+    SimpleString? comuna,
     SimpleString? tipoContrato,
+    SimpleString? laboresTrabajador,
     PositiveIntegerInput? horasSemanales,
+    PositiveIntegerInput? feriadoLegalDias,
     PositiveNumInput? remuneracion,
+    PositiveNumInput? montoFeriadoLegal,
+    PositiveNumInput? remuneracionPor50,
+    SimpleString? horarioJornadaTrabajo,
+    SimpleString? serviciosPrestados,
+    SimpleString? tipoAFP,
+    SimpleString? causalTermino,
+    SimpleString? periodoImposiciones,
+    SimpleString? region,
     // Detalles del Accidente
     // FechaAccidenteInput? fechaAccidenteLaboral,
-    HoraInput? horaAccidente,
-    SimpleString? relatoAccidenteExtenso,
-    SimpleString? relatoHechosPosteriores,
+    // HoraInput? horaAccidente,
+    // SimpleString? relatoAccidenteExtenso,
+    // SimpleString? relatoHechosPosteriores,
     // Daños y perjuicios
-    PositiveIntegerInput? porcentajeIncapacidad,
-    PositiveNumInput? montoADemandar,
-    SimpleString? relatoDaniosEsteticos,
-    SimpleString? danioActor,
-    SimpleString? danioTrabajador,
-    SimpleString? medidasNecesariasEmpresaDemandada,
+    // PositiveIntegerInput? porcentajeIncapacidad,
+    // PositiveNumInput? montoADemandar,
+    PositiveNumInput? montoDanioMoral,
+    // SimpleString? relatoDaniosEsteticos,
+    // SimpleString? danioActor,
+    // SimpleString? danioTrabajador,
+    // SimpleString? medidasNecesariasEmpresaDemandada,
     // Compensaciones
-    PositiveNumInput? montoRemuneracionSegunEmpleador,
-    PositiveNumInput? montoRemuneracionArt172,
+    // PositiveNumInput? montoRemuneracionSegunEmpleador,
+    // PositiveNumInput? montoRemuneracionArt172,
     // Lista de documentos adicionales
     List<String>? documentosAdicionalesAIngresar,
   }) =>
@@ -758,8 +971,7 @@ class DocumentForm02State {
        demandanteDireccion: demandanteDireccion ?? this.demandanteDireccion,
         demandanteFullName: demandanteFullName ?? this.demandanteFullName,
         demandanteRut: demandanteRut ?? this.demandanteRut,
-        demandanteNacionalidad:
-            demandanteNacionalidad ?? this.demandanteNacionalidad,
+        demandanteNacionalidad: demandanteNacionalidad ?? this.demandanteNacionalidad,
         // Abogado 1
         abogado1FullName: abogado1FullName ?? this.abogado1FullName,
         abogado1Rut: abogado1Rut ?? this.abogado1Rut,
@@ -775,50 +987,46 @@ class DocumentForm02State {
         demandadoSolidarioFullName: demandadoSolidarioFullName ?? this.demandadoSolidarioFullName,
         demandadoSolidarioRut: demandadoSolidarioRut ?? this.demandadoSolidarioRut,
         // Representante Legal principal
-        representanteLegalPrincipalGender:
-            representanteLegalPrincipalGender ?? this.representanteLegalPrincipalGender,
-        representanteLegalPrincipalFullName:
-            representanteLegalPrincipalFullName ?? this.representanteLegalPrincipalFullName,
+        representanteLegalPrincipalGender: representanteLegalPrincipalGender ?? this.representanteLegalPrincipalGender,
+        representanteLegalPrincipalFullName: representanteLegalPrincipalFullName ?? this.representanteLegalPrincipalFullName,
         representanteLegalPrincipalRut: representanteLegalPrincipalRut ?? this.representanteLegalPrincipalRut,
         representanteLegalPrincipalDomicilio: representanteLegalPrincipalDomicilio ?? this.representanteLegalPrincipalDomicilio,
         // Representante Legal solidario
-        representanteLegalSolidarioGender: representanteLegalSolidarioGender ?? this.representanteLegalSolidarioGender,
         representanteLegalSolidarioFullName: representanteLegalSolidarioFullName ?? this.representanteLegalSolidarioFullName,
         representanteLegalSolidarioRut: representanteLegalSolidarioRut ?? this.representanteLegalSolidarioRut,
         representanteLegalSolidarioDomicilio: representanteLegalSolidarioDomicilio ?? this.representanteLegalSolidarioDomicilio,
+        
         // Detalles adicionales del caso
         tribunal: tribunal ?? this.tribunal,
         fechaInicioRelacionLaboral: fechaInicioRelacionLaboral ?? this.fechaInicioRelacionLaboral,
         fechaTerminoRelacionLaboral: fechaTerminoRelacionLaboral ?? this.fechaTerminoRelacionLaboral,
-        cargoTrabajador: cargoTrabajador ?? this.cargoTrabajador,
+        fechaAutodespido: fechaAutodespido ?? this.fechaAutodespido,
+        fechaReclamoDt: fechaReclamoDt ?? this.fechaReclamoDt,
+        fechaComparendoDt: fechaComparendoDt ?? this.fechaComparendoDt,
+        cargoDemandante: cargoDemandante ?? this.cargoDemandante,
+        comuna: comuna ?? this.comuna,
+        montoFeriadoLegal: montoFeriadoLegal ?? this.montoFeriadoLegal,
+        serviciosPrestados: serviciosPrestados ?? this.serviciosPrestados,
         tipoContrato: tipoContrato ?? this.tipoContrato,
+        laboresTrabajador: laboresTrabajador ?? this.laboresTrabajador,
         horasSemanales: horasSemanales ?? this.horasSemanales,
         remuneracion: remuneracion ?? this.remuneracion,
+        remuneracionPor50: remuneracionPor50 ?? this.remuneracionPor50,
+        tipoAFP: tipoAFP ?? this.tipoAFP,
+        causalTermino: causalTermino ?? this.causalTermino,
+        periodoImposiciones: periodoImposiciones ?? this.periodoImposiciones,
         // Detalles del Accidente
-        // fechaAccidenteLaboral:
-        //     fechaAccidenteLaboral ?? this.fechaAccidenteLaboral,
-        horaAccidente: horaAccidente ?? this.horaAccidente,
-        relatoAccidenteExtenso:
-            relatoAccidenteExtenso ?? this.relatoAccidenteExtenso,
-        relatoHechosPosteriores:
-            relatoHechosPosteriores ?? this.relatoHechosPosteriores,
+        horarioJornadaTrabajo: horarioJornadaTrabajo ?? this.horarioJornadaTrabajo,
+        feriadoLegalDias: feriadoLegalDias ?? this.feriadoLegalDias,
+        region: region ?? this.region,
+        
         // Daños y perjuicios
-        porcentajeIncapacidad:
-            porcentajeIncapacidad ?? this.porcentajeIncapacidad,
-        montoADemandar: montoADemandar ?? this.montoADemandar,
-        relatoDaniosEsteticos:
-            relatoDaniosEsteticos ?? this.relatoDaniosEsteticos,
-        danioActor: danioActor ?? this.danioActor,
-        danioTrabajador: danioTrabajador ?? this.danioTrabajador,
-        medidasNecesariasEmpresaDemandada: medidasNecesariasEmpresaDemandada ??
-            this.medidasNecesariasEmpresaDemandada,
+        // montoADemandar: montoADemandar ?? this.montoADemandar,
+        montoDanioMoral: montoDanioMoral ?? this.montoDanioMoral,
         // Compensaciones
-        montoRemuneracionSegunEmpleador: montoRemuneracionSegunEmpleador ??
-            this.montoRemuneracionSegunEmpleador,
-        montoRemuneracionArt172:
-            montoRemuneracionArt172 ?? this.montoRemuneracionArt172,
+        // montoRemuneracionSegunEmpleador: montoRemuneracionSegunEmpleador ?? this.montoRemuneracionSegunEmpleador,
+        // montoRemuneracionArt172: montoRemuneracionArt172 ?? this.montoRemuneracionArt172,
         // Lista de documentos adicionales
-        documentosAdicionalesAIngresar: documentosAdicionalesAIngresar ??
-            this.documentosAdicionalesAIngresar,
+        documentosAdicionalesAIngresar: documentosAdicionalesAIngresar ?? this.documentosAdicionalesAIngresar,
       );
 }
