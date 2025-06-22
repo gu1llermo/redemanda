@@ -117,6 +117,12 @@ class _NewDocument02ScreenState extends ConsumerState<NewDocument02Screen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              Expanded(
+                 child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                   child: Text(NewDocument02Screen.description),
+                 ),
+               ),
               const UserCreditsWidget(),
             ],
           ),
