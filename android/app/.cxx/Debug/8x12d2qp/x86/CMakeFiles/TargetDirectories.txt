@@ -1,0 +1,2 @@
+C:/Users/guill/Documents/FlutterProjects/redemanda/android/app/.cxx/Debug/8x12d2qp/x86/CMakeFiles/edit_cache.dir
+C:/Users/guill/Documents/FlutterProjects/redemanda/android/app/.cxx/Debug/8x12d2qp/x86/CMakeFiles/rebuild_cache.dir

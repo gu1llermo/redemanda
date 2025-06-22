@@ -4,17 +4,36 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../config/config.dart';
 
-part 'autocomplete_state.freezed.dart';
 part 'autocomplete_state.g.dart';
 
-@freezed
-class AutocompleteState with _$AutocompleteState {
-  const factory AutocompleteState({
-    @Default('') String currentText,
-    @Default([]) List<String> suggestions,
-    @Default([]) List<String> historicalTerms,
-    // @Default(false) bool showOverlay,
-  }) = _AutocompleteState;
+class AutocompleteState {
+  final String currentText;
+  final List<String> suggestions;
+  final List<String> historicalTerms;
+
+  const AutocompleteState({
+    this.currentText = '',
+    this.suggestions = const [],
+    this.historicalTerms = const [],
+  });
+
+  AutocompleteState copyWith({
+    String? currentText,
+    List<String>? suggestions,
+    List<String>? historicalTerms,
+  }) =>
+      AutocompleteState(
+        currentText: currentText ?? this.currentText,
+        suggestions: suggestions ?? this.suggestions,
+        historicalTerms: suggestions ?? this.suggestions,
+      );
+
+  // const factory AutocompleteState({
+  //   @Default('') String currentText,
+  //   @Default([]) List<String> suggestions,
+  //   @Default([]) List<String> historicalTerms,
+  //   // @Default(false) bool showOverlay,
+  // }) = _AutocompleteState;
 }
 
 @Riverpod(dependencies: [keyValueStorageService])

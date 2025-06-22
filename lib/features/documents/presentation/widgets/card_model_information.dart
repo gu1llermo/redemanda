@@ -28,7 +28,6 @@ class CardModelInformation extends StatelessWidget {
                       alignment: WrapAlignment.start,
                       runSpacing: 10,
                       spacing: 20,
-                      // alignment: WrapAlignment.spaceEvenly,
                       children: children,
                     )),
               ),
