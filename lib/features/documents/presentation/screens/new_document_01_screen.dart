@@ -61,7 +61,7 @@ class NewDocument01Screen extends ConsumerStatefulWidget {
   const NewDocument01Screen({super.key});
   static const path = 'new-document-01';
   static const title = 'Plantilla nro 1';
-  static const description = 'Auto despidio con accidente y daño moral';
+  static const description = 'Auto despido con accidente y daño moral';
 
   @override
   ConsumerState<NewDocument01Screen> createState() => _NewDocumentScreenState();
@@ -125,6 +125,12 @@ class _NewDocumentScreenState extends ConsumerState<NewDocument01Screen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+               Expanded(
+                 child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                   child: Text(NewDocument01Screen.description),
+                 ),
+               ),
               const UserCreditsWidget(),
             ],
           ),
