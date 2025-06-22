@@ -6,14 +6,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../../config/config.dart';
 import '../../../domain/domain.dart';
 import '../providers.dart';
+import 'estado_civil.dart';
 
-part 'document_form_provider.g.dart';
+part 'document_form_01_provider.g.dart';
 
 @Riverpod(dependencies: [DocumentsPagination])
-class DocumentForm extends _$DocumentForm {
+class DocumentForm01 extends _$DocumentForm01 {
   @override
-  DocumentFormState build() {
-    return DocumentFormState();
+  DocumentForm01State build() {
+    return DocumentForm01State();
   }
 
   // index
@@ -432,7 +433,7 @@ class DocumentForm extends _$DocumentForm {
     state = state.copyWith(errorMessage: '');
   }
 
-  bool _isValidInfoPage(DocumentFormState newState) {
+  bool _isValidInfoPage(DocumentForm01State newState) {
     return Formz.validate([
       // Demandante
       SimpleStringInput.dirty(newState.demandanteFullName.value),
@@ -456,7 +457,7 @@ class DocumentForm extends _$DocumentForm {
     ]);
   }
 
-  bool _isValidDetailsPage(DocumentFormState newState) {
+  bool _isValidDetailsPage(DocumentForm01State newState) {
     final fechaTerminoRelacionLaboral = FechaTerminoInput.dirty(
       newState.fechaTerminoRelacionLaboral.value,
       fechaInicio: newState.fechaInicioRelacionLaboral.value,
@@ -489,7 +490,7 @@ class DocumentForm extends _$DocumentForm {
     ]);
   }
 
-  bool _isValidDaniosPage(DocumentFormState newState) {
+  bool _isValidDaniosPage(DocumentForm01State newState) {
     return Formz.validate([
       // Daños y perjuicios
       PositiveIntegerInput.dirty(newState.porcentajeIncapacidad.value),
@@ -501,7 +502,7 @@ class DocumentForm extends _$DocumentForm {
     ]);
   }
 
-  bool _isValidCompensacionesPage(DocumentFormState newState) {
+  bool _isValidCompensacionesPage(DocumentForm01State newState) {
     return Formz.validate([
       // Compensaciones
       PositiveNumInput.dirty(newState.montoRemuneracionSegunEmpleador.value),
@@ -568,7 +569,7 @@ class DocumentForm extends _$DocumentForm {
   //     isFormValid: _isValidAllPages(newState),
   //   );
   // }
-  void _touchEveryThing(DocumentFormState newState) {
+  void _touchEveryThing(DocumentForm01State newState) {
     final fechaTerminoRelacionLaboral = FechaTerminoInput.dirty(
       newState.fechaTerminoRelacionLaboral.value,
       fechaInicio: newState.fechaInicioRelacionLaboral.value,
@@ -594,7 +595,7 @@ class DocumentForm extends _$DocumentForm {
   }
 }
 
-class DocumentFormState {
+class DocumentForm01State {
   // errorMessage
   final String errorMessage;
   // index
@@ -651,7 +652,7 @@ class DocumentFormState {
   // Lista de documentos adicionales
   final List<String> documentosAdicionalesAIngresar;
 
-  DocumentFormState({
+  DocumentForm01State({
     this.errorMessage = '',
     // index
     this.selectedIndex = 0,
@@ -711,7 +712,7 @@ class DocumentFormState {
     this.documentosAdicionalesAIngresar = const [],
   });
 
-  DocumentFormState copyWith({
+  DocumentForm01State copyWith({
     String? errorMessage,
     // index
     int? selectedIndex,
@@ -768,7 +769,7 @@ class DocumentFormState {
     // Lista de documentos adicionales
     List<String>? documentosAdicionalesAIngresar,
   }) =>
-      DocumentFormState(
+      DocumentForm01State(
         errorMessage: errorMessage ?? this.errorMessage,
         // index
         selectedIndex: selectedIndex ?? this.selectedIndex,
@@ -844,24 +845,24 @@ class DocumentFormState {
       );
 }
 
-enum Gender {
-  hombre,
-  mujer;
+// enum Gender {
+//   hombre,
+//   mujer;
 
-  String donCortesia() {
-    return this == Gender.hombre ? 'don' : 'doña';
-  }
-}
+//   String donCortesia() {
+//     return this == Gender.hombre ? 'don' : 'doña';
+//   }
+// }
 
-enum EstadoCivil {
-  casado,
-  soltero,
-  divorciado,
-  separado,
-  viudo;
+// enum EstadoCivil {
+//   casado,
+//   soltero,
+//   divorciado,
+//   separado,
+//   viudo;
 
-  String texto(Gender gender) {
-    final subName = name.substring(0, name.length - 1);
-    return '$subName${gender == Gender.hombre ? 'o' : 'a'}';
-  }
-}
+//   String texto(Gender gender) {
+//     final subName = name.substring(0, name.length - 1);
+//     return '$subName${gender == Gender.hombre ? 'o' : 'a'}';
+//   }
+// }

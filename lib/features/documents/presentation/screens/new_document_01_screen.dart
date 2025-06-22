@@ -8,30 +8,79 @@ import 'package:redemanda/features/shared/shared.dart';
 import '../../../../config/config.dart';
 import '../../../../core/core.dart';
 import '../../../credits/presentation/widgets/widgets.dart';
-import '../providers/providers.dart';
+import '../providers/forms/document_form_01_provider.dart';
 import '../widgets/widgets.dart';
 
-class NewDocumentScreen extends ConsumerStatefulWidget {
-  const NewDocumentScreen({super.key});
+final _tabsView = const [
+  _Information(),
+  _DetallesAdicionales(),
+  _Danios(),
+  _Compensaciones(),
+];
+
+final _tabs = const [
+  Tab(
+    child: Row(
+      children: [
+        Icon(Icons.info_outline_rounded),
+        SizedBox(width: 4),
+        Text('Información'),
+      ],
+    ),
+  ),
+  Tab(
+    child: Row(
+      children: [
+        Icon(Icons.details_rounded),
+        SizedBox(width: 4),
+        Text('Detalles'),
+      ],
+    ),
+  ),
+  Tab(
+    child: Row(
+      children: [
+        Icon(Icons.broken_image),
+        SizedBox(width: 4),
+        Text('Daños'),
+      ],
+    ),
+  ),
+  Tab(
+    child: Row(
+      children: [
+        Icon(Icons.request_page_outlined),
+        SizedBox(width: 4),
+        Text('Compensaciones'),
+      ],
+    ),
+  ),
+];
+
+class NewDocument01Screen extends ConsumerStatefulWidget {
+  const NewDocument01Screen({super.key});
+  static const path = 'new-document-01';
+  static const title = 'Plantilla nro 1';
+  static const description = 'Auto despidio con accidente y daño moral';
 
   @override
-  ConsumerState<NewDocumentScreen> createState() => _NewDocumentScreenState();
+  ConsumerState<NewDocument01Screen> createState() => _NewDocumentScreenState();
 }
 
-class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
+class _NewDocumentScreenState extends ConsumerState<NewDocument01Screen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: _tabs.length, vsync: this);
 
     // Sincronizar TabController con el estado
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
         ref
-            .read(documentFormProvider.notifier)
+            .read(documentForm01Provider.notifier)
             .onSelectedIndexChanged(_tabController.index);
       }
     });
@@ -49,7 +98,7 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
 
     // Sincronizar el estado con TabController
     ref.listen(
-      documentFormProvider.select((state) => state.selectedIndex),
+      documentForm01Provider.select((state) => state.selectedIndex),
       (previous, next) {
         if (_tabController.index != next) {
           _tabController.animateTo(next);
@@ -58,14 +107,14 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
     );
 
     ref.listen(
-      documentFormProvider,
+      documentForm01Provider,
       (previous, next) {
         if (next.errorMessage.isEmpty) return;
         AppErrorsUtils.onError(context, next.errorMessage);
         // quiero colocar el mensaje de error del state en ''
         // otra vez, para que vuelva a mostrar el error
         // solo cuando vuelva a pasar
-        ref.read(documentFormProvider.notifier).resetError();
+        ref.read(documentForm01Provider.notifier).resetError();
       },
     );
 
@@ -83,385 +132,15 @@ class _NewDocumentScreenState extends ConsumerState<NewDocumentScreen>
             controller: _tabController,
             isScrollable: true,
             tabAlignment: TabAlignment.start,
-            tabs: const [
-              Tab(
-                // icon: Icon(Icons.info_outline_rounded),
-                // text: 'Información',
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline_rounded),
-                    SizedBox(width: 4),
-                    Text('Información'),
-                  ],
-                ),
-              ),
-              Tab(
-                // icon: Icon(Icons.details_rounded),
-                // text: 'Detalles',
-                child: Row(
-                  children: [
-                    Icon(Icons.details_rounded),
-                    SizedBox(width: 4),
-                    Text('Detalles'),
-                  ],
-                ),
-              ),
-              Tab(
-                // icon: Icon(Icons.broken_image),
-                // text: 'Daños',
-                child: Row(
-                  children: [
-                    Icon(Icons.broken_image),
-                    SizedBox(width: 4),
-                    Text('Daños'),
-                  ],
-                ),
-              ),
-              Tab(
-                // icon: Icon(Icons.request_page_outlined),
-                // text: 'Compensaciones',
-                child: Row(
-                  children: [
-                    Icon(Icons.request_page_outlined),
-                    SizedBox(width: 4),
-                    Text('Compensaciones'),
-                  ],
-                ),
-              ),
-            ],
+            tabs: _tabs,
           ),
         ),
         body: TabBarView(
           controller: _tabController,
-          children: const [
-            _Information(),
-            _DetallesAdicionales(),
-            _Danios(),
-            _Compensaciones(),
-          ],
+          children: _tabsView,
         ),
         floatingActionButton: _GenerateButton(),
       ),
-    );
-  }
-}
-
-// El resto de las clases (_Information, _DetallesAdicionales, _Danios, _Compensaciones)
-// permanecen sin cambios
-
-class _Information extends ConsumerStatefulWidget {
-  const _Information();
-
-  @override
-  ConsumerState<_Information> createState() => _InformationState();
-}
-
-class _InformationState extends ConsumerState<_Information>
-    with AutomaticKeepAliveClientMixin, KeepPageAliveMixin {
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    final newDocumentState = ref.watch(documentFormProvider);
-
-    return ListView(
-      padding: const EdgeInsets.only(
-        bottom: 100,
-        left: 5,
-        right: 5,
-      ),
-      children: [
-        SizedBox(height: 5),
-        // _InformacionDemandante(),
-        _InformacionDemandante(ref: ref, newDocumentState: newDocumentState),
-        SizedBox(height: 5),
-        //_InformacionAbogado1(),
-        _InformacionAbogado1(ref: ref, newDocumentState: newDocumentState),
-        SizedBox(height: 5),
-        //_InformacionAbogado2(),
-        _InformacionAbogado2(ref: ref, newDocumentState: newDocumentState),
-        SizedBox(height: 5),
-        //_InformacionDemandado(),
-        _InformacionDemandado(ref: ref, newDocumentState: newDocumentState),
-        SizedBox(height: 5),
-        //_InformacionRepresentanteLegal(),
-        _InformacionRepresentanteLegal(
-            ref: ref, newDocumentState: newDocumentState),
-        //SizedBox(height: 40),
-        // _SubmitButton()
-      ],
-    );
-  }
-}
-
-class _InformacionRepresentanteLegal extends StatelessWidget {
-  const _InformacionRepresentanteLegal({
-    required this.ref,
-    required this.newDocumentState,
-  });
-
-  final WidgetRef ref;
-  final DocumentFormState newDocumentState;
-
-  @override
-  Widget build(BuildContext context) {
-    return CardModelInformation(
-      title: 'Representante Legal',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_representante_legal',
-          initialValue: newDocumentState.representanteLegalFullName.value,
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onRepresentanteLegalFullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.representanteLegalFullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_representante_legal',
-          initialValue: newDocumentState.representanteLegalRut.value,
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onRepresentanteLegalRutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.representanteLegalRut.errorMessage
-              : null,
-        ),
-        GenderSelector(
-          selectedGender: newDocumentState.representanteLegalGender,
-          onGenderChanged: ref
-              .read(documentFormProvider.notifier)
-              .onRepresentanteLegalGenderChanged,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 400,
-          labelText: 'Domicilio Empresa',
-          preferencesKey: 'domicilio_empresa',
-          initialValue: newDocumentState.representanteLegalDomicilio.value,
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onRepresentanteLegalDomicilioChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.representanteLegalDomicilio.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
-class _InformacionDemandado extends StatelessWidget {
-  const _InformacionDemandado({
-    required this.ref,
-    required this.newDocumentState,
-  });
-
-  final WidgetRef ref;
-  final DocumentFormState newDocumentState;
-
-  @override
-  Widget build(BuildContext context) {
-    return CardModelInformation(
-      title: 'Demandado',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 400,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_demandado',
-          initialValue: newDocumentState.demandadoFullName.value,
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onDemandadoFullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandadoFullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_demandado',
-          initialValue: newDocumentState.demandadoRut.value,
-          onChanged:
-              ref.read(documentFormProvider.notifier).onDemandadoRutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandadoRut.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
-class _InformacionAbogado2 extends StatelessWidget {
-  const _InformacionAbogado2({
-    required this.ref,
-    required this.newDocumentState,
-  });
-
-  final WidgetRef ref;
-  final DocumentFormState newDocumentState;
-
-  @override
-  Widget build(BuildContext context) {
-    return CardModelInformation(
-      title: 'Abogado 2',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_abogado_2',
-          initialValue: newDocumentState.abogado2FullName.value,
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado2FullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2FullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_abogado_2',
-          initialValue: newDocumentState.abogado2Rut.value,
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado2RutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2Rut.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Correo',
-          preferencesKey: 'correo_abogado_2',
-          initialValue: newDocumentState.abogado2Email.value,
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado2EmailChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2Email.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
-class _InformacionAbogado1 extends StatelessWidget {
-  const _InformacionAbogado1({
-    required this.ref,
-    required this.newDocumentState,
-  });
-
-  final WidgetRef ref;
-  final DocumentFormState newDocumentState;
-
-  @override
-  Widget build(BuildContext context) {
-    return CardModelInformation(
-      title: 'Abogado 1',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_abogado_1',
-          initialValue: newDocumentState.abogado1FullName.value,
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado1FullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado1FullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_abogado_1',
-          initialValue: newDocumentState.abogado1Rut.value,
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado1RutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado1Rut.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Correo',
-          preferencesKey: 'correo_abogado_1',
-          initialValue: newDocumentState.abogado1Email.value,
-          onChanged:
-              ref.read(documentFormProvider.notifier).onAbogado1EmailChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado1Email.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
-class _InformacionDemandante extends StatelessWidget {
-  const _InformacionDemandante({
-    required this.ref,
-    required this.newDocumentState,
-  });
-
-  final WidgetRef ref;
-  final DocumentFormState newDocumentState;
-
-  @override
-  Widget build(BuildContext context) {
-    return CardModelInformation(
-      title: 'Demandante',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_demandante',
-          initialValue: newDocumentState.demandanteFullName.value,
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onDemandanteFullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandanteFullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_demandante',
-          initialValue: newDocumentState.demandanteRut.value,
-          onChanged:
-              ref.read(documentFormProvider.notifier).onDemandanteRutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandanteRut.errorMessage
-              : null,
-        ),
-        GenderSelector(
-          selectedGender: newDocumentState.demandanteGender,
-          onGenderChanged:
-              ref.read(documentFormProvider.notifier).onDemandanteGenderChanged,
-        ),
-        EstadoCivilDropdown(
-          estadoCivilInicial: newDocumentState.demandanteEstadoCivil,
-          gender: newDocumentState.demandanteGender,
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onDemandanteEstadoCivilChanged,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 180,
-          labelText: 'Nacionalidad',
-          preferencesKey: 'nacionalidad',
-          initialValue: newDocumentState.demandanteNacionalidad.value,
-          onChanged: ref
-              .read(documentFormProvider.notifier)
-              .onDemandanteNacionalidadChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.demandanteNacionalidad.errorMessage
-              : null,
-        ),
-      ],
     );
   }
 }
@@ -471,7 +150,7 @@ class _GenerateButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final newDocumentState = ref.watch(documentFormProvider);
+    final newDocumentState = ref.watch(documentForm01Provider);
     // return FloatingActionButton(
     //   onPressed: () {
 
@@ -481,7 +160,7 @@ class _GenerateButton extends ConsumerWidget {
       onPressed: newDocumentState.isPosting
           ? null
           : () {
-              ref.read(documentFormProvider.notifier).onFormSubmit().then(
+              ref.read(documentForm01Provider.notifier).onFormSubmit().then(
                 (document) {
                   if (document != null) {
                     // aquí tengo que pensar qué hacer
@@ -542,13 +221,338 @@ class _GenerateButton extends ConsumerWidget {
   }
 }
 
+// El resto de las clases (_Information, _DetallesAdicionales, _Danios, _Compensaciones)
+// permanecen sin cambios
+
+class _Information extends ConsumerStatefulWidget {
+  const _Information();
+
+  @override
+  ConsumerState<_Information> createState() => _InformationState();
+}
+
+class _InformationState extends ConsumerState<_Information>
+    with AutomaticKeepAliveClientMixin, KeepPageAliveMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final newDocumentState = ref.watch(documentForm01Provider);
+
+    return ListView(
+      padding: const EdgeInsets.only(
+        bottom: 100,
+        left: 5,
+        right: 5,
+      ),
+      children: [
+        SizedBox(height: 5),
+        // _InformacionDemandante(),
+        _InformacionDemandante(ref: ref, newDocumentState: newDocumentState),
+        SizedBox(height: 5),
+        //_InformacionAbogado1(),
+        _InformacionAbogado1(ref: ref, newDocumentState: newDocumentState),
+        SizedBox(height: 5),
+        //_InformacionAbogado2(),
+        _InformacionAbogado2(ref: ref, newDocumentState: newDocumentState),
+        SizedBox(height: 5),
+        //_InformacionDemandado(),
+        _InformacionDemandado(ref: ref, newDocumentState: newDocumentState),
+        SizedBox(height: 5),
+        //_InformacionRepresentanteLegal(),
+        _InformacionRepresentanteLegal(
+            ref: ref, newDocumentState: newDocumentState),
+        //SizedBox(height: 40),
+        // _SubmitButton()
+      ],
+    );
+  }
+}
+
+class _InformacionRepresentanteLegal extends StatelessWidget {
+  const _InformacionRepresentanteLegal({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentForm01State newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Representante Legal',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_representante_legal',
+          initialValue: newDocumentState.representanteLegalFullName.value,
+          onChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onRepresentanteLegalFullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.representanteLegalFullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_representante_legal',
+          initialValue: newDocumentState.representanteLegalRut.value,
+          onChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onRepresentanteLegalRutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.representanteLegalRut.errorMessage
+              : null,
+        ),
+        GenderSelector(
+          selectedGender: newDocumentState.representanteLegalGender,
+          onGenderChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onRepresentanteLegalGenderChanged,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 400,
+          labelText: 'Domicilio Empresa',
+          preferencesKey: 'domicilio_empresa',
+          initialValue: newDocumentState.representanteLegalDomicilio.value,
+          onChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onRepresentanteLegalDomicilioChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.representanteLegalDomicilio.errorMessage
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _InformacionDemandado extends StatelessWidget {
+  const _InformacionDemandado({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentForm01State newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Demandado',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 400,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_demandado',
+          initialValue: newDocumentState.demandadoFullName.value,
+          onChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onDemandadoFullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandadoFullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_demandado',
+          initialValue: newDocumentState.demandadoRut.value,
+          onChanged:
+              ref.read(documentForm01Provider.notifier).onDemandadoRutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandadoRut.errorMessage
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _InformacionAbogado2 extends StatelessWidget {
+  const _InformacionAbogado2({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentForm01State newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Abogado 2',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_abogado_2',
+          initialValue: newDocumentState.abogado2FullName.value,
+          onChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onAbogado2FullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado2FullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_abogado_2',
+          initialValue: newDocumentState.abogado2Rut.value,
+          onChanged:
+              ref.read(documentForm01Provider.notifier).onAbogado2RutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado2Rut.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Correo',
+          preferencesKey: 'correo_abogado_2',
+          initialValue: newDocumentState.abogado2Email.value,
+          onChanged:
+              ref.read(documentForm01Provider.notifier).onAbogado2EmailChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado2Email.errorMessage
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _InformacionAbogado1 extends StatelessWidget {
+  const _InformacionAbogado1({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentForm01State newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Abogado 1',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_abogado_1',
+          initialValue: newDocumentState.abogado1FullName.value,
+          onChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onAbogado1FullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado1FullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_abogado_1',
+          initialValue: newDocumentState.abogado1Rut.value,
+          onChanged:
+              ref.read(documentForm01Provider.notifier).onAbogado1RutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado1Rut.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Correo',
+          preferencesKey: 'correo_abogado_1',
+          initialValue: newDocumentState.abogado1Email.value,
+          onChanged:
+              ref.read(documentForm01Provider.notifier).onAbogado1EmailChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.abogado1Email.errorMessage
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _InformacionDemandante extends StatelessWidget {
+  const _InformacionDemandante({
+    required this.ref,
+    required this.newDocumentState,
+  });
+
+  final WidgetRef ref;
+  final DocumentForm01State newDocumentState;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardModelInformation(
+      title: 'Demandante',
+      children: [
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 300,
+          labelText: 'Nombre Completo',
+          preferencesKey: 'nombre_demandante',
+          initialValue: newDocumentState.demandanteFullName.value,
+          onChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onDemandanteFullNameChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandanteFullName.errorMessage
+              : null,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 200,
+          labelText: 'Rut/CI',
+          preferencesKey: 'rut_demandante',
+          initialValue: newDocumentState.demandanteRut.value,
+          onChanged:
+              ref.read(documentForm01Provider.notifier).onDemandanteRutChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandanteRut.errorMessage
+              : null,
+        ),
+        GenderSelector(
+          selectedGender: newDocumentState.demandanteGender,
+          onGenderChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onDemandanteGenderChanged,
+        ),
+        EstadoCivilDropdown(
+          estadoCivilInicial: newDocumentState.demandanteEstadoCivil,
+          gender: newDocumentState.demandanteGender,
+          onChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onDemandanteEstadoCivilChanged,
+        ),
+        AdvancedAutocompleteTextFieldOverlay(
+          width: 180,
+          labelText: 'Nacionalidad',
+          preferencesKey: 'nacionalidad',
+          initialValue: newDocumentState.demandanteNacionalidad.value,
+          onChanged: ref
+              .read(documentForm01Provider.notifier)
+              .onDemandanteNacionalidadChanged,
+          errorMessage: newDocumentState.isFormPosted
+              ? newDocumentState.demandanteNacionalidad.errorMessage
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+
+
 // class _NextButton extends ConsumerWidget {
 //   const _NextButton(this.nroPaginas);
 //   final int nroPaginas;
 
 //   @override
 //   Widget build(BuildContext context, ref) {
-//     final newDocumentState = ref.watch(documentFormProvider);
+//     final newDocumentState = ref.watch(documentForm01Provider);
 //     final indiceActual = newDocumentState.selectedIndex;
 
 //     return indiceActual < nroPaginas - 1
@@ -556,7 +560,7 @@ class _GenerateButton extends ConsumerWidget {
 //             tooltip: 'Siguiente',
 //             heroTag: 'next',
 //             onPressed: () {
-//               ref.read(documentFormProvider.notifier).incrementarIndex();
+//               ref.read(documentForm01Provider.notifier).incrementarIndex();
 //             },
 //             child: Icon(Icons.arrow_forward_rounded),
 //           )
@@ -570,7 +574,7 @@ class _GenerateButton extends ConsumerWidget {
 
 //   @override
 //   Widget build(BuildContext context, ref) {
-//     final newDocumentState = ref.watch(documentFormProvider);
+//     final newDocumentState = ref.watch(documentForm01Provider);
 //     final indiceActual = newDocumentState.selectedIndex;
 
 //     return indiceActual > 0
@@ -580,7 +584,7 @@ class _GenerateButton extends ConsumerWidget {
 //               tooltip: 'Anterior',
 //               heroTag: 'previus',
 //               onPressed: () {
-//                 ref.read(documentFormProvider.notifier).decrementarIndex();
+//                 ref.read(documentForm01Provider.notifier).decrementarIndex();
 //               },
 //               child: Icon(Icons.arrow_back_rounded),
 //             ),
@@ -602,7 +606,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final newDocumentState = ref.watch(documentFormProvider);
+    final newDocumentState = ref.watch(documentForm01Provider);
     // final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     // final remuneracion =
@@ -642,7 +646,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                         labelText: 'TRIBUNAL',
                         initialValue: newDocumentState.tribunal.value,
                         onChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onTribunalChanged,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState.tribunal.errorMessage
@@ -655,7 +659,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                           return !day.isAfter(DateTime.now());
                         },
                         onFechaChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onFechaInicioRelacionLaboralChanged,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState
@@ -676,7 +680,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                           return !day.isAfter(DateTime.now()) && !isBefore;
                         },
                         onFechaChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onFechaTerminoRelacionLaboralChanged,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState
@@ -691,7 +695,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                         labelText: 'CARGO DEL TRABAJADOR',
                         initialValue: newDocumentState.cargoTrabajador.value,
                         onChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onCargoTrabajadorChanged,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState.cargoTrabajador.errorMessage
@@ -703,7 +707,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                         labelText: 'TIPO DE CONTRATO',
                         initialValue: newDocumentState.tipoContrato.value,
                         onChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onTipoContratoChanged,
                         errorMessage: newDocumentState.isFormPosted
                             ? newDocumentState.tipoContrato.errorMessage
@@ -717,7 +721,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                             ? newDocumentState.horasSemanales.errorMessage
                             : null,
                         onChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onHorasSemanalesChanged,
                       ),
                       CustomNumericTextField(
@@ -730,7 +734,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                             ? newDocumentState.remuneracion.errorMessage
                             : null,
                         onChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onRemuneracionChanged,
                       ),
                     ],
@@ -765,7 +769,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                         return !isBefore && !isAfter;
                       },
                       onFechaChanged: ref
-                          .read(documentFormProvider.notifier)
+                          .read(documentForm01Provider.notifier)
                           .onFechaAccidenteLaboralChanged,
                       errorMessage: newDocumentState.isFormPosted
                           ? newDocumentState.fechaAccidenteLaboral.errorMessage
@@ -775,7 +779,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                     SelectTimeEntryCustom(
                       title: 'Hora del accidente',
                       onHoraChanged: ref
-                          .read(documentFormProvider.notifier)
+                          .read(documentForm01Provider.notifier)
                           .onHoraAccidenteChanged,
                       errorMessage: newDocumentState.isFormPosted
                           ? newDocumentState.horaAccidente.errorMessage
@@ -793,7 +797,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                     height: altura * factorAltura,
                     initialValue: newDocumentState.relatoAccidenteExtenso.value,
                     onChanged: ref
-                        .read(documentFormProvider.notifier)
+                        .read(documentForm01Provider.notifier)
                         .onRelatoAccidenteExtensoChanged,
                     errorMessage: newDocumentState.isFormPosted
                         ? newDocumentState.relatoAccidenteExtenso.errorMessage
@@ -807,7 +811,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                     initialValue:
                         newDocumentState.relatoHechosPosteriores.value,
                     onChanged: ref
-                        .read(documentFormProvider.notifier)
+                        .read(documentForm01Provider.notifier)
                         .onRelatoHechosPosterioresChanged,
                     errorMessage: newDocumentState.isFormPosted
                         ? newDocumentState.relatoHechosPosteriores.errorMessage
@@ -836,7 +840,7 @@ class _DaniosState extends ConsumerState<_Danios>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final newDocumentState = ref.watch(documentFormProvider);
+    final newDocumentState = ref.watch(documentForm01Provider);
     final textTheme = Theme.of(context).textTheme;
     // final montoADemandar =
     //     "\$${StringUtils.formatToNumber(newDocumentState.montoADemandar.value)}";
@@ -881,7 +885,7 @@ class _DaniosState extends ConsumerState<_Danios>
                                 .porcentajeIncapacidad.errorMessage
                             : null,
                         onChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onPorcentajeIncapacidadChanged,
                       ),
                       CustomNumericTextField(
@@ -895,7 +899,7 @@ class _DaniosState extends ConsumerState<_Danios>
                             ? newDocumentState.montoADemandar.errorMessage
                             : null,
                         onChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onMontoADemandarChanged,
                       ),
                     ],
@@ -910,7 +914,7 @@ class _DaniosState extends ConsumerState<_Danios>
                     height: altura * 0.23,
                     initialValue: newDocumentState.relatoDaniosEsteticos.value,
                     onChanged: ref
-                        .read(documentFormProvider.notifier)
+                        .read(documentForm01Provider.notifier)
                         .onRelatoDaniosEsteticosChanged,
                     errorMessage: newDocumentState.isFormPosted
                         ? newDocumentState.relatoDaniosEsteticos.errorMessage
@@ -924,7 +928,7 @@ class _DaniosState extends ConsumerState<_Danios>
                     height: altura * 0.2,
                     initialValue: newDocumentState.danioActor.value,
                     onChanged: ref
-                        .read(documentFormProvider.notifier)
+                        .read(documentForm01Provider.notifier)
                         .onDanioActorChanged,
                     errorMessage: newDocumentState.isFormPosted
                         ? newDocumentState.danioActor.errorMessage
@@ -936,7 +940,7 @@ class _DaniosState extends ConsumerState<_Danios>
                     height: altura * 0.1,
                     initialValue: newDocumentState.danioTrabajador.value,
                     onChanged: ref
-                        .read(documentFormProvider.notifier)
+                        .read(documentForm01Provider.notifier)
                         .onDanioTrabajadorChanged,
                     errorMessage: newDocumentState.isFormPosted
                         ? newDocumentState.danioTrabajador.errorMessage
@@ -951,7 +955,7 @@ class _DaniosState extends ConsumerState<_Danios>
                     initialValue: newDocumentState
                         .medidasNecesariasEmpresaDemandada.value,
                     onChanged: ref
-                        .read(documentFormProvider.notifier)
+                        .read(documentForm01Provider.notifier)
                         .onMedidasNecesariasEmpresaDemandadaChanged,
                     errorMessage: newDocumentState.isFormPosted
                         ? newDocumentState
@@ -981,7 +985,7 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final newDocumentState = ref.watch(documentFormProvider);
+    final newDocumentState = ref.watch(documentForm01Provider);
     // final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     // final montoRemuneracionSegunEmpleador =
@@ -1032,7 +1036,7 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                                 .montoRemuneracionSegunEmpleador.errorMessage
                             : null,
                         onChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onMontoRemuneracionSegunEmpleadorChanged,
                       ),
                       CustomNumericTextField(
@@ -1049,7 +1053,7 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                                 .montoRemuneracionArt172.errorMessage
                             : null,
                         onChanged: ref
-                            .read(documentFormProvider.notifier)
+                            .read(documentForm01Provider.notifier)
                             .onMontoRemuneracionArt172Changed,
                       ),
                     ],
@@ -1080,7 +1084,7 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                               initialValue: newDocumentState
                                   .documentosAdicionalesAIngresar[index],
                               onChanged: ref
-                                  .read(documentFormProvider.notifier)
+                                  .read(documentForm01Provider.notifier)
                                   .onDocumentoAdicionalChanged,
                             ),
                             IconButton(
@@ -1088,7 +1092,7 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                               icon: const Icon(Icons.delete_forever_rounded),
                               onPressed: () {
                                 ref
-                                    .read(documentFormProvider.notifier)
+                                    .read(documentForm01Provider.notifier)
                                     .onRemoveDocumentosAdicionalesAIngresar(
                                         index);
                               },
@@ -1105,7 +1109,7 @@ class _CompensacionesState extends ConsumerState<_Compensaciones>
                           icon: const Icon(Icons.add),
                           onPressed: () {
                             ref
-                                .read(documentFormProvider.notifier)
+                                .read(documentForm01Provider.notifier)
                                 .onAddDocumentosAdicionalesAIngresar();
                           },
                         ),

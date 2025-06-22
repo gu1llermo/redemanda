@@ -14,7 +14,7 @@ class DocumentsState {
   final int pageSize;
   final bool isLoading;
   final String errorMessage;
-  // final AsyncValue<void> status;
+  final int selectedIndex;
 
   DocumentsState({
     this.documents = const [],
@@ -23,7 +23,7 @@ class DocumentsState {
     this.pageSize = 10,
     this.isLoading = false,
     this.errorMessage = '',
-    // this.status = const AsyncValue.data(null),
+    this.selectedIndex = 0,
   });
 
   DocumentsState copyWith({
@@ -33,7 +33,7 @@ class DocumentsState {
     int? pageSize,
     bool? isLoading,
     String? errorMessage,
-    // AsyncValue<void>? status,
+    int? selectedIndex,
   }) =>
       DocumentsState(
         documents: documents ?? this.documents,
@@ -42,7 +42,7 @@ class DocumentsState {
         pageSize: pageSize ?? this.pageSize,
         isLoading: isLoading ?? this.isLoading,
         errorMessage: errorMessage ?? this.errorMessage,
-        // status: status ?? this.status,
+        selectedIndex: selectedIndex ?? this.selectedIndex,
       );
 }
 
@@ -56,10 +56,7 @@ class DocumentsPagination extends _$DocumentsPagination {
 
   // Cargar documentos con paginación
   Future<void> loadDocuments({bool refresh = false}) async {
-    // Si ya estamos cargando o no hay más documentos, no hacemos nada
-    // if (state.status is AsyncLoading && !refresh) return;
     if (state.isLoading) return;
-    // if (state.isLoading && !refresh) return;
 
     try {
       // Iniciar carga
@@ -118,6 +115,10 @@ class DocumentsPagination extends _$DocumentsPagination {
     await loadDocuments(refresh: true);
   }
 
+  void onItemTapped(int index) {
+    state = state.copyWith(selectedIndex: index);
+  }
+
   // Método para crear un nuevo documento
   Future<Document?> createDocument(Map<String, dynamic> documentRequest) async {
     try {
@@ -131,16 +132,8 @@ class DocumentsPagination extends _$DocumentsPagination {
       );
       return newDocument;
     } on NetworkException catch (e) {
-      // state = state.copyWith(
-      //   errorMessage: e.message,
-      // );
-      // return null;
       rethrow;
     } catch (e) {
-      // state = state.copyWith(
-      //   errorMessage: e.toString(),
-      // );
-      // return null;
       rethrow;
     }
   }

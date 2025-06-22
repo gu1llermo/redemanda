@@ -6,6 +6,29 @@ import '../../features/auth/presentation/screens/screens.dart';
 import '../../features/documents/documents.dart';
 import 'app_router_notifier.dart';
 
+final List<GoRoute> _documentsSubRouts = [
+  GoRoute(
+    path: NewDocument01Screen.path,
+    builder: (context, state) => NewDocument01Screen(),
+  ),
+  GoRoute(
+    path: NewDocument02Screen.path,
+    builder: (context, state) => NewDocument02Screen(),
+  ),
+  GoRoute(
+    path: NewDocument03Screen.path,
+    builder: (context, state) => NewDocument03Screen(),
+  ),
+  GoRoute(
+    path: NewDocument04Screen.path,
+    builder: (context, state) => NewDocument04Screen(),
+  ),
+  GoRoute(
+    path: NewDocument05Screen.path,
+    builder: (context, state) => NewDocument05Screen(),
+  ),
+];
+
 final goRouterProvider = Provider<GoRouter>((ref) {
   //* El objetivo de encerrar el goRouter con un provider, es para saber si el usuario está autenticado
   //* ó no, es para proteger las rutas, especialmente en la web, en donde un usuario puede llegar
@@ -38,13 +61,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/',
         builder: (context, state) => const DocumentsScreen(),
-        routes: [
-          GoRoute(
-            path: 'new-document',
-            builder: (context, state) => NewDocumentScreen(),
-          ),
-        ],
+        routes: _documentsSubRouts,
       ),
+
+      ///* Settings Route
       GoRoute(
         path: '/settings',
         builder: (context, state) => const UnderConstructionScreen(),
