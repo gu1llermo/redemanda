@@ -143,6 +143,7 @@ class _NewDocument02ScreenState extends ConsumerState<NewDocument02Screen>
   }
   
 }
+
 class _GenerateButton extends ConsumerWidget {
   const _GenerateButton();
 
