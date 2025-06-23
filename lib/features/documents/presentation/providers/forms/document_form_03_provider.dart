@@ -2,18 +2,17 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../../config/config.dart';
 import '../../../domain/domain.dart';
-// import '../providers.dart';
 import '../documents_provider.dart';
 import 'estado_civil.dart';
 import 'inputs/inputs.dart';
 
-part 'document_form_02_provider.g.dart';
+part 'document_form_03_provider.g.dart';
 
 @Riverpod(dependencies: [DocumentsPagination])
-class DocumentForm02 extends _$DocumentForm02 {
+class DocumentForm03 extends _$DocumentForm03 {
   @override
-  DocumentForm02State build() {
-    return DocumentForm02State();
+  DocumentForm03State build() {
+    return DocumentForm03State();
   }
 
   ///* index
@@ -296,13 +295,13 @@ class DocumentForm02 extends _$DocumentForm02 {
     state = state.copyWith(cargoDemandante: cargoDemandanteValidated);
   }
 
-  void onComunaChanged(String value) {
-    final comunaChanged = state.comuna.onChanged(value);
-    state = state.copyWith(comuna: comunaChanged);
+  void onComunaDemandadoSolidarioChanged(String value) {
+    final comunaDemandadoSolidarioChanged = state.comunaDemandadoSolidario.onChanged(value);
+    state = state.copyWith(comunaDemandadoSolidario: comunaDemandadoSolidarioChanged);
   }
-  void onComunaValidate() {
-    final comunaValidated = state.comuna.validate();
-    state = state.copyWith(comuna: comunaValidated);
+  void onComunaDemandadoSolidarioValidate() {
+    final comunaDemandadoSolidarioValidated = state.comunaDemandadoSolidario.validate();
+    state = state.copyWith(comunaDemandadoSolidario: comunaDemandadoSolidarioValidated);
   }
 
   void onTipoContratoChanged(String value) {
@@ -375,13 +374,31 @@ class DocumentForm02 extends _$DocumentForm02 {
     state = state.copyWith(tipoAFP: tipoAFPValidated);
   }
 
-  void onRegionChanged(String value) {
-    final regionChanged = state.region.onChanged(value);
-    state = state.copyWith(region: regionChanged);
+  void onRegionDemandanteChanged(String value) {
+    final regionDemandanteChanged = state.regionDemandante.onChanged(value);
+    state = state.copyWith(regionDemandante: regionDemandanteChanged);
   }
-  void onRegionValidate() {
-    final regionValidated = state.region.validate();
-    state = state.copyWith(region: regionValidated);
+  void onRegionDemandanteValidate() {
+    final regionDemandanteValidated = state.regionDemandante.validate();
+    state = state.copyWith(regionDemandante: regionDemandanteValidated);
+  }
+
+  void onComunaDemandanteChanged(String value) {
+    final comunaDemandanteChanged = state.comunaDemandante.onChanged(value);
+    state = state.copyWith(comunaDemandante: comunaDemandanteChanged);
+  }
+  void onComunaDemandanteValidate() {
+    final comunaDemandanteValidated = state.comunaDemandante.validate();
+    state = state.copyWith(comunaDemandante: comunaDemandanteValidated);
+  }
+
+  void onCalleDireccionDemandanteChanged(String value) {
+    final calleDireccionDemandanteChanged = state.calleDireccionDemandante.onChanged(value);
+    state = state.copyWith(calleDireccionDemandante: calleDireccionDemandanteChanged);
+  }
+  void onCalleDireccionDemandanteValidate() {
+    final calleDireccionDemandanteValidated = state.calleDireccionDemandante.validate();
+    state = state.copyWith(calleDireccionDemandante: calleDireccionDemandanteValidated);
   }
 
   void onCausalTerminoChanged(String value) {
@@ -500,13 +517,16 @@ class DocumentForm02 extends _$DocumentForm02 {
       final fechaReclamoDt = AppDateUtils.getCustomFormattedDate(state.fechaReclamoDt.value!);
       final fechaComparendoDt = AppDateUtils.getCustomFormattedDate(state.fechaComparendoDt.value!);
 
-      final nameTemplate = 'DDA_recon Rla Lab Autodespido nulidad con solidaria - template_02.docx';
+      final nameTemplate = 'DDA_recon Rla Lab Autodespido nulidad SIN solidaria Danio moral - template_03.docx';
       final data = {
         //*Demandante
         'NOMBRE_DEMANDANTE': state.demandanteFullName.value,
         'RUT_DEMANDANTE': state.demandanteRut.value,
         'NACIONALIDAD': state.demandanteNacionalidad.value,
         'DIRECCION_DEMANDANTE': state.demandanteDireccion.value,
+        'REGION_DEMANDANTE': state.regionDemandante.value,
+        'COMUNA_DEMANDANTE': state.comunaDemandante.value,
+        'CALLE_DIRECCION_DEMANDANTE': state.calleDireccionDemandante.value,
         'DON_CORTESIA_DEMANDANTE': state.demandanteGender.donCortesia(),
         'DEMANDANTE_A_O': state.demandanteGender.colocaAO(),
         'LA_ACTORA_EL_ACTOR': state.demandanteGender.actorAO(),
@@ -524,6 +544,7 @@ class DocumentForm02 extends _$DocumentForm02 {
         //* Demandado solidario
         'DEMANDADO_SOLIDARIO': state.demandadoSolidarioFullName.value,
         'RUT_DEMANDADO_SOLIDARIO': state.demandadoSolidarioRut.value,
+        'COMUNA_DEMANDADO_SOLIDARIO': state.comunaDemandadoSolidario.value,
         //* Representante Legal principal
         'REPRESENTANTE_LEGAL_DEMANDADO_PRINCIPAL': state.representanteLegalPrincipalFullName.value,
         'RUT_REPRESENTANTE_LEGAL_DEMANDADO_PRINCIPAL': state.representanteLegalPrincipalRut.value,
@@ -543,7 +564,7 @@ class DocumentForm02 extends _$DocumentForm02 {
         'FECHA_DE_RECLAMO_DT': fechaReclamoDt,
         'FECHA_DE_COMPARENDO_DT': fechaComparendoDt,
         'CARGO_DEMANDANTE': state.cargoDemandante.value,
-        'COMUNA': state.comuna.value,
+        
         'TIPO_DE_CONTRATO': state.tipoContrato.value,
         // 'HORAS_SEMANALES': state.horasSemanales.value,//no lo estoy usando en ésta plantilla
         'HORARIO_JORNADA_DE_TRABAJO': state.horarioJornadaTrabajo.value,
@@ -551,7 +572,7 @@ class DocumentForm02 extends _$DocumentForm02 {
         'CAUSAL_DE_TERMINO': state.causalTermino.value,
         'PERIODO_IMPAGO_IMPOSICIONES': state.periodoImposiciones.value,
         'FERIADO_LEGAL_DIAS': state.feriadoLegalDias.value,
-        'INGRESAR_REGION': state.region.value,
+        
 
         'LABORES_DESARROLLADAS_POR_EL_TRABAJADOR': state.laboresTrabajador.value,
         'SERVICIOS_PRESTADOS_POR_LA_PRINCIPAL_A_LA_SOLIDARIA': state.serviciosPrestados.value,
@@ -603,6 +624,9 @@ class DocumentForm02 extends _$DocumentForm02 {
     onDemandanteRutValidate();
     onDemandanteNacionalidadValidate();
     onDemandanteDireccionValidate();
+    onRegionDemandanteValidate();
+    onComunaDemandanteValidate();
+    onCalleDireccionDemandanteValidate();
     // Abogado 1
     onAbogado1FullNameValidate();
     onAbogado1RutValidate();
@@ -634,17 +658,16 @@ class DocumentForm02 extends _$DocumentForm02 {
     onFechaReclamoDtValidate();
     onFechaComparendoDtValidate();
     onCargoDemandanteValidate();
-    onComunaValidate();
+    onComunaDemandadoSolidarioValidate();
     onTipoContratoValidate();
     onHorarioJornadaTrabajoValidate();
     onTipoAFPValidate();
     onCausalTerminoValidate();
     onPeriodoImposicionesValidate();
     onFeriadoLegalDiasValidate();
-    onRegionValidate();
+
     onLaboresTrabajadorValidate();
     onServiciosPrestadosValidate();
-
   }
 
   void _isValidCompensacionesPage(){
@@ -656,7 +679,7 @@ class DocumentForm02 extends _$DocumentForm02 {
   }
 }
 
-class DocumentForm02State {
+class DocumentForm03State {
   // errorMessage
   final String errorMessage;
   // index
@@ -671,6 +694,9 @@ class DocumentForm02State {
   final SimpleString demandanteFullName;
   final SimpleString demandanteRut;
   final SimpleString demandanteNacionalidad;
+  final SimpleString regionDemandante;
+  final SimpleString comunaDemandante;
+  final SimpleString calleDireccionDemandante;
   // ABOGADO 1
   final SimpleString abogado1FullName;
   final SimpleString abogado1Rut;
@@ -685,6 +711,7 @@ class DocumentForm02State {
   // Demandado solidario
   final SimpleString demandadoSolidarioFullName;
   final SimpleString demandadoSolidarioRut;
+  final SimpleString comunaDemandadoSolidario;
   // Representante Legal Demandado principal
   final Gender representanteLegalPrincipalGender;
   final SimpleString representanteLegalPrincipalFullName;
@@ -702,7 +729,7 @@ class DocumentForm02State {
   final FechaInput fechaReclamoDt;
   final FechaInput fechaComparendoDt;
   final SimpleString cargoDemandante;
-  final SimpleString comuna;
+  
   final SimpleString serviciosPrestados;
 
   final SimpleString tipoContrato;
@@ -710,7 +737,7 @@ class DocumentForm02State {
   final SimpleString laboresTrabajador;
   final SimpleString tipoAFP;
   final SimpleString causalTermino;
-  final SimpleString region;
+  
   final SimpleString periodoImposiciones;
   final PositiveIntegerInput horasSemanales;
   final PositiveNumInput remuneracion;
@@ -735,7 +762,7 @@ class DocumentForm02State {
   // Lista de documentos adicionales
   final List<String> documentosAdicionalesAIngresar;
 
-  DocumentForm02State({
+  DocumentForm03State({
     this.errorMessage = '',
     this.selectedIndex = 0,
     // utiles del formulario
@@ -748,6 +775,9 @@ class DocumentForm02State {
     this.demandanteFullName = const SimpleString(value: ''),
     this.demandanteRut = const SimpleString(value: ''),
     this.demandanteNacionalidad = const SimpleString(value: ''),
+    this.regionDemandante = const SimpleString(value: ''),
+    this.comunaDemandante = const SimpleString(value: ''),
+    this.calleDireccionDemandante = const SimpleString(value: ''),
     // Abogado 1
     this.abogado1FullName = const SimpleString(value: ''),
     this.abogado1Rut = const SimpleString(value: ''),
@@ -762,6 +792,7 @@ class DocumentForm02State {
     // Demandando solidario
     this.demandadoSolidarioFullName = const SimpleString(value: ''),
     this.demandadoSolidarioRut = const SimpleString(value: ''),
+    this.comunaDemandadoSolidario = const SimpleString(value: ''),
     // Representante Legal principal
     this.representanteLegalPrincipalGender = Gender.hombre,
     this.representanteLegalPrincipalFullName = const SimpleString(value: ''),
@@ -779,14 +810,13 @@ class DocumentForm02State {
     this.fechaReclamoDt = const FechaInput(value: null),
     this.fechaComparendoDt = const FechaInput(value: null),
     this.cargoDemandante = const SimpleString(value: ''),
-    this.comuna = const SimpleString(value: ''),
     this.tipoContrato = const SimpleString(value: ''),
     this.laboresTrabajador = const SimpleString(value: ''),
     this.serviciosPrestados = const SimpleString(value: ''),
     this.tipoAFP = const SimpleString(value: ''),
     this.causalTermino = const SimpleString(value: ''),
     this.periodoImposiciones = const SimpleString(value: ''),
-    this.region = const SimpleString(value: ''),
+    
 
     this.horasSemanales = const PositiveIntegerInput(value: ''),
 
@@ -828,6 +858,9 @@ class DocumentForm02State {
         demandanteRut.hasError,
         demandanteNacionalidad.hasError,
         demandanteDireccion.hasError,
+        regionDemandante.hasError,
+        comunaDemandante.hasError,
+        calleDireccionDemandante.hasError,
         // Abogado 1
         abogado1FullName.hasError,
         abogado1Rut.hasError,
@@ -842,6 +875,7 @@ class DocumentForm02State {
         // Demandado Solidario
         demandadoSolidarioFullName.hasError,
         demandadoSolidarioRut.hasError,
+        comunaDemandadoSolidario.hasError,
         // Representante legal principal
         representanteLegalPrincipalFullName.hasError,
         representanteLegalPrincipalRut.hasError,
@@ -860,7 +894,6 @@ class DocumentForm02State {
         fechaReclamoDt.hasError,
         fechaComparendoDt.hasError,
         cargoDemandante.hasError,
-        comuna.hasError,
         tipoContrato.hasError,
         horarioJornadaTrabajo.hasError,
         laboresTrabajador.hasError,
@@ -869,7 +902,7 @@ class DocumentForm02State {
         causalTermino.hasError,
         periodoImposiciones.hasError,
         feriadoLegalDias.hasError,
-        region.hasError,
+        
         laboresTrabajador.hasError,
         serviciosPrestados.hasError,
 
@@ -882,7 +915,7 @@ class DocumentForm02State {
         montoFeriadoLegal.hasError,
       ].any((input) => input);
 
-  DocumentForm02State copyWith({
+  DocumentForm03State copyWith({
     String? errorMessage,
     // index
     int? selectedIndex,
@@ -895,6 +928,9 @@ class DocumentForm02State {
     SimpleString? demandanteRut,
     SimpleString? demandanteNacionalidad,
     SimpleString? demandanteDireccion,
+    SimpleString? regionDemandante,
+    SimpleString? comunaDemandante,
+    SimpleString? calleDireccionDemandante,
     // Abogado 1
     SimpleString? abogado1FullName,
     SimpleString? abogado1Rut,
@@ -909,6 +945,7 @@ class DocumentForm02State {
     // Demandado solidario
     SimpleString? demandadoSolidarioFullName,
     SimpleString? demandadoSolidarioRut,
+    SimpleString? comunaDemandadoSolidario,
     // Representante Legal principal
     Gender? representanteLegalPrincipalGender,
     SimpleString? representanteLegalPrincipalFullName,
@@ -926,7 +963,7 @@ class DocumentForm02State {
     FechaInput? fechaReclamoDt,
     FechaInput? fechaComparendoDt,
     SimpleString? cargoDemandante,
-    SimpleString? comuna,
+    
     SimpleString? tipoContrato,
     SimpleString? laboresTrabajador,
     PositiveIntegerInput? horasSemanales,
@@ -939,7 +976,7 @@ class DocumentForm02State {
     SimpleString? tipoAFP,
     SimpleString? causalTermino,
     SimpleString? periodoImposiciones,
-    SimpleString? region,
+    
     // Detalles del Accidente
     // FechaAccidenteInput? fechaAccidenteLaboral,
     // HoraInput? horaAccidente,
@@ -959,7 +996,7 @@ class DocumentForm02State {
     // Lista de documentos adicionales
     List<String>? documentosAdicionalesAIngresar,
   }) =>
-      DocumentForm02State(
+      DocumentForm03State(
         errorMessage: errorMessage ?? this.errorMessage,
         // index
         selectedIndex: selectedIndex ?? this.selectedIndex,
@@ -973,6 +1010,9 @@ class DocumentForm02State {
         demandanteFullName: demandanteFullName ?? this.demandanteFullName,
         demandanteRut: demandanteRut ?? this.demandanteRut,
         demandanteNacionalidad: demandanteNacionalidad ?? this.demandanteNacionalidad,
+        regionDemandante: regionDemandante ?? this.regionDemandante,
+        comunaDemandante: comunaDemandante ?? this.comunaDemandante,
+        calleDireccionDemandante: calleDireccionDemandante ?? this.calleDireccionDemandante,
         // Abogado 1
         abogado1FullName: abogado1FullName ?? this.abogado1FullName,
         abogado1Rut: abogado1Rut ?? this.abogado1Rut,
@@ -987,6 +1027,7 @@ class DocumentForm02State {
         // Demandado Solidario
         demandadoSolidarioFullName: demandadoSolidarioFullName ?? this.demandadoSolidarioFullName,
         demandadoSolidarioRut: demandadoSolidarioRut ?? this.demandadoSolidarioRut,
+        comunaDemandadoSolidario: comunaDemandadoSolidario ?? this.comunaDemandadoSolidario,
         // Representante Legal principal
         representanteLegalPrincipalGender: representanteLegalPrincipalGender ?? this.representanteLegalPrincipalGender,
         representanteLegalPrincipalFullName: representanteLegalPrincipalFullName ?? this.representanteLegalPrincipalFullName,
@@ -1005,7 +1046,7 @@ class DocumentForm02State {
         fechaReclamoDt: fechaReclamoDt ?? this.fechaReclamoDt,
         fechaComparendoDt: fechaComparendoDt ?? this.fechaComparendoDt,
         cargoDemandante: cargoDemandante ?? this.cargoDemandante,
-        comuna: comuna ?? this.comuna,
+        
         montoFeriadoLegal: montoFeriadoLegal ?? this.montoFeriadoLegal,
         serviciosPrestados: serviciosPrestados ?? this.serviciosPrestados,
         tipoContrato: tipoContrato ?? this.tipoContrato,
@@ -1019,7 +1060,7 @@ class DocumentForm02State {
         // Detalles del Accidente
         horarioJornadaTrabajo: horarioJornadaTrabajo ?? this.horarioJornadaTrabajo,
         feriadoLegalDias: feriadoLegalDias ?? this.feriadoLegalDias,
-        region: region ?? this.region,
+        
         
         // Daños y perjuicios
         // montoADemandar: montoADemandar ?? this.montoADemandar,
