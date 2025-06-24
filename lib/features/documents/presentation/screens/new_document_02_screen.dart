@@ -245,8 +245,8 @@ class _InformationState extends ConsumerState<_Information>
         _InformacionAbogado1(ref: ref, newDocumentState: newDocumentState),
         SizedBox(height: 5),
         //_InformacionAbogado2(),
-        _InformacionAbogado2(ref: ref, newDocumentState: newDocumentState),
-        SizedBox(height: 5),
+        // _InformacionAbogado2(ref: ref, newDocumentState: newDocumentState),
+        // SizedBox(height: 5),
         _InformacionDemandadoPrincipal(ref: ref, newDocumentState: newDocumentState),
         SizedBox(height: 5),
         _InformacionDemandadoSolidario(ref: ref, newDocumentState: newDocumentState),
@@ -461,58 +461,58 @@ class _InformacionDemandadoSolidario extends StatelessWidget {
   }
 }
 
-class _InformacionAbogado2 extends StatelessWidget {
-  const _InformacionAbogado2({
-    required this.ref,
-    required this.newDocumentState,
-  });
+// class _InformacionAbogado2 extends StatelessWidget {
+//   const _InformacionAbogado2({
+//     required this.ref,
+//     required this.newDocumentState,
+//   });
 
-  final WidgetRef ref;
-  final DocumentForm02State newDocumentState;
+//   final WidgetRef ref;
+//   final DocumentForm02State newDocumentState;
 
-  @override
-  Widget build(BuildContext context) {
-    return CardModelInformation(
-      title: 'Abogado 2',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_abogado_2',
-          initialValue: newDocumentState.abogado2FullName.value,
-          onChanged: ref
-              .read(documentForm02Provider.notifier)
-              .onAbogado2FullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2FullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_abogado_2',
-          initialValue: newDocumentState.abogado2Rut.value,
-          onChanged:
-              ref.read(documentForm02Provider.notifier).onAbogado2RutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2Rut.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Correo',
-          preferencesKey: 'correo_abogado_2',
-          initialValue: newDocumentState.abogado2Email.value,
-          onChanged:
-              ref.read(documentForm02Provider.notifier).onAbogado2EmailChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2Email.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return CardModelInformation(
+//       title: 'Abogado 2',
+//       children: [
+//         AdvancedAutocompleteTextFieldOverlay(
+//           width: 300,
+//           labelText: 'Nombre Completo',
+//           preferencesKey: 'nombre_abogado_2',
+//           initialValue: newDocumentState.abogado2FullName.value,
+//           onChanged: ref
+//               .read(documentForm02Provider.notifier)
+//               .onAbogado2FullNameChanged,
+//           errorMessage: newDocumentState.isFormPosted
+//               ? newDocumentState.abogado2FullName.errorMessage
+//               : null,
+//         ),
+//         AdvancedAutocompleteTextFieldOverlay(
+//           width: 200,
+//           labelText: 'Rut/CI',
+//           preferencesKey: 'rut_abogado_2',
+//           initialValue: newDocumentState.abogado2Rut.value,
+//           onChanged:
+//               ref.read(documentForm02Provider.notifier).onAbogado2RutChanged,
+//           errorMessage: newDocumentState.isFormPosted
+//               ? newDocumentState.abogado2Rut.errorMessage
+//               : null,
+//         ),
+//         AdvancedAutocompleteTextFieldOverlay(
+//           width: 300,
+//           labelText: 'Correo',
+//           preferencesKey: 'correo_abogado_2',
+//           initialValue: newDocumentState.abogado2Email.value,
+//           onChanged:
+//               ref.read(documentForm02Provider.notifier).onAbogado2EmailChanged,
+//           errorMessage: newDocumentState.isFormPosted
+//               ? newDocumentState.abogado2Email.errorMessage
+//               : null,
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class _InformacionAbogado1 extends StatelessWidget {
   const _InformacionAbogado1({
@@ -725,6 +725,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                       DateTimeEntryCustom(
                         title: 'Fecha Termino relación laboral',
                         selectableDayPredicate: (day) {
+                          // return !day.isAfter(DateTime.now());
 
                           final bool isBeforeFechaInicio = day.isBefore(newDocumentState
                                   .fechaInicioRelacionLaboral.value ??
@@ -745,16 +746,17 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                       DateTimeEntryCustom(
                         title: 'Fecha de autodespido',
                         selectableDayPredicate: (day) {
+                          return !day.isAfter(DateTime.now());
 
-                          final bool isBeforeFechaInicio = day.isBefore(
-                            newDocumentState.fechaInicioRelacionLaboral.value
-                            ?? DateTime.now());
+                          // final bool isBeforeFechaInicio = day.isBefore(
+                          //   newDocumentState.fechaInicioRelacionLaboral.value
+                          //   ?? DateTime.now());
 
-                          final bool isAfterFechaTermino = day.isAfter(
-                            newDocumentState.fechaTerminoRelacionLaboral.value
-                            ?? DateTime.now());
+                          // final bool isAfterFechaTermino = day.isAfter(
+                          //   newDocumentState.fechaTerminoRelacionLaboral.value
+                          //   ?? DateTime.now());
 
-                          return !isAfterFechaTermino && !isBeforeFechaInicio;
+                          // return !isAfterFechaTermino && !isBeforeFechaInicio;
                         },
                         onFechaChanged: ref
                             .read(documentForm02Provider.notifier)
@@ -768,16 +770,17 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                       DateTimeEntryCustom(
                         title: 'Fecha de reclamo DT',
                         selectableDayPredicate: (day) {
+                          return !day.isAfter(DateTime.now());
 
-                          final bool isBeforeFechaInicio = day.isBefore(
-                            newDocumentState.fechaInicioRelacionLaboral.value
-                            ?? DateTime.now());
+                          // final bool isBeforeFechaInicio = day.isBefore(
+                          //   newDocumentState.fechaInicioRelacionLaboral.value
+                          //   ?? DateTime.now());
 
-                          final bool isAfterFechaTermino = day.isAfter(
-                            newDocumentState.fechaTerminoRelacionLaboral.value
-                            ?? DateTime.now());
+                          // final bool isAfterFechaTermino = day.isAfter(
+                          //   newDocumentState.fechaTerminoRelacionLaboral.value
+                          //   ?? DateTime.now());
 
-                          return !isAfterFechaTermino && !isBeforeFechaInicio;
+                          // return !isAfterFechaTermino && !isBeforeFechaInicio;
                         },
                         onFechaChanged: ref
                             .read(documentForm02Provider.notifier)
@@ -791,16 +794,17 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                       DateTimeEntryCustom(
                         title: 'Fecha de comparendo DT',
                         selectableDayPredicate: (day) {
+                          return !day.isAfter(DateTime.now());
 
-                          final bool isBeforeFechaInicio = day.isBefore(
-                            newDocumentState.fechaInicioRelacionLaboral.value
-                            ?? DateTime.now());
+                          // final bool isBeforeFechaInicio = day.isBefore(
+                          //   newDocumentState.fechaInicioRelacionLaboral.value
+                          //   ?? DateTime.now());
 
-                          final bool isAfterFechaTermino = day.isAfter(
-                            newDocumentState.fechaTerminoRelacionLaboral.value
-                            ?? DateTime.now());
+                          // final bool isAfterFechaTermino = day.isAfter(
+                          //   newDocumentState.fechaTerminoRelacionLaboral.value
+                          //   ?? DateTime.now());
 
-                          return !isAfterFechaTermino && !isBeforeFechaInicio;
+                          // return !isAfterFechaTermino && !isBeforeFechaInicio;
                         },
                         onFechaChanged: ref
                             .read(documentForm02Provider.notifier)
