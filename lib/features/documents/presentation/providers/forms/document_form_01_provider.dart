@@ -83,23 +83,23 @@ class DocumentForm01 extends _$DocumentForm01 {
   }
 
   //* Abogado 2
-  void onAbogado2FullNameChanged(String value) {
-    final abogado2FullName = SimpleStringInput.dirty(value);
-    final newState = state.copyWith(abogado2FullName: abogado2FullName);
-    _touchEveryThing(newState);
-  }
+  // void onAbogado2FullNameChanged(String value) {
+  //   final abogado2FullName = SimpleStringInput.dirty(value);
+  //   final newState = state.copyWith(abogado2FullName: abogado2FullName);
+  //   _touchEveryThing(newState);
+  // }
 
-  void onAbogado2RutChanged(String value) {
-    final abogado2Rut = SimpleStringInput.dirty(value);
-    final newState = state.copyWith(abogado2Rut: abogado2Rut);
-    _touchEveryThing(newState);
-  }
+  // void onAbogado2RutChanged(String value) {
+  //   final abogado2Rut = SimpleStringInput.dirty(value);
+  //   final newState = state.copyWith(abogado2Rut: abogado2Rut);
+  //   _touchEveryThing(newState);
+  // }
 
-  void onAbogado2EmailChanged(String value) {
-    final abogado2Email = Email.dirty(value);
-    final newState = state.copyWith(abogado2Email: abogado2Email);
-    _touchEveryThing(newState);
-  }
+  // void onAbogado2EmailChanged(String value) {
+  //   final abogado2Email = Email.dirty(value);
+  //   final newState = state.copyWith(abogado2Email: abogado2Email);
+  //   _touchEveryThing(newState);
+  // }
 
   //* Demandado
   void onDemandadoFullNameChanged(String value) {
@@ -364,9 +364,9 @@ class DocumentForm01 extends _$DocumentForm01 {
         'rut_abogado_1': state.abogado1Rut.value,
         'correo_abogado_1': state.abogado1Email.value,
         //* Abogado 2
-        'nombre_abogado_2': state.abogado2FullName.value,
-        'rut_abogado_2': state.abogado2Rut.value,
-        'correo_abogado_2': state.abogado2Email.value,
+        // 'nombre_abogado_2': state.abogado2FullName.value,
+        // 'rut_abogado_2': state.abogado2Rut.value,
+        // 'correo_abogado_2': state.abogado2Email.value,
         //* Demandado
         'nombre_demandado': state.demandadoFullName.value,
         'rut_demandado': state.demandadoRut.value,
@@ -444,9 +444,9 @@ class DocumentForm01 extends _$DocumentForm01 {
       SimpleStringInput.dirty(newState.abogado1Rut.value),
       Email.dirty(newState.abogado1Email.value),
       // Abogado 2
-      SimpleStringInput.dirty(newState.abogado2FullName.value),
-      SimpleStringInput.dirty(newState.abogado2Rut.value),
-      Email.dirty(newState.abogado2Email.value),
+      // SimpleStringInput.dirty(newState.abogado2FullName.value),
+      // SimpleStringInput.dirty(newState.abogado2Rut.value),
+      // Email.dirty(newState.abogado2Email.value),
       // Demandado
       SimpleStringInput.dirty(newState.demandadoFullName.value),
       SimpleStringInput.dirty(newState.demandadoRut.value),
@@ -615,9 +615,9 @@ class DocumentForm01State {
   final SimpleStringInput abogado1Rut;
   final Email abogado1Email;
   // Abogado 2
-  final SimpleStringInput abogado2FullName;
-  final SimpleStringInput abogado2Rut;
-  final Email abogado2Email;
+  // final SimpleStringInput abogado2FullName;
+  // final SimpleStringInput abogado2Rut;
+  // final Email abogado2Email;
   // Demandado
   final SimpleStringInput demandadoFullName;
   final SimpleStringInput demandadoRut;
@@ -674,9 +674,9 @@ class DocumentForm01State {
     this.abogado1Rut = const SimpleStringInput.dirty(''),
     this.abogado1Email = const Email.dirty(''),
     // Abogado 2
-    this.abogado2FullName = const SimpleStringInput.dirty(''),
-    this.abogado2Rut = const SimpleStringInput.dirty(''),
-    this.abogado2Email = const Email.dirty(''),
+    // this.abogado2FullName = const SimpleStringInput.dirty(''),
+    // this.abogado2Rut = const SimpleStringInput.dirty(''),
+    // this.abogado2Email = const Email.dirty(''),
     // Demandando
     this.demandadoFullName = const SimpleStringInput.dirty(''),
     this.demandadoRut = const SimpleStringInput.dirty(''),
@@ -732,9 +732,9 @@ class DocumentForm01State {
     SimpleStringInput? abogado1Rut,
     Email? abogado1Email,
     // Abogado 2
-    SimpleStringInput? abogado2FullName,
-    SimpleStringInput? abogado2Rut,
-    Email? abogado2Email,
+    // SimpleStringInput? abogado2FullName,
+    // SimpleStringInput? abogado2Rut,
+    // Email? abogado2Email,
     // Demandado
     SimpleStringInput? demandadoFullName,
     SimpleStringInput? demandadoRut,
@@ -791,9 +791,9 @@ class DocumentForm01State {
         abogado1Rut: abogado1Rut ?? this.abogado1Rut,
         abogado1Email: abogado1Email ?? this.abogado1Email,
         // Abogado 2
-        abogado2FullName: abogado2FullName ?? this.abogado2FullName,
-        abogado2Rut: abogado2Rut ?? this.abogado2Rut,
-        abogado2Email: abogado2Email ?? this.abogado2Email,
+        // abogado2FullName: abogado2FullName ?? this.abogado2FullName,
+        // abogado2Rut: abogado2Rut ?? this.abogado2Rut,
+        // abogado2Email: abogado2Email ?? this.abogado2Email,
         // Demandado
         demandadoFullName: demandadoFullName ?? this.demandadoFullName,
         demandadoRut: demandadoRut ?? this.demandadoRut,

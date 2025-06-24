@@ -257,9 +257,8 @@ class _InformationState extends ConsumerState<_Information>
         SizedBox(height: 5),
         //_InformacionAbogado1(),
         _InformacionAbogado1(ref: ref, newDocumentState: newDocumentState),
-        SizedBox(height: 5),
-        //_InformacionAbogado2(),
-        _InformacionAbogado2(ref: ref, newDocumentState: newDocumentState),
+        // SizedBox(height: 5),
+        // _InformacionAbogado2(ref: ref, newDocumentState: newDocumentState),
         SizedBox(height: 5),
         //_InformacionDemandado(),
         _InformacionDemandado(ref: ref, newDocumentState: newDocumentState),
@@ -377,58 +376,58 @@ class _InformacionDemandado extends StatelessWidget {
   }
 }
 
-class _InformacionAbogado2 extends StatelessWidget {
-  const _InformacionAbogado2({
-    required this.ref,
-    required this.newDocumentState,
-  });
+// class _InformacionAbogado2 extends StatelessWidget {
+//   const _InformacionAbogado2({
+//     required this.ref,
+//     required this.newDocumentState,
+//   });
 
-  final WidgetRef ref;
-  final DocumentForm01State newDocumentState;
+//   final WidgetRef ref;
+//   final DocumentForm01State newDocumentState;
 
-  @override
-  Widget build(BuildContext context) {
-    return CardModelInformation(
-      title: 'Abogado 2',
-      children: [
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Nombre Completo',
-          preferencesKey: 'nombre_abogado_2',
-          initialValue: newDocumentState.abogado2FullName.value,
-          onChanged: ref
-              .read(documentForm01Provider.notifier)
-              .onAbogado2FullNameChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2FullName.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 200,
-          labelText: 'Rut/CI',
-          preferencesKey: 'rut_abogado_2',
-          initialValue: newDocumentState.abogado2Rut.value,
-          onChanged:
-              ref.read(documentForm01Provider.notifier).onAbogado2RutChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2Rut.errorMessage
-              : null,
-        ),
-        AdvancedAutocompleteTextFieldOverlay(
-          width: 300,
-          labelText: 'Correo',
-          preferencesKey: 'correo_abogado_2',
-          initialValue: newDocumentState.abogado2Email.value,
-          onChanged:
-              ref.read(documentForm01Provider.notifier).onAbogado2EmailChanged,
-          errorMessage: newDocumentState.isFormPosted
-              ? newDocumentState.abogado2Email.errorMessage
-              : null,
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return CardModelInformation(
+//       title: 'Abogado 2',
+//       children: [
+//         AdvancedAutocompleteTextFieldOverlay(
+//           width: 300,
+//           labelText: 'Nombre Completo',
+//           preferencesKey: 'nombre_abogado_2',
+//           initialValue: newDocumentState.abogado2FullName.value,
+//           onChanged: ref
+//               .read(documentForm01Provider.notifier)
+//               .onAbogado2FullNameChanged,
+//           errorMessage: newDocumentState.isFormPosted
+//               ? newDocumentState.abogado2FullName.errorMessage
+//               : null,
+//         ),
+//         AdvancedAutocompleteTextFieldOverlay(
+//           width: 200,
+//           labelText: 'Rut/CI',
+//           preferencesKey: 'rut_abogado_2',
+//           initialValue: newDocumentState.abogado2Rut.value,
+//           onChanged:
+//               ref.read(documentForm01Provider.notifier).onAbogado2RutChanged,
+//           errorMessage: newDocumentState.isFormPosted
+//               ? newDocumentState.abogado2Rut.errorMessage
+//               : null,
+//         ),
+//         AdvancedAutocompleteTextFieldOverlay(
+//           width: 300,
+//           labelText: 'Correo',
+//           preferencesKey: 'correo_abogado_2',
+//           initialValue: newDocumentState.abogado2Email.value,
+//           onChanged:
+//               ref.read(documentForm01Provider.notifier).onAbogado2EmailChanged,
+//           errorMessage: newDocumentState.isFormPosted
+//               ? newDocumentState.abogado2Email.errorMessage
+//               : null,
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class _InformacionAbogado1 extends StatelessWidget {
   const _InformacionAbogado1({
@@ -678,6 +677,7 @@ class _DetallesAdicionalesState extends ConsumerState<_DetallesAdicionales>
                         title: 'Fecha Termino relación laboral',
                         selectableDayPredicate: (day) {
                           // Retorna true solo para días que no sean posteriores a hoy
+                          // return !day.isAfter(DateTime.now());
 
                           final bool isBefore = day.isBefore(newDocumentState
                                   .fechaInicioRelacionLaboral.value ??
