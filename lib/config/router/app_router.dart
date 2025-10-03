@@ -85,10 +85,29 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/reset-password',
         builder: (context, state) {
-          final code = state.uri.queryParameters['code'] ?? 'empty';
+          // Primero intenta obtenerlo de los query parameters normales
+          String? code = state.uri.queryParameters['code'];
+
+          // Si no está ahí, intenta extraerlo del hash fragment completo
+          if (code == null || code.isEmpty) {
+            final fullUri = Uri.base;
+            code = fullUri.queryParameters['code'];
+          }
+
+          // Si aún no lo tienes, intenta parsearlo manualmente
+          if (code == null || code.isEmpty) {
+            final hash = Uri.base.toString();
+            final regex = RegExp(r'[?&]code=([^&#]+)');
+            final match = regex.firstMatch(hash);
+            if (match != null) {
+              code = match.group(1);
+            }
+          }
+
+          code ??= 'empty';
           print('code: $code');
-          // Puedes pasar el código como parámetro si lo necesitas
-          return  ResetPasswordScreen(code:code);
+
+          return ResetPasswordScreen(code: code);
         },
       ),
     ],
@@ -102,7 +121,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         return null; // lo deja tranquilo que vaya a splash
       }
       if (authStatus == AuthStatus.notAuthenticated) {
-        if (isGoingTo.startsWith('/login') || isGoingTo=='/reset-password') {
+        if (isGoingTo.startsWith('/login') || isGoingTo == '/reset-password') {
           // cuando se coloca null, es para dejar que vaya a la pantalla que quiera
           return null;
         }
