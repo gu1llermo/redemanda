@@ -9,8 +9,10 @@ part 'reset_password_form_provider.g.dart';
 
 @Riverpod()
 class ResetPasswordForm extends _$ResetPasswordForm {
+  String _code = 'none';
   @override
-  ResetPasswordFormState build() {
+  ResetPasswordFormState build(String code) {
+    _code = code;
     return ResetPasswordFormState();
   }
 
@@ -55,7 +57,7 @@ class ResetPasswordForm extends _$ResetPasswordForm {
     try {
       await ref
           .read(authRepositoryProvider)
-          .resetPassword(state.password.value);
+          .resetPassword(state.password.value, _code);
       state = state.copyWith(
         isPosting: false,
         success: true,

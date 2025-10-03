@@ -142,13 +142,18 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
   }
 
   @override
-  Future<void> resetPassword(String newPassword) async {
+  Future<void> resetPassword(String newPassword, String code) async {
     try {
-      await supabase.auth.updateUser(
-        UserAttributes(
+      await supabase.auth.admin.updateUserById(
+        code,
+        attributes: AdminUserAttributes(
           password: newPassword,
         ),
       );
+
+      /// Este método se utiliza junto con updateUser()
+      /// cuando es necesario actualizar la contraseña de un usuario.
+      await supabase.auth.reauthenticate();
     } on AuthApiException catch (e) {
       throw CustomError(e.message);
     } catch (e) {
