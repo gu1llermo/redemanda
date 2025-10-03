@@ -5,5 +5,5 @@ abstract class AuthDatasource {
   Future<void> logout();
   Future<UserEntity> checkAuthStatus(String token);
   Future<void> sendPasswordResetEmail(String email);
-  Future<void> resetPassword(String newPassword);
+  Future<void> resetPassword(String newPassword, String code);
 }

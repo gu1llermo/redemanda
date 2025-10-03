@@ -7,15 +7,16 @@ import '../../../shared/widgets/widgets.dart';
 import '../providers/providers.dart';
 
 class ResetPasswordScreen extends ConsumerWidget {
-  const ResetPasswordScreen({super.key});
+  const ResetPasswordScreen({super.key, required this.code});
+  final String code;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
-    final form = ref.watch(resetPasswordFormProvider);
+    final form = ref.watch(resetPasswordFormProvider(code));
     final obscureText = form.obscureText;
 
-    ref.listen(resetPasswordFormProvider, (previous, next) {
+    ref.listen(resetPasswordFormProvider(code), (previous, next) {
       if (next.errorMessage.isNotEmpty) {
         AppErrorsUtils.onError(context, next.errorMessage);
         return;
@@ -45,11 +46,11 @@ class ResetPasswordScreen extends ConsumerWidget {
                     suffixIcon: PasswordSuffixIcon(
                       obscureText: obscureText,
                       onTap: ref
-                          .read(resetPasswordFormProvider.notifier)
+                          .read(resetPasswordFormProvider(code).notifier)
                           .onTapPasswordSuffixIcon,
                     ),
                     onChanged: ref
-                        .read(resetPasswordFormProvider.notifier)
+                        .read(resetPasswordFormProvider(code).notifier)
                         .onPasswordChange,
                     errorMessage:
                         form.isFormPosted ? form.password.errorMessage : null,
@@ -62,14 +63,14 @@ class ResetPasswordScreen extends ConsumerWidget {
                   //   suffixIcon: PasswordSuffixIcon(
                   //     obscureText: obscureText,
                   //     onTap: ref
-                  //         .read(resetPasswordFormProvider.notifier)
+                  //         .read(resetPasswordFormProvider(code).notifier)
                   //         .onTapPasswordSuffixIcon,
                   //   ),
                   //   obscureText: obscureText,
                   //   onChanged:
                   //       ref.read(loginFormProvider.notifier).onPasswordChange,
                   //   onFieldSubmitted: (value) =>
-                  //       ref.read(resetPasswordFormProvider.notifier).onFormSubmit(),
+                  //       ref.read(resetPasswordFormProvider(code).notifier).onFormSubmit(),
                   //   errorMessage: loginForm.isFormPosted
                   //       ? loginForm.password.errorMessage
                   //       : null,
@@ -82,11 +83,11 @@ class ResetPasswordScreen extends ConsumerWidget {
                     suffixIcon: PasswordSuffixIcon(
                       obscureText: obscureText,
                       onTap: ref
-                          .read(resetPasswordFormProvider.notifier)
+                          .read(resetPasswordFormProvider(code).notifier)
                           .onTapPasswordSuffixIcon,
                     ),
                     onChanged: ref
-                        .read(resetPasswordFormProvider.notifier)
+                        .read(resetPasswordFormProvider(code).notifier)
                         .onConfirmPasswordChange,
                     errorMessage: form.isFormPosted
                         ? form.confirmPassword.errorMessage
@@ -101,7 +102,7 @@ class ResetPasswordScreen extends ConsumerWidget {
                       onPressed: form.isPosting
                           ? null
                           : ref
-                              .read(resetPasswordFormProvider.notifier)
+                              .read(resetPasswordFormProvider(code).notifier)
                               .onSubmit,
                       buttonColor: colors.primary,
                     ),

@@ -12,9 +12,13 @@ Future<void> main() async {
   await EnvironmentConfig.initialize();
 
   await Supabase.initialize(
-    url: EnvironmentConfig().supabaseUrl,
-    anonKey: EnvironmentConfig().supabaseAnonKey,
-  );
+      url: EnvironmentConfig().supabaseUrl,
+      anonKey: EnvironmentConfig().supabaseAnonKey,
+      authOptions: FlutterAuthClientOptions(
+          authFlowType: AuthFlowType.pkce, autoRefreshToken: true),
+      storageOptions: StorageClientOptions(retryAttempts: 10),
+      realtimeClientOptions:
+          RealtimeClientOptions(logLevel: RealtimeLogLevel.info));
 
   await AppDesktopServiceImpl().config();
 

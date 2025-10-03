@@ -28,7 +28,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<void> resetPassword(String newPassword) {
-    return datasource.resetPassword(newPassword);
+  Future<void> resetPassword(String newPassword, String code) {
+    return datasource.resetPassword(newPassword, code);
   }
 }
