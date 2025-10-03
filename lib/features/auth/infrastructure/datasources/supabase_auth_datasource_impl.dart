@@ -151,9 +151,6 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
         ),
       );
 
-      /// Este método se utiliza junto con updateUser()
-      /// cuando es necesario actualizar la contraseña de un usuario.
-      await supabase.auth.reauthenticate();
     } on AuthApiException catch (e) {
       throw CustomError(e.message);
     } catch (e) {
