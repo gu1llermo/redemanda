@@ -6,29 +6,49 @@ part of 'documents_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$documentsRepositoryHash() =>
-    r'2e17578c1164256d51db9b7f087c2a94ec8c5961';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [documentsRepository].
 @ProviderFor(documentsRepository)
-final documentsRepositoryProvider =
-    AutoDisposeProvider<DocumentsRepository>.internal(
-  documentsRepository,
-  name: r'documentsRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$documentsRepositoryHash,
-  dependencies: <ProviderOrFamily>[authProvider, supabaseClientProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    authProvider,
-    ...?authProvider.allTransitiveDependencies,
-    supabaseClientProvider,
-    ...?supabaseClientProvider.allTransitiveDependencies
-  },
-);
+const documentsRepositoryProvider = DocumentsRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef DocumentsRepositoryRef = AutoDisposeProviderRef<DocumentsRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class DocumentsRepositoryProvider extends $FunctionalProvider<
+    DocumentsRepository,
+    DocumentsRepository,
+    DocumentsRepository> with $Provider<DocumentsRepository> {
+  const DocumentsRepositoryProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'documentsRepositoryProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$documentsRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<DocumentsRepository> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  DocumentsRepository create(Ref ref) {
+    return documentsRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DocumentsRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DocumentsRepository>(value),
+    );
+  }
+}
+
+String _$documentsRepositoryHash() =>
+    r'09f7cc9c219cb420808a2cf852104b23cd109b4b';

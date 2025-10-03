@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:redemanda/config/config.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/shared/shared.dart';
@@ -15,7 +14,7 @@ class ThemeConstants {
   static const colorStorageKey = 'color_seed';
 }
 
-@Riverpod(dependencies: [keyValueStorageService])
+@Riverpod()
 class ColorPreferences extends _$ColorPreferences {
   // static const _darkColorSeed = 'darkColorSeed';
   // static const _lightColorSeed = 'lightColorSeed';
@@ -61,7 +60,7 @@ class ColorPreferences extends _$ColorPreferences {
   }
 }
 
-@Riverpod(dependencies: [keyValueStorageService])
+@Riverpod()
 class ThemeNotifier extends _$ThemeNotifier {
   static const String _isDarkMode = ThemeConstants.themeStorageKey;
 
@@ -129,7 +128,7 @@ class AppThemes {
 // Provider para el servicio de almacenamiento
 // la diferencia es que en minúsculas viene con autodispose, pero en mayúsculas
 // puedes especificar ese comportamiento entre paréntesis
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true)
 KeyValueStorageService keyValueStorageService(Ref ref) {
   return KeyValueStorageServiceImpl();
 }

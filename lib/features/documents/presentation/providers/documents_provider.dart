@@ -46,7 +46,7 @@ class DocumentsState {
       );
 }
 
-@Riverpod(dependencies: [documentsRepository])
+@Riverpod()
 class DocumentsPagination extends _$DocumentsPagination {
   @override
   DocumentsState build() {
@@ -131,7 +131,7 @@ class DocumentsPagination extends _$DocumentsPagination {
         errorMessage: '',
       );
       return newDocument;
-    } on NetworkException catch (e) {
+    } on NetworkException catch (_) {
       rethrow;
     } catch (e) {
       rethrow;

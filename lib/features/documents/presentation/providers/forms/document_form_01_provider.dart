@@ -10,7 +10,7 @@ import 'estado_civil.dart';
 
 part 'document_form_01_provider.g.dart';
 
-@Riverpod(dependencies: [DocumentsPagination])
+@Riverpod()
 class DocumentForm01 extends _$DocumentForm01 {
   @override
   DocumentForm01State build() {

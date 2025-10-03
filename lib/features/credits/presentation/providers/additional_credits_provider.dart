@@ -7,7 +7,7 @@ import '../../../auth/presentation/providers/providers.dart';
 
 part 'additional_credits_provider.g.dart';
 
-@Riverpod(dependencies: [supabaseClient])
+@Riverpod()
 class AdditionalCredits extends _$AdditionalCredits {
   RealtimeChannel? _subscription;
 

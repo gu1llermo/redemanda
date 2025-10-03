@@ -6,24 +6,55 @@ part of 'document_form_03_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$documentForm03Hash() => r'1858e923535c9e0604da6a80316328c5cccc41d1';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [DocumentForm03].
 @ProviderFor(DocumentForm03)
-final documentForm03Provider =
-    AutoDisposeNotifierProvider<DocumentForm03, DocumentForm03State>.internal(
-  DocumentForm03.new,
-  name: r'documentForm03Provider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$documentForm03Hash,
-  dependencies: <ProviderOrFamily>[documentsPaginationProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    documentsPaginationProvider,
-    ...?documentsPaginationProvider.allTransitiveDependencies
-  },
-);
+const documentForm03Provider = DocumentForm03Provider._();
 
-typedef _$DocumentForm03 = AutoDisposeNotifier<DocumentForm03State>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class DocumentForm03Provider
+    extends $NotifierProvider<DocumentForm03, DocumentForm03State> {
+  const DocumentForm03Provider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'documentForm03Provider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$documentForm03Hash();
+
+  @$internal
+  @override
+  DocumentForm03 create() => DocumentForm03();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DocumentForm03State value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DocumentForm03State>(value),
+    );
+  }
+}
+
+String _$documentForm03Hash() => r'6f8df7baf0142aa8356867b1b22897187a203552';
+
+abstract class _$DocumentForm03 extends $Notifier<DocumentForm03State> {
+  DocumentForm03State build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<DocumentForm03State, DocumentForm03State>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<DocumentForm03State, DocumentForm03State>,
+        DocumentForm03State,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

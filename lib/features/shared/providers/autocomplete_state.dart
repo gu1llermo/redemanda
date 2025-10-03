@@ -1,5 +1,4 @@
 // autocomplete_state.dart
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../config/config.dart';
@@ -36,7 +35,7 @@ class AutocompleteState {
   // }) = _AutocompleteState;
 }
 
-@Riverpod(dependencies: [keyValueStorageService])
+@Riverpod()
 class AutocompleteNotifier extends _$AutocompleteNotifier {
   @override
   AutocompleteState build(String preferencesKey) {

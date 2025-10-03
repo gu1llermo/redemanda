@@ -5,7 +5,7 @@ import 'auth_provider.dart';
 
 part 'login_form_provider.g.dart';
 
-@Riverpod(dependencies: [Auth])
+@riverpod
 class LoginForm extends _$LoginForm {
   @override
   LoginFormState build() {

@@ -6,7 +6,7 @@ import 'providers.dart';
 
 part 'password_recovery_form_provider.g.dart';
 
-@Riverpod(dependencies: [authRepository])
+@Riverpod()
 class PasswordRecoveryForm extends _$PasswordRecoveryForm {
   @override
   PasswordRecoveryFormState build() {

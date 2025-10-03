@@ -9,7 +9,7 @@ import 'inputs/inputs.dart';
 
 part 'document_form_02_provider.g.dart';
 
-@Riverpod(dependencies: [DocumentsPagination])
+@Riverpod()
 class DocumentForm02 extends _$DocumentForm02 {
   @override
   DocumentForm02State build() {

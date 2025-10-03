@@ -101,10 +101,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         return null; // lo deja tranquilo que vaya a splash
       }
       if (authStatus == AuthStatus.notAuthenticated) {
-        if (isGoingTo == '/login' ||
-            isGoingTo == '/register' ||
-            isGoingTo == '/login/recuperar-password' ||
-            isGoingTo == '/reset-password') {
+        if (isGoingTo.startsWith('/login') || isGoingTo=='/reset-password') {
           // cuando se coloca null, es para dejar que vaya a la pantalla que quiera
           return null;
         }

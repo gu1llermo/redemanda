@@ -28,7 +28,7 @@ class MainApp extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final appRouter = ref.watch(goRouterProvider);
     // Observar cambios en el tema
-    final themeMode = ref.watch(themeNotifierProvider);
+    final themeMode = ref.watch(themeProvider);
     final seedColor = ref.watch(colorPreferencesProvider);
 
     return MaterialApp.router(

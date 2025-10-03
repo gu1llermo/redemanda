@@ -6,25 +6,56 @@ part of 'documents_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$documentsPaginationHash() =>
-    r'21159492ce3ad3d8cb0e8d6604dc7d71c7b534d4';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [DocumentsPagination].
 @ProviderFor(DocumentsPagination)
-final documentsPaginationProvider =
-    AutoDisposeNotifierProvider<DocumentsPagination, DocumentsState>.internal(
-  DocumentsPagination.new,
-  name: r'documentsPaginationProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$documentsPaginationHash,
-  dependencies: <ProviderOrFamily>[documentsRepositoryProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    documentsRepositoryProvider,
-    ...?documentsRepositoryProvider.allTransitiveDependencies
-  },
-);
+const documentsPaginationProvider = DocumentsPaginationProvider._();
 
-typedef _$DocumentsPagination = AutoDisposeNotifier<DocumentsState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class DocumentsPaginationProvider
+    extends $NotifierProvider<DocumentsPagination, DocumentsState> {
+  const DocumentsPaginationProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'documentsPaginationProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$documentsPaginationHash();
+
+  @$internal
+  @override
+  DocumentsPagination create() => DocumentsPagination();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(DocumentsState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<DocumentsState>(value),
+    );
+  }
+}
+
+String _$documentsPaginationHash() =>
+    r'5187ab4dec0b1395a552cc322042dccf592099bb';
+
+abstract class _$DocumentsPagination extends $Notifier<DocumentsState> {
+  DocumentsState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<DocumentsState, DocumentsState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<DocumentsState, DocumentsState>,
+        DocumentsState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

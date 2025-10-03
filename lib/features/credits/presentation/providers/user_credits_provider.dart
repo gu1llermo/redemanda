@@ -1,13 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'providers.dart';
 
 part 'user_credits_provider.g.dart';
 
-@Riverpod(dependencies: [FixedCredits, AdditionalCredits])
+@Riverpod()
 Stream<int> userCredits(Ref ref, String userId) async* {
   final controller = StreamController<int>();
 

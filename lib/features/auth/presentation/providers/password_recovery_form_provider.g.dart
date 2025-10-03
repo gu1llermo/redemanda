@@ -6,25 +6,58 @@ part of 'password_recovery_form_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$passwordRecoveryFormHash() =>
-    r'f611c1bdb0aa40fadd58d0125ce18dce8e8e9cb5';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [PasswordRecoveryForm].
 @ProviderFor(PasswordRecoveryForm)
-final passwordRecoveryFormProvider = AutoDisposeNotifierProvider<
-    PasswordRecoveryForm, PasswordRecoveryFormState>.internal(
-  PasswordRecoveryForm.new,
-  name: r'passwordRecoveryFormProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$passwordRecoveryFormHash,
-  dependencies: <ProviderOrFamily>[authRepositoryProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    authRepositoryProvider,
-    ...?authRepositoryProvider.allTransitiveDependencies
-  },
-);
+const passwordRecoveryFormProvider = PasswordRecoveryFormProvider._();
 
-typedef _$PasswordRecoveryForm = AutoDisposeNotifier<PasswordRecoveryFormState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class PasswordRecoveryFormProvider
+    extends $NotifierProvider<PasswordRecoveryForm, PasswordRecoveryFormState> {
+  const PasswordRecoveryFormProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'passwordRecoveryFormProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$passwordRecoveryFormHash();
+
+  @$internal
+  @override
+  PasswordRecoveryForm create() => PasswordRecoveryForm();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PasswordRecoveryFormState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PasswordRecoveryFormState>(value),
+    );
+  }
+}
+
+String _$passwordRecoveryFormHash() =>
+    r'9eeab25f6750836f792dca7a34ca789f7298abb5';
+
+abstract class _$PasswordRecoveryForm
+    extends $Notifier<PasswordRecoveryFormState> {
+  PasswordRecoveryFormState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref =
+        this.ref as $Ref<PasswordRecoveryFormState, PasswordRecoveryFormState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<PasswordRecoveryFormState, PasswordRecoveryFormState>,
+        PasswordRecoveryFormState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

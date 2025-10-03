@@ -53,7 +53,7 @@ class _AdvancedAutocompleteTextFieldState
         () {
           ref
               .read(
-                  autocompleteNotifierProvider(widget.preferencesKey).notifier)
+                  autocompleteProvider(widget.preferencesKey).notifier)
               .updateText(widget.initialValue,
                   shouldGenerateSuggestions: false);
         },
@@ -70,7 +70,7 @@ class _AdvancedAutocompleteTextFieldState
         if (text.isNotEmpty) {
           ref
               .read(
-                  autocompleteNotifierProvider(widget.preferencesKey).notifier)
+                  autocompleteProvider(widget.preferencesKey).notifier)
               .saveTermToHistory(text);
         }
         widget.onChanged?.call(text);
@@ -82,7 +82,7 @@ class _AdvancedAutocompleteTextFieldState
     //   final text = _textController.text.trim();
     //   if (text.isNotEmpty) {
     //     ref
-    //         .read(autocompleteNotifierProvider(widget.preferencesKey).notifier)
+    //         .read(autocompleteProvider(widget.preferencesKey).notifier)
     //         .saveTermToHistory(text);
     //   }
     // }
@@ -102,7 +102,7 @@ class _AdvancedAutocompleteTextFieldState
             child: Consumer(
               builder: (context, ref, child) {
                 final state = ref
-                    .watch(autocompleteNotifierProvider(widget.preferencesKey));
+                    .watch(autocompleteProvider(widget.preferencesKey));
                 return ListView.builder(
                   shrinkWrap: true,
                   itemCount: state.suggestions.length,
@@ -115,7 +115,7 @@ class _AdvancedAutocompleteTextFieldState
                         onPressed: () {
                           _focusNode.requestFocus();
                           ref
-                              .read(autocompleteNotifierProvider(
+                              .read(autocompleteProvider(
                                       widget.preferencesKey)
                                   .notifier)
                               .removeTermFromHistory(suggestion);
@@ -124,7 +124,7 @@ class _AdvancedAutocompleteTextFieldState
                       onTap: () {
                         _textController.text = suggestion;
                         ref
-                            .read(autocompleteNotifierProvider(
+                            .read(autocompleteProvider(
                                     widget.preferencesKey)
                                 .notifier)
                             .saveTermToHistory(suggestion);
@@ -163,7 +163,7 @@ class _AdvancedAutocompleteTextFieldState
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       ref
-          .read(autocompleteNotifierProvider(widget.preferencesKey).notifier)
+          .read(autocompleteProvider(widget.preferencesKey).notifier)
           .updateText(value);
       widget.onChanged?.call(value);
     });
@@ -172,7 +172,7 @@ class _AdvancedAutocompleteTextFieldState
   @override
   Widget build(BuildContext context) {
     ref.listen(
-      autocompleteNotifierProvider(widget.preferencesKey)
+      autocompleteProvider(widget.preferencesKey)
           .select((state) => state.suggestions),
       (previous, next) {
         if (next.isNotEmpty) {
@@ -183,7 +183,7 @@ class _AdvancedAutocompleteTextFieldState
       },
     );
     // ref.listen(
-    //   autocompleteNotifierProvider(widget.preferencesKey)
+    //   autocompleteProvider(widget.preferencesKey)
     //       .select((state) => state.showOverlay),
     //   (previous, next) {
     //     if (next) {
