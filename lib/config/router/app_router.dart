@@ -86,7 +86,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/reset-password',
         builder: (context, state) {
           final code = state.uri.queryParameters['code'] ?? 'empty';
-          print(code);
+          print('code: $code');
           // Puedes pasar el código como parámetro si lo necesitas
           return  ResetPasswordScreen(code:code);
         },
