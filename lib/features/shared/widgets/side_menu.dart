@@ -31,7 +31,7 @@ class _SideMenuState extends ConsumerState<SideMenu> {
     final isAdmin = auth.user?.isAdmin ?? false;
     final name = auth.user?.email ?? 'Usuario';
     final colors = Theme.of(context).colorScheme;
-    final themeMode = ref.watch(themeNotifierProvider);
+    final themeMode = ref.watch(themeProvider);
     final isDarkMode = themeMode == ThemeMode.dark;
     // final seedColor = ref.watch(colorPreferencesProvider);
 
@@ -153,7 +153,7 @@ class _ChangeModeCustomSwitch extends ConsumerWidget {
       ),
       height: 40,
       onChanged: (_) {
-        ref.read(themeNotifierProvider.notifier).toggleTheme();
+        ref.read(themeProvider.notifier).toggleTheme();
       },
       styleBuilder: (value) => ToggleStyle(
         // Usa colores con buen contraste del esquema de colores

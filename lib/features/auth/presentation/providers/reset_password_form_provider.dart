@@ -7,7 +7,7 @@ import 'providers.dart';
 
 part 'reset_password_form_provider.g.dart';
 
-@Riverpod(dependencies: [authRepository])
+@Riverpod()
 class ResetPasswordForm extends _$ResetPasswordForm {
   @override
   ResetPasswordFormState build() {

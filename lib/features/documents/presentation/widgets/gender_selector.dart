@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../providers/forms/estado_civil.dart';
-import '../providers/providers.dart';
 
 class GenderSelector extends StatelessWidget {
   final Gender selectedGender;

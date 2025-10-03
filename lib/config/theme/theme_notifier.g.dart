@@ -6,62 +6,143 @@ part of 'theme_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$keyValueStorageServiceHash() =>
-    r'90f32e40cd750e63927e93d59eaa5c1662be8b62';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [keyValueStorageService].
-@ProviderFor(keyValueStorageService)
-final keyValueStorageServiceProvider =
-    Provider<KeyValueStorageService>.internal(
-  keyValueStorageService,
-  name: r'keyValueStorageServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$keyValueStorageServiceHash,
-  dependencies: const <ProviderOrFamily>[],
-  allTransitiveDependencies: const <ProviderOrFamily>{},
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef KeyValueStorageServiceRef = ProviderRef<KeyValueStorageService>;
-String _$colorPreferencesHash() => r'6eca00ba83e1ac72729c27dfb24d8287c9a866fd';
-
-/// See also [ColorPreferences].
 @ProviderFor(ColorPreferences)
-final colorPreferencesProvider =
-    AutoDisposeNotifierProvider<ColorPreferences, Color>.internal(
-  ColorPreferences.new,
-  name: r'colorPreferencesProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$colorPreferencesHash,
-  dependencies: <ProviderOrFamily>[keyValueStorageServiceProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    keyValueStorageServiceProvider,
-    ...?keyValueStorageServiceProvider.allTransitiveDependencies
-  },
-);
+const colorPreferencesProvider = ColorPreferencesProvider._();
 
-typedef _$ColorPreferences = AutoDisposeNotifier<Color>;
-String _$themeNotifierHash() => r'e94434185bbdee85768f78a3df809b6fc97c4eab';
+final class ColorPreferencesProvider
+    extends $NotifierProvider<ColorPreferences, Color> {
+  const ColorPreferencesProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'colorPreferencesProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [ThemeNotifier].
+  @override
+  String debugGetCreateSourceHash() => _$colorPreferencesHash();
+
+  @$internal
+  @override
+  ColorPreferences create() => ColorPreferences();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Color value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Color>(value),
+    );
+  }
+}
+
+String _$colorPreferencesHash() => r'c59e70646ccacb67d982733fe6a56daccae9177e';
+
+abstract class _$ColorPreferences extends $Notifier<Color> {
+  Color build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Color, Color>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<Color, Color>, Color, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(ThemeNotifier)
-final themeNotifierProvider =
-    AutoDisposeNotifierProvider<ThemeNotifier, ThemeMode>.internal(
-  ThemeNotifier.new,
-  name: r'themeNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$themeNotifierHash,
-  dependencies: <ProviderOrFamily>[keyValueStorageServiceProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    keyValueStorageServiceProvider,
-    ...?keyValueStorageServiceProvider.allTransitiveDependencies
-  },
-);
+const themeProvider = ThemeNotifierProvider._();
 
-typedef _$ThemeNotifier = AutoDisposeNotifier<ThemeMode>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ThemeNotifierProvider
+    extends $NotifierProvider<ThemeNotifier, ThemeMode> {
+  const ThemeNotifierProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'themeProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$themeNotifierHash();
+
+  @$internal
+  @override
+  ThemeNotifier create() => ThemeNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ThemeMode value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ThemeMode>(value),
+    );
+  }
+}
+
+String _$themeNotifierHash() => r'e90928fd469cbde87e20a625ee045faa779babdb';
+
+abstract class _$ThemeNotifier extends $Notifier<ThemeMode> {
+  ThemeMode build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<ThemeMode, ThemeMode>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<ThemeMode, ThemeMode>, ThemeMode, Object?, Object?>;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(keyValueStorageService)
+const keyValueStorageServiceProvider = KeyValueStorageServiceProvider._();
+
+final class KeyValueStorageServiceProvider extends $FunctionalProvider<
+    KeyValueStorageService,
+    KeyValueStorageService,
+    KeyValueStorageService> with $Provider<KeyValueStorageService> {
+  const KeyValueStorageServiceProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'keyValueStorageServiceProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$keyValueStorageServiceHash();
+
+  @$internal
+  @override
+  $ProviderElement<KeyValueStorageService> $createElement(
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  KeyValueStorageService create(Ref ref) {
+    return keyValueStorageService(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(KeyValueStorageService value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<KeyValueStorageService>(value),
+    );
+  }
+}
+
+String _$keyValueStorageServiceHash() =>
+    r'81017f407e6bfabdc0305e1bf4848a2a5fe1698f';

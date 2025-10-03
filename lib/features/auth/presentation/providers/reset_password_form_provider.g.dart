@@ -6,24 +6,56 @@ part of 'reset_password_form_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$resetPasswordFormHash() => r'4cca4f35588f7de4527e88aa309850ec542b8d0e';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [ResetPasswordForm].
 @ProviderFor(ResetPasswordForm)
-final resetPasswordFormProvider = AutoDisposeNotifierProvider<ResetPasswordForm,
-    ResetPasswordFormState>.internal(
-  ResetPasswordForm.new,
-  name: r'resetPasswordFormProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$resetPasswordFormHash,
-  dependencies: <ProviderOrFamily>[authRepositoryProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    authRepositoryProvider,
-    ...?authRepositoryProvider.allTransitiveDependencies
-  },
-);
+const resetPasswordFormProvider = ResetPasswordFormProvider._();
 
-typedef _$ResetPasswordForm = AutoDisposeNotifier<ResetPasswordFormState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ResetPasswordFormProvider
+    extends $NotifierProvider<ResetPasswordForm, ResetPasswordFormState> {
+  const ResetPasswordFormProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'resetPasswordFormProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$resetPasswordFormHash();
+
+  @$internal
+  @override
+  ResetPasswordForm create() => ResetPasswordForm();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ResetPasswordFormState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ResetPasswordFormState>(value),
+    );
+  }
+}
+
+String _$resetPasswordFormHash() => r'bcc1db1032e0cf08ad4420f2c00f5c8071bc552f';
+
+abstract class _$ResetPasswordForm extends $Notifier<ResetPasswordFormState> {
+  ResetPasswordFormState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref =
+        this.ref as $Ref<ResetPasswordFormState, ResetPasswordFormState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<ResetPasswordFormState, ResetPasswordFormState>,
+        ResetPasswordFormState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

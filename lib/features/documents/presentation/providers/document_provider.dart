@@ -4,11 +4,11 @@ import 'providers.dart';
 
 part 'document_provider.g.dart';
 
-final documentProvider = AutoDisposeProviderFamily<DocumentNotifier, int>(
-    (ref, productId) => DocumentNotifier());
+// final documentProvider = AutoDisposeProviderFamily<DocumentNotifier, int>(
+//     (ref, productId) => DocumentNotifier());
     
 
-@Riverpod(dependencies: [documentsRepository])
+@Riverpod()
 class DocumentNotifier extends _$DocumentNotifier {
   @override
   DocumentState build(int productId) {

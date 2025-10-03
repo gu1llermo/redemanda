@@ -6,23 +6,55 @@ part of 'login_form_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loginFormHash() => r'fc50f19c06f6af3484315fdd10212302d1ccf919';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [LoginForm].
 @ProviderFor(LoginForm)
-final loginFormProvider =
-    AutoDisposeNotifierProvider<LoginForm, LoginFormState>.internal(
-  LoginForm.new,
-  name: r'loginFormProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$loginFormHash,
-  dependencies: <ProviderOrFamily>[authProvider],
-  allTransitiveDependencies: <ProviderOrFamily>{
-    authProvider,
-    ...?authProvider.allTransitiveDependencies
-  },
-);
+const loginFormProvider = LoginFormProvider._();
 
-typedef _$LoginForm = AutoDisposeNotifier<LoginFormState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class LoginFormProvider
+    extends $NotifierProvider<LoginForm, LoginFormState> {
+  const LoginFormProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'loginFormProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$loginFormHash();
+
+  @$internal
+  @override
+  LoginForm create() => LoginForm();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LoginFormState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LoginFormState>(value),
+    );
+  }
+}
+
+String _$loginFormHash() => r'4bd64932ed42da2fa5a76922656b66fed827dd6e';
+
+abstract class _$LoginForm extends $Notifier<LoginFormState> {
+  LoginFormState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<LoginFormState, LoginFormState>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<LoginFormState, LoginFormState>,
+        LoginFormState,
+        Object?,
+        Object?>;
+    element.handleValue(ref, created);
+  }
+}

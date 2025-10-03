@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -20,7 +19,7 @@ class _AuthErrorMessages {
   final String networkError = 'Revise su conexión a internet';
 }
 
-@Riverpod(keepAlive: true, dependencies: [authRepository])
+@Riverpod(keepAlive: true)
 class Auth extends _$Auth {
   late final AuthRepository _authRepository;
 
@@ -124,10 +123,10 @@ class AuthStateApp {
 
 enum AuthStatus { checking, authenticated, notAuthenticated }
 
-@Riverpod(dependencies: [])
+@Riverpod(keepAlive: true)
 SupabaseClient supabaseClient(Ref ref) => Supabase.instance.client;
 
-@Riverpod(keepAlive: true, dependencies: [supabaseClient])
+@Riverpod(keepAlive: true)
 AuthRepository authRepository(Ref ref) {
   return AuthRepositoryImpl(
       SupabaseAuthDatasourceImpl(ref.read(supabaseClientProvider)));
