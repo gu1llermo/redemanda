@@ -144,9 +144,9 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
   @override
   Future<void> resetPassword(String newPassword, String code) async {
     try {
-      await supabase.auth.admin.updateUserById(
-        code,
-        attributes: AdminUserAttributes(
+      await supabase.auth.setSession(code);
+      await supabase.auth.updateUser(
+        UserAttributes(
           password: newPassword,
         ),
       );
