@@ -144,17 +144,19 @@ class SupabaseAuthDatasourceImpl extends AuthDatasource {
   @override
   Future<void> resetPassword(String newPassword, String code) async {
     try {
-      await supabase.auth.setSession(code);
+      // await supabase.auth.setSession(code);// no funciona
       await supabase.auth.updateUser(
         UserAttributes(
           password: newPassword,
         ),
       );
+      print('code: Usuario actualizado');
 
     } on AuthApiException catch (e) {
+      print('code: ${e.message}');
       throw CustomError(e.message);
     } catch (e) {
-      //print(e);
+      print('code: $e');
       throw CustomError(e.toString());
       // throw CustomError(AuthConstants.errorMessages.defaultError);
     }

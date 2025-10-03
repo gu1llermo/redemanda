@@ -105,7 +105,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           }
 
           code ??= 'empty';
-          print('code: $code');
+          // print('code: $code');// con el match lee bien el code
+          // ahora no sé qué hacer con ese code
 
           return ResetPasswordScreen(code: code);
         },
